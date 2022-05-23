@@ -7,14 +7,15 @@
 	<meta name="author" content="" />
 	<meta name="robots" content="" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Travl : Hotel Admin Dashboard Bootstrap 5 Template" />
-	<meta property="og:title" content="Travl : Hotel Admin Dashboard Bootstrap 5 Template" />
-	<meta property="og:description" content="Travl : Hotel Admin Dashboard Bootstrap 5 Template" />
-	<meta property="og:image" content="https://travl.dexignlab.com/xhtml/social-image.png" />
+	<meta name="description" content="SIM DIKLIT RSGJ CIREBON" />
+	<meta property="og:title" content="SIM DIKLIT RSGJ CIREBON" />
+	<meta property="og:description" content="SIM DIKLIT RSGJ CIREBON" />
+	<meta property="og:image" content="{{ asset('image/assets/logo.png') }}" />
 	<meta name="format-detection" content="telephone=no">
+	<meta name="csrf-token" content="{{ csrf_token() }}" />
 	
 	<!-- PAGE TITLE HERE -->
-	<title>Travl Hotel Admin Dashboard</title>
+	<title>@yield('title') | SIM DIKLIT</title>
 	
 	@include('dashboard.layouts.components.css')
 	

@@ -12,7 +12,7 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $permissions = collect(['pendidikan', 'penelitian', 'user']);
+        $permissions = collect(['master', 'pendidikan', 'penelitian', 'user']);
 
         $permissions->each(function($data){
             Permission::create([

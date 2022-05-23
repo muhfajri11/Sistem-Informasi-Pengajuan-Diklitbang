@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-})->name('index');
+Route::get('/', 'HomeController@index')->name('index');
 
 Auth::routes(['verify' => true, 'login' => false, 'register' => false]);
 
@@ -28,7 +26,17 @@ Route::post('/register', 'Auth\RegisterController@register')->name('register');
 Route::post('/reset_password', 'Auth\ForgotPasswordController@resetPassword')->name('reset_password');
 
 Route::middleware('verified')->prefix('dashboard')->group(function(){
-    Route::middleware('verified')->get('/', 'DashboardController@index')->name('dashboard');
+    Route::get('/', 'DashboardController@index')->name('dashboard');
+    
+    Route::get('/manajemenrole', 'DashboardController@manage_role')->name('manage_role');
+    
+    Route::name('manage_role.')->prefix('manajemenrole')->group(function() {
+        Route::post('/users', 'DashboardController@get_users')->name('users');
+        Route::post('/roles', 'DashboardController@get_roles')->name('roles');
+        Route::post('/permissions', 'DashboardController@get_permissions')->name('permissions');
+    });
+
+    Route::get('/manajemenruangan', 'DashboardController@manage_room')->name('manage_room');
 });
 
 

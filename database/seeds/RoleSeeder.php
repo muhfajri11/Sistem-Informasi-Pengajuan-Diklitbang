@@ -22,7 +22,7 @@ class RoleSeeder extends Seeder
 
             switch($data){
                 case 'masteradmin':
-                    $role->givePermissionTo(['pendidikan', 'penelitian', 'user']);
+                    $role->givePermissionTo(['master', 'pendidikan', 'penelitian', 'user']);
                     break;
                 case 'penelitian':
                     $role->givePermissionTo(['penelitian']);

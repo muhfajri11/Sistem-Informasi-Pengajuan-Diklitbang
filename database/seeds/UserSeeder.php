@@ -14,27 +14,31 @@ class UserSeeder extends Seeder
     {
         $users = collect([
             [
-                'name'      => 'Master Admin',
-                'phone'     => '12345612',
-                'email'     => 'master@test.com',
-                'password'  => bcrypt('12341234')
+                'name'                  => 'Master Admin',
+                'phone'                 => '12345612',
+                'email'                 => 'master@test.com',
+                'email_verified_at'     => date('Y-m-d h:i:s'),
+                'password'              => bcrypt('12341234')
             ],
             [
                 'name'      => 'Admin Pendidikan',
                 'phone'     => '32141234',
                 'email'     => 'pendidikan@test.com',
+                'email_verified_at'     => date('Y-m-d h:i:s'),
                 'password'  => bcrypt('12341234')
             ],
             [
                 'name'      => 'Admin Penelitian',
                 'phone'     => '098760981',
                 'email'     => 'penelitian@test.com',
+                'email_verified_at'     => date('Y-m-d h:i:s'),
                 'password'  => bcrypt('12341234')
             ],
             [
                 'name'      => 'User Example',
                 'phone'     => '123456789',
                 'email'     => 'example@test.com',
+                'email_verified_at'     => date('Y-m-d h:i:s'),
                 'password'  => bcrypt('12341234')
             ]
         ]);

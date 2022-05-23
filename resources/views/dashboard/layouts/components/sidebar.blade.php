@@ -3,30 +3,58 @@
 		***********************************-->
 		<div class="dlabnav">
 			<div class="dlabnav-scroll">
-				{{-- <ul class="metismenu" id="menu">
-					<li><a class="has-arrow " href="javascript:void()" aria-expanded="false">
+				<ul class="metismenu" id="menu">
+					<li>
+						<a href="{{ route('dashboard') }}" class="{{ request()->is('/dashboard') ? 'mm-active' : '' }}" aria-expanded="false">
 							<i class="flaticon-025-dashboard"></i>
 							<span class="nav-text">Dashboard</span>
 						</a>
-						<ul aria-expanded="false">
-							<li><a href="index.html">Dashboard Light</a></li>
-							<li><a href="index-2.html">Dashboard Dark</a></li>
-							<li><a href="guest-list.html">Guest List</a></li>
-							<li><a href="guest-details.html">Guest Details</a></li>
-							<li><a href="concierge-list.html">Concierge List</a></li>
-							<li><a href="room-list.html">Room List</a></li>
-							<li><a href="reviews.html">Reviews</a></li>	
-						</ul>
-
 					</li>
-					<li><a href="widget-basic.html" class="active" aria-expanded="false">
-							<i class="flaticon-013-checkmark"></i>
-							<span class="nav-text">Widget</span>
+					<li>
+						<a href="{{ route('manage_role') }}" class="active" aria-expanded="false">
+							<i class="fas fa-users"></i>
+							<span class="nav-text">Manajemen Role</span>
 						</a>
 					</li>
+					<li>
+						<a class="has-arrow " href="javascript:void()" aria-expanded="false">
+							<i class="fas fa-graduation-cap"></i>
+							<span class="nav-text">PKL</span>
+						</a>
+						<ul aria-expanded="false">
+							<li><a href="#!">Data Pengajuan</a></li>
+							<li><a href="#!">Pengajuan</a></li>
+							<li><a href="#!">Pengaturan</a></li>
 						</ul>
 					</li>
-				</ul> --}}
+					<li>
+						<a class="has-arrow " href="javascript:void()" aria-expanded="false">
+							<i class="fas fa-users-class"></i>
+							<span class="nav-text">Studi Banding</span>
+						</a>
+						<ul aria-expanded="false">
+							<li><a href="#!">Data Pengajuan</a></li>
+							<li><a href="#!">Pengajuan</a></li>
+						</ul>
+					</li>
+					<li>
+						<a class="has-arrow " href="javascript:void()" aria-expanded="false">
+							<i class="fas fa-atom"></i>
+							<span class="nav-text">Penelitian</span>
+						</a>
+						<ul aria-expanded="false">
+							<li><a href="#!">Data Pengajuan</a></li>
+							<li><a href="#!">Pengambilan Data</a></li>
+							<li><a href="#!">Pengajuan Penelitian</a></li>
+							<li><a href="#!">Pengajuan Validasi Data</a></li>
+						</ul>
+					</li>
+					<li><a href="{{ route('manage_room') }}" class="active" aria-expanded="false">
+						<i class="fas fa-hospital-alt"></i>
+						<span class="nav-text">Ruangan</span>
+						</a>
+					</li>
+				</ul>
 				
 				<div class="copyright">
 					<p class="text-center"><strong>SIM Diklit Dashboard</strong> © {{ date('Y')}}</p>

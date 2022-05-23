@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'test')
+@section('title', 'SIM DIKLIT RSGJ Cirebon')
 
 @section('content')
     <!-- Top content -->

@@ -1,5 +1,7 @@
 @extends('dashboard.layouts.app')
 
+@section('title', 'Verifikasi Email')
+
 @section('content')
 <div class="col-md-12">
     <div class="card">
