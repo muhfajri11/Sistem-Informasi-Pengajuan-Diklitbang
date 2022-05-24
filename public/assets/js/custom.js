@@ -12,7 +12,7 @@
 	}
 
 	var handlePreloader = function(){
-		jQuery('#preloader').remove();
+		jQuery('#preloader').addClass('d-none');
 			$('#main-wrapper').addClass('show');
 		
 	}
@@ -451,3 +451,66 @@ jQuery(window).on('resize',function () {
 	}, 1000);
 });
 /*  Window Resize END */
+
+var alertSuccess = function(title, msg){
+    toastr.success(msg, title, {
+        timeOut: 3500,
+        closeButton: !0,
+        debug: !1,
+        newestOnTop: !0,
+        progressBar: !0,
+        positionClass: "toast-top-right",
+        preventDuplicates: !0,
+        onclick: null,
+        showDuration: "0",
+        hideDuration: "1000",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut",
+        tapToDismiss: !1
+    })
+}
+
+var alertWarning = function(title, msg){
+    toastr.warning(msg, title, {
+        timeOut: 3500,
+        closeButton: !0,
+        debug: !1,
+        newestOnTop: !0,
+        progressBar: !0,
+        positionClass: "toast-top-right",
+        preventDuplicates: !0,
+        onclick: null,
+        showDuration: "0",
+        hideDuration: "1000",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut",
+        tapToDismiss: !1
+    })
+}
+
+var alertError = function(title, msg){
+    toastr.error(msg, title, {
+        timeOut: 3500,
+        closeButton: !0,
+        debug: !1,
+        newestOnTop: !0,
+        progressBar: !0,
+        positionClass: "toast-top-right",
+        preventDuplicates: !0,
+        onclick: null,
+        showDuration: "0",
+        hideDuration: "1000",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut",
+        tapToDismiss: !1
+    })
+}

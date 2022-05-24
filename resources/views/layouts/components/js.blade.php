@@ -91,7 +91,7 @@
                         url: '{{ route("verifyemail") }}',
                         type: 'POST',
                         data: {
-                            email_daftar: function(){
+                            email: function(){
                                 return $('#email_daftar').val();
                             }
                         }

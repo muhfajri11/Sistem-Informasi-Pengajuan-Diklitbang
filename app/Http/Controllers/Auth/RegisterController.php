@@ -77,16 +77,6 @@ class RegisterController extends Controller
         return $user;
     }
 
-    public function verifyemail(Request $request){
-        $email = User::where('email', $request->email_daftar)->get();
-
-        if (count($email) > 0) {
-            return response()->json("Email sudah terdaftar");
-        } 
-
-        return response()->json("true");
-    }
-
     public function register(Request $request){
         $this->validator($request->all())->validate();
         $check = $this->create($request->all());

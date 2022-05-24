@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/css/jquery.dataTables.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/toastr/css/toastr.min.css') }}">
 
+@yield('style')
+
 <!-- Style css -->
 <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
-
-@yield('style')

@@ -17,6 +17,7 @@
 	<script src="{{ asset('assets/vendor/bootstrap-datetimepicker/js/moment.js') }}"></script>
 	<script src="{{ asset('assets/vendor/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js') }}"></script>
 	<script src="{{ asset('assets/vendor/toastr/js/toastr.min.js') }}"></script>
+	<script src="{{ asset('assets/vendor/sweetalert/sweetalert2.all.min.js') }}"></script>
 	
 	<script src="{{ asset('assets/js/custom.js') }}"></script>
 	<script src="{{ asset('assets/js/dlabnav-init.js') }}"></script>

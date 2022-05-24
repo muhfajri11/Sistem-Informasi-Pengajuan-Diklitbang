@@ -2,9 +2,9 @@
 
 @section('title', "Manage Roles")
 
-{{-- @section('style')
-	<link rel="stylesheet" href="{{ asset('assets/vendor/datatables/css/jquery.dataTables.min.css') }}">
-@endsection --}}
+@section('style')
+	<link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}">
+@endsection
 
 @section('content')
 	<div class="d-block d-md-none col-12">
@@ -82,7 +82,6 @@
 													<tr>
 														<th>Nama</th>
 														<th>Permissions</th>
-														<th>Action</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -94,30 +93,62 @@
 							</div>
 						</div>
 					</div>
-					<!-- Modal -->
-					<div class="modal fade" id="replyModal">
-						<div class="modal-dialog modal-dialog-centered" role="document">
+
+					<div class="modal fade" id="modal_detailpengguna" role="dialog" aria-hidden="true">
+						<div class="modal-dialog modal-lg">
 							<div class="modal-content">
 								<div class="modal-header">
-									<h5 class="modal-title">Post Reply</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+									<h3 class="modal-title text-secondary"><i class="fas fa-user me-2"></i> Lihat Pengguna</h3>
+									<button type="button" class="btn-close" data-bs-dismiss="modal">
+									</button>
 								</div>
 								<div class="modal-body">
-									<form>
-										<textarea class="form-control" rows="4">Message</textarea>
-									</form>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-danger light" data-bs-dismiss="modal">btn-close</button>
-									<button type="button" class="btn btn-primary">Reply</button>
+									<div class="row">
+										<div class="col-12 mb-4">
+											<div class="form-group">
+												<label for="nama_view">Nama Lengkap</label>
+												<div class="input-group mb-2">
+													<div class="input-group-text"><i class="fas fa-user"></i></div>
+													<input type="text" class="form-control" id="nama_view" disabled>
+												</div>
+											</div>
+										</div>
+										<div class="col-12 col-md-6 mb-4">
+											<div class="form-group">
+												<label for="email_view">Email</label>
+												<div class="input-group mb-2">
+													<div class="input-group-text" id="email_check"><i class="fas fa-envelope"></i></div>
+													<input type="text" class="form-control" id="email_view" disabled>
+												</div>
+											</div>
+										</div>
+										<div class="col-12 col-md-6 mb-4">
+											<div class="form-group">
+												<label for="phone_view">No. Handphone</label>
+												<div class="input-group mb-2">
+													<div class="input-group-text"><i class="fas fa-phone"></i></div>
+													<input type="text" class="form-control" id="phone_view" disabled>
+												</div>
+											</div>
+										</div>
+										<div class="col-12 mb-4">
+											<h4 class="text-primary mb-4">
+												<i class="fas fa-user-tag me-2"></i>
+												Role User (<span id="role_view"></span>)
+											</h4>
+											<h4 class="text-secondary">Permissions</h4>
+											<div id="permissions_view"></div>
+										</div>
+										<p class="text-center" id="created_view"></p>
+									</div>						
 								</div>
 							</div>
 						</div>
 					</div>
 
-					<div class="modal fade" id="modal_addpengguna" tabindex="-1" role="dialog" aria-hidden="true">
+					<div class="modal fade" id="modal_addpengguna" role="dialog" aria-hidden="true">
 						<div class="modal-dialog modal-lg">
-							<div class="modal-content">
+							<form class="modal-content" id="tambah_pengguna" novalidate>
 								<div class="modal-header">
 									<h3 class="modal-title"><i class="fas fa-user-plus"></i> <span class="ml-4">Tambah Pengguna</span></h3>
 									<button type="button" class="btn-close" data-bs-dismiss="modal">
@@ -125,6 +156,11 @@
 								</div>
 								<div class="modal-body">
 									<div class="row">
+										<div class="col-12">
+											<div class="alert alert-secondary alert-alt fade show">
+												Setiap akun yang dibuat memiliki password default <strong>12341234</strong>.
+											</div>
+										</div>
 										<div class="col-12 mb-4">
 											<div class="form-group">
 												<label for="nama_daftar">Nama Lengkap</label>
@@ -143,12 +179,90 @@
 												<input type="number" name="phone_daftar" class="form-control" id="phone_daftar" required>
 											</div>
 										</div>
+										<div class="col-12 col-md-6 mb-4">
+											<div class="form-group">
+												<label for="role_daftar">Pilih Role</label>
+												<select id="role_daftar" class="select2_" name="role_daftar">
+													@foreach ($roles as $role)
+														<option value="{{ $role['id'] }}">{{ $role['name'] }}</option>
+													@endforeach
+												</select>
+											</div>
+										</div>
+										<div class="col-12 col-md-6 mb-4">
+											<div class="form-group">
+												<label for="permissions_daftar">Pilih Permissions</label>
+												<select id="permissions_daftar" class="multi-select select2_" name="permissions_daftar[]" multiple="multiple">
+													@foreach ($permissions as $permission)
+														<option value="{{ $permission['id'] }}" selected>{{ $permission['name'] }}</option>
+													@endforeach
+												</select>
+											</div>
+										</div>
 									</div>
 								</div>
 								<div class="modal-footer">
-									<button type="button" class="btn btn-primary">Simpan Data</button>
+									<button type="submit" class="btn btn-primary">Simpan Data</button>
 								</div>
-							</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="modal fade" id="modal_editpengguna" role="dialog" aria-hidden="true">
+						<div class="modal-dialog modal-lg">
+							<form class="modal-content" id="edit_pengguna" novalidate>
+								<div class="modal-header">
+									<h3 class="modal-title"><i class="fas fa-user-cog"></i> <span class="ml-4">Update Pengguna</span></h3>
+									<button type="button" class="btn-close" data-bs-dismiss="modal">
+									</button>
+								</div>
+								<div class="modal-body">
+									<div class="row">
+										<input type="hidden" name="id" id="id_edit" required>
+										<div class="col-12 mb-4">
+											<div class="form-group">
+												<label for="nama_edit">Nama Lengkap</label>
+												<input type="text" name="nama_edit" class="form-control" id="nama_edit" required>
+											</div>
+										</div>
+										<div class="col-12 col-md-6 mb-4">
+											<div class="form-group">
+												<label for="email_edit">Email</label>
+												<input type="text" name="email_edit" class="form-control" id="email_edit" required>
+											</div>
+										</div>
+										<div class="col-12 col-md-6 mb-4">
+											<div class="form-group">
+												<label for="phone_edit">Nomor Handphone</label>
+												<input type="number" name="phone_edit" class="form-control" id="phone_edit" required>
+											</div>
+										</div>
+										<div class="col-12 col-md-6 mb-4">
+											<div class="form-group">
+												<label for="role_edit">Pilih Role</label>
+												<select id="role_edit" class="select2_" name="role_edit" data-is="1" required>
+													@foreach ($roles as $role)
+														<option value="{{ $role['id'] }}">{{ $role['name'] }}</option>
+													@endforeach
+												</select>
+											</div>
+										</div>
+										<div class="col-12 col-md-6 mb-4">
+											<div class="form-group">
+												<label for="permissions_edit">Pilih Permissions</label>
+												<select id="permissions_edit" class="multi-select select2_" name="permissions_edit[]" multiple="multiple" required>
+													@foreach ($permissions as $permission)
+														<option value="{{ $permission['id'] }}">{{ $permission['name'] }}</option>
+													@endforeach
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="submit" class="btn btn-primary">Simpan Data</button>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -158,6 +272,9 @@
 @endsection
 
 @section('script')
+	<script src="{{ asset('assets/vendor/select2/js/select2.full.min.js') }}"></script>
+	<script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
+
 	<script>
 		$(document).ready(function(){
 			$.ajaxSetup({
@@ -165,23 +282,46 @@
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				}
 			});
-			
-			const base_url = "{{ URL::to('/') }}",
-				setDatatables = {
-					searching: true,
-					paging:true,
-					select: true,
-					info: true,         
-					language: {
-						paginate: {
-							next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
-							previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>' 
-						},
-						searchPlaceholder: "Cari Sesuatu ..."
-					},
-					lengthChange: true,
-					"sAjaxDataProp": ""
+
+			$.validator.setDefaults({
+				highlight: function(element) {
+					$(element).closest('.form-group').addClass('has-error');
+				},
+				unhighlight: function(element) {
+					$(element).closest('.form-group').removeClass('has-error');
+				},
+				errorElement: 'span',
+				errorClass: 'text-danger',
+				errorPlacement: function(error, element) {
+					if(element.parent('.input-group').length) {
+						error.insertAfter(element.parent());
+					} else {
+						error.insertAfter(element);
+					}
 				}
+			});
+
+			$.validator.addMethod("alphanumeric", function(value, element) {
+				return this.optional(element) || /^[a-z\d\-\s]+$/i.test(value);
+			}, "Letters, numbers, and spaces only please");
+
+			$(".select2_").select2();
+			
+			const setDatatables = {
+				searching: true,
+				paging:true,
+				select: true,
+				info: true,         
+				language: {
+					paginate: {
+						next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+						previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>' 
+					},
+					searchPlaceholder: "Cari Sesuatu ..."
+				},
+				lengthChange: true,
+				"sAjaxDataProp": ""
+			}
 
 			const setBadgeRoles = roles => {
 				switch(roles){
@@ -265,11 +405,25 @@
 						"render": function (data, row, type, meta) {
 							
 							let btn = `
-							<button data-id="${ data.id }" data-from="arrivals"
-								class="btn btn-primary shadow btn-xs px-2"
-								data-bs-toggle="modal" data-bs-target="#detail_booking">
-								<i class="fas fa-eye me-0 me-sm-1 d-block d-sm-none"></i> <span class="d-none d-sm-block"><i class="fas fa-eye me-1"></i> View Data</span>
-							</button>`;
+							<div class="btn-group">
+								<button data-id="${ data.id }"
+									class="btn btn-primary shadow btn-xs px-2"
+									data-bs-toggle="modal" data-bs-target="#modal_detailpengguna">
+									<i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
+								</button>
+								<div class="btn-group">
+									<button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
+									<div class="dropdown-menu">
+										<button class="dropdown-item" data-id="${ data.id }"
+											data-bs-toggle="modal" data-bs-target="#modal_editpengguna">
+											<i class="fas fa-cog me-1"></i> Edit
+										</button>
+										<button class="dropdown-item delete_pengguna" data-id="${ data.id }" data-name="${data.name}">
+											<i class="fas fa-trash me-1"></i> Hapus
+										</button>
+									</div>
+								</div>
+							</div>`;
 
 							return btn;
 						}
@@ -343,21 +497,6 @@
 
 											return collect;
 										}
-									},
-									{
-										"mData": null,
-										"sortable": false,
-										"render": function (data, row, type, meta) {
-											
-											let btn = `
-											<button data-id="${ data.id }" data-from="arrivals"
-												class="btn btn-primary shadow btn-xs px-2"
-												data-bs-toggle="modal" data-bs-target="#detail_booking">
-												<i class="fas fa-eye me-0 me-sm-1 d-block d-sm-none"></i> <span class="d-none d-sm-block"><i class="fas fa-eye me-1"></i> View Data</span>
-											</button>`;
-
-											return btn;
-										}
 									}
 								]
 							})
@@ -390,6 +529,292 @@
 				const table = $(this).data('table');
 
 				reloadData(table)
+			})
+
+			$('#role_daftar, #role_edit').on('change', function(e){
+				e.preventDefault();
+				let permission = $(this).data('is')? $("#permissions_edit") : $("#permissions_daftar");
+				// data fees
+				$.ajax({
+					url: "{{ route('manage_role.get_role') }}",
+					data: {id_role: $(this).val()},
+					type: 'POST',
+					async:false,
+					dataType: 'json',
+					beforeSend: function(){
+						permission.prop('disabled', true);
+						permission.val('').change();
+					}
+				}).done(function(data){
+					const id = [];
+					$.each(data.permissions, function(i, val){
+						id.push(val)
+					})
+
+					permission.val(id).change();
+					permission.prop('disabled', false);
+				}).fail(function(data){
+					console.log(data.responseText)
+				});
+			});
+
+			$('#tambah_pengguna').validate({
+				rules:{
+					nama_daftar: { required: true, maxlength: 20, alphanumeric: true },
+					email_daftar: { 
+						required: true, 
+						email: true,
+						remote: {
+							url: '{{ route("verifyemail") }}',
+							type: 'POST',
+							data: {
+								email: function(){
+									return $('#email_daftar').val();
+								}
+							}
+						}
+					},
+					phone_daftar: { required: true, digits: true, minlength: 11, maxlength: 14 },
+					role_daftar: { required: true },
+					permissions_daftar: { required: true }
+				},
+				submitHandler: function (form) {
+					let data_daftar = $(form).serializeArray(),
+						dataDaftar  = {};
+
+					$.each(data_daftar, function(i, val){
+						if(!(val.name == 'permissions_daftar[]')){
+							dataDaftar[val.name] = val.value
+						}
+					})
+
+					const arr = [], permission = $("#permissions_daftar");
+					$.each(permission.val(), function(i, val) {
+						arr.push(val)
+					});
+
+					dataDaftar.permissions = arr;
+					console.log(dataDaftar);
+					
+					$.ajax({
+						url: '{{ route('manage_role.add_user') }}',
+						method: 'POST',
+						data: dataDaftar,
+						beforeSend: function(){
+							$('#modal_addpengguna').modal('hide')
+							$('#tambah_pengguna')[0].reset();
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function (data) {						
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						
+						if(data.success){
+							alertSuccess("Berhasil Tambah Pengguna", data.msg)
+							reloadData('#data_users')
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					});   
+				}
+			})
+
+			$('#edit_pengguna').validate({
+				rules:{
+					nama_edit: { required: true, maxlength: 20, alphanumeric: true },
+					email_edit: { 
+						required: true, 
+						email: true,
+						remote: {
+							url: '{{ route("verifyemail") }}',
+							type: 'POST',
+							data: {
+								email: function(){
+									return $('#email_edit').val();
+								},
+								id_user: function(){
+									return $('#id_edit').val();
+								}
+							}
+						}
+					},
+					phone_edit: { required: true, digits: true, minlength: 11, maxlength: 14 },
+					role_edit: { required: true },
+					permissions_edit: { required: true }
+				},
+				submitHandler: function (form) {
+					let data_update = $(form).serializeArray(),
+						dataUpdate  = {};
+
+					$.each(data_update, function(i, val){
+						if(!(val.name == 'permissions_edit[]')){
+							dataUpdate[val.name] = val.value
+						}
+					})
+
+					const arr = [], permission = $("#permissions_edit");
+					$.each(permission.val(), function(i, val) {
+						arr.push(val)
+					});
+
+					dataUpdate.permissions = arr;
+					dataUpdate._method = "PATCH";
+					console.log(dataUpdate);
+					
+					$.ajax({
+						url: '{{ route('manage_role.update_user') }}',
+						type: 'PATCH',
+						data: dataUpdate,
+						beforeSend: function(){
+							$('#modal_editpengguna').modal('hide')
+							$('#edit_pengguna')[0].reset();
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function (data) {						
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						
+						if(data.success){
+							alertSuccess("Berhasil Update Pengguna", data.msg)
+							reloadData('#data_users')
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					});   
+				}
+			})
+
+			$('#modal_detailpengguna').on('shown.bs.modal', function (e) {
+				const modal = $(this),
+					  data_id = $(e.relatedTarget).data('id');
+
+				$.ajax({
+					url: "{{ route('manage_role.get_user') }}",
+					data: {id: data_id},
+					type: 'POST',
+					async:false,
+					dataType: 'json',
+					beforeSend: function(){
+						$('#preloader').removeClass('d-none');
+						$('#main-wrapper').removeClass('show');
+					}
+				}).done(function(data){
+					modal.find('#nama_view').val(data.name)
+					modal.find('#email_view').val(data.email)
+					if(data.is_verified){
+						modal.find('#email_check').addClass('bg-primary text-white');
+					} else {
+						modal.find('#email_check').removeClass('bg-primary text-white');
+					}
+
+					modal.find('#phone_view').val(data.phone)
+					modal.find('#role_view').html(data.role)
+					
+					let collect = ``;
+					$.each(data.permissions, function(i, val){
+						collect += setBadgeRoles(val.name) + " ";
+					})
+
+					modal.find('#permissions_view').html(collect)
+					modal.find('#created_view').html(data.created_at)
+
+					$('#preloader').addClass('d-none');
+					$('#main-wrapper').addClass('show');
+				}).fail(function(data){
+					console.log(data.responseText)
+				});
+			})
+
+			$('#modal_editpengguna').on('shown.bs.modal', function (e) {
+				const modal = $(this),
+					  data_id = $(e.relatedTarget).data('id');
+
+				$.ajax({
+					url: "{{ route('manage_role.get_user') }}",
+					data: {id: data_id},
+					type: 'POST',
+					async:false,
+					dataType: 'json',
+					beforeSend: function(){
+						$('#preloader').removeClass('d-none');
+						$('#main-wrapper').removeClass('show');
+					}
+				}).done(function(data){
+					modal.find('#id_edit').val(data_id);
+					modal.find('#nama_edit').val(data.name);
+					modal.find('#email_edit').val(data.email);
+					modal.find('#phone_edit').val(data.phone);
+
+					modal.find('#role_edit').val(data.role_id).change()
+
+					const id = [];
+					$.each(data.permissions, function(i, val){
+						id.push(val.id)
+					})
+
+					modal.find('#permissions_edit').val(id).change();
+
+					$('#preloader').addClass('d-none');
+					$('#main-wrapper').addClass('show');
+				}).fail(function(data){
+					console.log(data.responseText)
+				});
+			})
+
+			$('#data_users').on('click', ".delete_pengguna", function(e){
+				e.preventDefault();
+				const id = $(this).data('id'),
+					  name = $(this).data('name');
+
+				Swal.fire({
+					title: `Apakah kamu yakin ingin menghapus ${name}?`,
+					showDenyButton: true,
+					showConfirmButton: false,
+					showCancelButton: true,
+					denyButtonText: `Hapus`
+				}).then((result) => {
+					if (result.isDenied) {
+						$.ajax({
+							url: "{{ route('manage_role.delete_user') }}",
+							data: {id: id},
+							type: 'DELETE',
+							async:false,
+							dataType: 'json',
+							beforeSend: function(){
+								$('#preloader').removeClass('d-none');
+								$('#main-wrapper').removeClass('show');
+							}
+						}).done(function(data){
+							if(data.success){
+								alertWarning("Berhasil Hapus Pengguna", data.msg)
+								reloadData('#data_users')
+							} else {
+								alertError("Terjadi Kesalahan", data.msg)
+							}
+
+							$('#preloader').addClass('d-none');
+							$('#main-wrapper').addClass('show');
+						}).fail(function(data){
+							console.log(data.responseText)
+						});
+					}
+				})
 			})
 		})
 	</script>
