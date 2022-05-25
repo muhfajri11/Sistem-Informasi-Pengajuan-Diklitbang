@@ -205,8 +205,4 @@ class DashboardController extends Controller
         echo json_encode($response);
         exit;
     }
-
-    public function manage_room(){
-        return view('dashboard.masteradmin.managerooms');
-    }
 }

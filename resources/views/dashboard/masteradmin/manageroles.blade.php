@@ -9,7 +9,7 @@
 @section('content')
 	<div class="d-block d-md-none col-12">
 		<div class="card px-4 py-3">
-			<h3 class="text-secondary mb-0"><i class="fas fa-users mr-4"></i> @yield('title')</h3>
+			<h3 class="text-secondary mb-0"><i class="fas fa-users me-2"></i> @yield('title')</h3>
 		</div>
 	</div>
 
@@ -277,11 +277,6 @@
 
 	<script>
 		$(document).ready(function(){
-			$.ajaxSetup({
-				headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-				}
-			});
 
 			$.validator.setDefaults({
 				highlight: function(element) {

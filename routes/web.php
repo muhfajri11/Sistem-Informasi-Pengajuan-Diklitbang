@@ -43,7 +43,15 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::post('/permissions', 'DashboardController@get_permissions')->name('permissions');
     });
 
-    Route::get('/manajemenruangan', 'DashboardController@manage_room')->name('manage_room');
+    Route::get('/manajemenruangan', 'RoomController@index')->name('manage_room');
+    Route::name('manage_room.')->prefix('manajemenruangan')->group(function() {
+        Route::post('/rooms', 'RoomController@get_rooms')->name('rooms');
+        Route::post('/room', 'RoomController@get_room')->name('get_room');
+        Route::post('/check', 'RoomController@check')->name('check');
+        Route::post('/add_room', 'RoomController@add_room')->name('add_room');
+        Route::patch('/update_room', 'RoomController@update_room')->name('update_room');
+        Route::delete('/delete_room', 'RoomController@delete_room')->name('delete_room');
+    });
 });
 
 
