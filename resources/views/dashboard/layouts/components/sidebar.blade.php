@@ -34,7 +34,7 @@
 						</a>
 						<ul aria-expanded="false">
 							<li><a href="#!">Data Pengajuan</a></li>
-							<li><a href="#!">Pengajuan</a></li>
+							<li><a href="{{ route('studi_banding') }}">Pengajuan</a></li>
 						</ul>
 					</li>
 					<li>

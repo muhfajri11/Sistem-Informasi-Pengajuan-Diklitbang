@@ -52,6 +52,17 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::patch('/update_room', 'RoomController@update_room')->name('update_room');
         Route::delete('/delete_room', 'RoomController@delete_room')->name('delete_room');
     });
+
+    Route::get('/studibanding', 'ComparativeController@index')->name('studi_banding');
+    Route::name('studi_banding.')->prefix('studibanding')->group(function() {
+        Route::post('/all/{type}', 'ComparativeController@all')->name('all');
+        Route::post('/store', 'ComparativeController@store')->name('store');
+        Route::delete('/delete', 'ComparativeController@delete')->name('delete');
+    });
+
+    Route::post('/get_institusi', 'InstitutionController@get')->name('get_institution');
+    Route::post('/verify_institusi', 'InstitutionController@check')->name('verify_institution');
+    Route::post('/store_institusi', 'InstitutionController@store')->name('store_institution');
 });
 
 
