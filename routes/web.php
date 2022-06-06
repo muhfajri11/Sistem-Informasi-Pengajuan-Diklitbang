@@ -20,6 +20,8 @@ Auth::routes(['verify' => true, 'login' => false, 'register' => false]);
 Route::get('/login', function(){ return abort(404); });
 Route::get('/register', function(){ return abort(404); });
 
+Route::get('/test', 'TestController@index');
+
 Route::post('/verifyemail', 'HomeController@verifyemail')->name('verifyemail');
 Route::post('/login', 'Auth\LoginController@check_login')->name('login.check_login');
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
@@ -53,10 +55,15 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::delete('/delete_room', 'RoomController@delete_room')->name('delete_room');
     });
 
+    Route::post('/institutionroom', 'ComparativeController@get_institutionroom')->name('get_institutionroom');
     Route::get('/studibanding', 'ComparativeController@index')->name('studi_banding');
     Route::name('studi_banding.')->prefix('studibanding')->group(function() {
         Route::post('/all/{type}', 'ComparativeController@all')->name('all');
+        Route::post('/get_once', 'ComparativeController@get_once')->name('get');
         Route::post('/store', 'ComparativeController@store')->name('store');
+        Route::patch('/update', 'ComparativeController@update')->name('update');
+
+        Route::put('/update_eviden', 'ComparativeController@update_eviden')->name('update_eviden');
         Route::delete('/delete', 'ComparativeController@delete')->name('delete');
     });
 
