@@ -107,7 +107,7 @@
 									<div class="col-12">
 										<div class="d-flex justify-content-between mb-4">
 											<h3 class="font-weight-bold">Data Pengajuan <span class="small text-light">(Diterima)</span></h3>
-											<button type="button" data-table="#data_payments" class="btn btn-rounded btn-primary btn_refresh">
+											<button type="button" data-table="#data_accepts" class="btn btn-rounded btn-primary btn_refresh">
 												<span class="btn-icon-start text-primary">
 													<i class="fas fa-sync-alt"></i>
 												</span> Refresh Data
@@ -220,6 +220,12 @@
 
 			const setBadgeStatus = status => {
 				switch(status){
+					case "reject":
+						return `
+						<span class="badge mx-auto badge-pill badge-danger">
+							${status}
+						</span>`;
+						break;
 					case "review":
 						return `
 						<span class="badge mx-auto badge-pill badge-dark">
@@ -265,7 +271,7 @@
             $.extend(dataReviews, {
                 "ajax": {
                     "type": "POST",
-                    "url": `{{ route('studi_banding.all', 'review') }}`,
+                    "url": `{{ route('studi_banding.all', 'review,reject') }}`,
                     "timeout": 120000
                 },
                 "aoColumns": [
@@ -436,7 +442,7 @@
 														<button class="dropdown-item" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.id}">
 															<i class="fas fa-file me-1"></i> Upload Pembayaran
 														</button>
-                                                        <button class="dropdown-item delete_studibanding" data-id="${ data.id }" data-name="${data.title}">
+                                                        <button class="dropdown-item delete_studibanding" data-id="${ data.id }" data-name="${data.title}" data-from="#data_payments">
                                                             <i class="fas fa-trash me-1"></i> Hapus
                                                         </button>
                                                     </div>
@@ -539,46 +545,6 @@
 				const id_elm = $(this).data('table');
 
 				reloadData(id_elm);
-			})
-
-            $('#data_reviews').on('click', ".delete_pengguna", function(e){
-				e.preventDefault();
-				const id = $(this).data('id'),
-					  name = $(this).data('name');
-
-				Swal.fire({
-					title: `Apakah kamu yakin ingin menghapus ${name}?`,
-					showDenyButton: true,
-					showConfirmButton: false,
-					showCancelButton: true,
-					denyButtonText: `Hapus`
-				}).then((result) => {
-					if (result.isDenied) {
-						$.ajax({
-							url: "{{ route('studi_banding.delete') }}",
-							data: {id: id},
-							type: 'DELETE',
-							async:false,
-							dataType: 'json',
-							beforeSend: function(){
-								$('#preloader').removeClass('d-none');
-								$('#main-wrapper').removeClass('show');
-							}
-						}).done(function(data){
-							if(data.success){
-								alertWarning("Berhasil Hapus Pengguna", data.msg)
-								reloadData('#data_users')
-							} else {
-								alertError("Terjadi Kesalahan", data.msg)
-							}
-
-							$('#preloader').addClass('d-none');
-							$('#main-wrapper').addClass('show');
-						}).fail(function(data){
-							console.log(data.responseText)
-						});
-					}
-				})
 			})
 
             $('#modal_addstudibanding, #modal_editstudibanding').on('click', '.min_members', function(e){
@@ -1102,7 +1068,7 @@
 				});
 			})
 
-			$('#data_reviews').on('click', ".delete_studibanding", function(e){
+			$('#data_reviews, #data_payments').on('click', ".delete_studibanding", function(e){
 				e.preventDefault();
 				const id = $(this).data('id'),
 					  name = $(this).data('name'),

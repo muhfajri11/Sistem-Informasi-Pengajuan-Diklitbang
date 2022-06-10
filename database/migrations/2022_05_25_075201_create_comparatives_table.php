@@ -22,10 +22,10 @@ class CreateComparativesTable extends Migration
             $table->text('questions');
             $table->integer('members');
             $table->date('visit');
-            $table->enum('status', ['review', 'pay', 'accept']);
+            $table->enum('status', ['reject', 'review', 'pay', 'accept'])->default('review');
             
             $table->string('total_paid');
-            $table->integer('paid');
+            $table->tinyInteger('paid')->default(0);
             $table->string('eviden_paid')->nullable();
             $table->string('attach');
 

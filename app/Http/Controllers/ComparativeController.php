@@ -23,10 +23,24 @@ class ComparativeController extends Controller
 
     public function all($type){
         $user = auth()->user();
+
+        if(strpos($type, ',')){
+            $type = explode(',', $type);
+            
+            $type2 = $type[1];
+            $type = $type[0];
+        }
+
         $comparatives = Comparative::where([
             'user_id' => $user->id,
             'status'  => $type
-        ])->latest()->get();
+        ]);
+
+        if(isset($type2)){
+            $comparatives->orWhere('status', $type2);
+        }
+
+        $comparatives->latest()->get();
         $response = [];
 
         $comparatives->each(function($data, $i) use (&$response){
@@ -294,32 +308,6 @@ class ComparativeController extends Controller
         return response()->json([
             'success' => true,
             'msg'     => 'Berhasil Update Data Pengajuan Studi Banding'
-        ], 200);
-    }
-
-    public function get_institutionroom(){
-        $rooms = Room::get(['id', 'name']);
-        $institutions = Institution::get(['id', 'name']);
-
-        $data = ['rooms' => $rooms, 'institutions' => $institutions];
-
-        if(!$rooms){
-            return response()->json([
-                'success' => false,
-                'msg'     => 'Terjadi Kesalahan data room'
-            ], 200);   
-        }
-
-        if(!$institutions){
-            return response()->json([
-                'success' => false,
-                'msg'     => 'Terjadi Kesalahan data institution'
-            ], 200);   
-        }
-
-        return response()->json([
-            'success' => true,
-            'get'    => $data
         ], 200);
     }
 }

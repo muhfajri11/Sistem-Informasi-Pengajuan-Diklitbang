@@ -41,4 +41,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function comparatives(){
         return $this->hasMany(Comparative::class);
     }
+
+    public function internships(){
+        return $this->hasMany(Internship::class);
+    }
 }

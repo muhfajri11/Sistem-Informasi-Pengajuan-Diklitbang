@@ -31,6 +31,8 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
     Route::get('/', 'DashboardController@index')->name('dashboard');
     
     Route::get('/manajemenrole', 'DashboardController@manage_role')->name('manage_role');
+    Route::post('/institutionroom', 'DashboardController@get_institutionroom')->name('get_institutionroom');
+    Route::post('/institution', 'DashboardController@get_institutions')->name('get_institutions');
     
     Route::name('manage_role.')->prefix('manajemenrole')->group(function() {
         Route::post('/users', 'DashboardController@get_users')->name('users');
@@ -55,7 +57,6 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::delete('/delete_room', 'RoomController@delete_room')->name('delete_room');
     });
 
-    Route::post('/institutionroom', 'ComparativeController@get_institutionroom')->name('get_institutionroom');
     Route::get('/studibanding', 'ComparativeController@index')->name('studi_banding');
     Route::name('studi_banding.')->prefix('studibanding')->group(function() {
         Route::post('/all/{type}', 'ComparativeController@all')->name('all');
@@ -65,6 +66,11 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
 
         Route::put('/update_eviden', 'ComparativeController@update_eviden')->name('update_eviden');
         Route::delete('/delete', 'ComparativeController@delete')->name('delete');
+    });
+
+    Route::get('/internship', 'InternshipController@index')->name('internship');
+    Route::name('internship.')->prefix('internship')->group(function() {
+
     });
 
     Route::post('/get_institusi', 'InstitutionController@get')->name('get_institution');

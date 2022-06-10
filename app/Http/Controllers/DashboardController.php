@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Institution;
+use App\Room;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -204,5 +206,47 @@ class DashboardController extends Controller
 
         echo json_encode($response);
         exit;
+    }
+
+    public function get_institutions(){
+        $institutions = Institution::get(['id', 'name']);
+
+        if(!$institutions){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'Terjadi Kesalahan!'
+            ], 200);   
+        }
+
+        return response()->json([
+            'success' => true,
+            'get'     => $institutions
+        ], 200);   
+    }
+
+    public function get_institutionroom(){
+        $rooms = Room::get(['id', 'name']);
+        $institutions = Institution::get(['id', 'name']);
+
+        $data = ['rooms' => $rooms, 'institutions' => $institutions];
+
+        if(!$rooms){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'Terjadi Kesalahan data room'
+            ], 200);   
+        }
+
+        if(!$institutions){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'Terjadi Kesalahan data institution'
+            ], 200);   
+        }
+
+        return response()->json([
+            'success' => true,
+            'get'    => $data
+        ], 200);
     }
 }

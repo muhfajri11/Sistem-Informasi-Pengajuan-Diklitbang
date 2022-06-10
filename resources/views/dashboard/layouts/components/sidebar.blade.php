@@ -19,11 +19,11 @@
 					<li>
 						<a class="has-arrow " href="javascript:void()" aria-expanded="false">
 							<i class="fas fa-graduation-cap"></i>
-							<span class="nav-text">PKL</span>
+							<span class="nav-text">Magang</span>
 						</a>
 						<ul aria-expanded="false">
 							<li><a href="#!">Data Pengajuan</a></li>
-							<li><a href="#!">Pengajuan</a></li>
+							<li><a href="{{ route('internship') }}">Pengajuan</a></li>
 							<li><a href="#!">Pengaturan</a></li>
 						</ul>
 					</li>

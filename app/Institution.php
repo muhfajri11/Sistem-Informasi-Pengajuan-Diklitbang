@@ -11,4 +11,8 @@ class Institution extends Model
     public function comparatives(){
         return $this->hasMany(Comparative::class);
     }
+
+    public function internships(){
+        return $this->hasMany(Internship::class);
+    }
 }
