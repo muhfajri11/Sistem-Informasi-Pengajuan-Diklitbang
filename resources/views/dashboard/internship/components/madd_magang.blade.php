@@ -54,7 +54,11 @@
                                 <div class="col-12 col-md-6 mb-2">
                                     <div class="form-group">
                                         <label for="semester_daftar">Semester</label>
-                                        <input type="number" name="semester" class="form-control mb-2" id="semester_daftar" required>
+                                        <div class="input-group mb-2">
+                                            <button class="btn btn-primary min_members" type="button">-</button>
+                                            <input type="number" name="semester" class="form-control text-center" id="semester_daftar" value="1" readonly required>
+                                            <button class="btn btn-primary add_members" type="button">+</button>
+                                        </div>
                                     </div>
                                 </div>
                                 <hr>
@@ -80,10 +84,17 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="col-12 col-md-6 mb-2">
+                                <div class="col-12 mb-2">
                                     <div class="form-group">
                                         <label for="phone_daftar">No. Handphone</label>
                                         <input type="number" name="phone" class="form-control mb-2" id="phone_daftar" required>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 mb-2">
+                                    <div class="form-group">
+                                        <label for="province_daftar">Pilih Asal Provinsi</label>
+                                        <select id="province_daftar" class="select2_ mb-2" name="province" required>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-6 mb-2">
@@ -96,7 +107,7 @@
                                 <div class="col-12 mb-2">
                                     <div class="form-group">
                                         <label for="address_daftar">Alamat</label>
-                                        <textarea name="address" id="address_daftar" class="form-control" required></textarea>
+                                        <textarea name="address" id="address_daftar" class="form-control" rows="1" required></textarea>
                                     </div>
                                 </div>
                             </div>

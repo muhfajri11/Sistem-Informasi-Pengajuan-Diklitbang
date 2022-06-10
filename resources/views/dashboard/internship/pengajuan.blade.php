@@ -186,19 +186,6 @@
 
     <script>
         $(document).ready(function(){
-
-			$.ajax({
-				url: 'https://dev.farizdotid.com/api/daerahindonesia/provinsi',
-				type: 'GET',
-				dataType: 'json',
-				headers: {}
-			}).done(function (data) {
-				console.log(data)
-			}).fail(function(data){
-				resp = JSON.parse(data.responseText)
-				alertError("Terjadi Kesalahan", resp.message)
-				console.log("error");
-			}); 
             var currency = new Intl.NumberFormat('id-ID');
 
 			$.validator.setDefaults({
@@ -237,6 +224,9 @@
                 format: 'd mmmm yyyy',
                 formatSubmit: 'yyyy-mm-dd'
             })
+
+			$('#start_date').pickadate('picker').set("min", "{{ date('Y-m-d') }}")
+			$('#end_date').pickadate('picker').set("disable", true)
 
 			$('.nav-table').on('shown.bs.tab', function (event) {
 				const active = event.target, // newly activated tab
@@ -311,35 +301,141 @@
 
 			});
 
-			$('#modal_addstudibanding').on('show.bs.modal', function (e) {
+			$('#modal_addmagang').on('change', 'input[name="start_date"]', function(e) {
+				const modal = $(this).closest('.modal')
+					  minDate = new Date($(this).val());
+
+				minDate.setMonth(minDate.getMonth()+1);
+				modal.find('input[name="end_date"]').val('')
+				modal.find('input[name="end_date"]').pickadate('picker').set({
+					disable: false,
+					min: minDate // +1 Month
+				})
+			});
+
+			$('#modal_addmagang').on('click', '.min_members', function(e){
+                e.preventDefault();
+                const members = $(this).parent().find('input'),
+                      membersNow = parseInt(members.val())
+
+                if(membersNow > 1) members.val(membersNow - 1)
+            })
+
+            $('#modal_addmagang').on('click', '.add_members', function(e){
+                e.preventDefault();
+                const members = $(this).parent().find('input'),
+                      membersNow = parseInt(members.val())
+
+                if(membersNow > 0) members.val(membersNow + 1)
+            })
+
+			$('#modal_addmagang').on('show.bs.modal', function (e) {
+                const modal = $(this);
+				let institutions, province, city;
+
+                $.when(
+					$.ajax({
+						url: '{{ route('get_institutions') }}',
+						type: 'POST',
+						dataType: 'json',
+						cache: false
+					}).done(function (data) {
+						if(data.success){
+							institutions = data.get
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					}),
+					$.ajax({
+						url: 'https://dev.farizdotid.com/api/daerahindonesia/provinsi',
+						type: 'GET',
+						dataType: 'json',
+						headers: '',
+						cache: false
+					}).done(function (data) {
+						province = data.provinsi
+					}).fail(function(data){
+						console.log(data)
+						console.log("error");
+					}),
+					$.ajax({
+						url: 'https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=32',
+						type: 'GET',
+						dataType: 'json',
+						headers: '',
+						cache: false
+					}).done(function (data) {
+						city = data.kota_kabupaten
+					}).fail(function(data){
+						console.log(data)
+						console.log("error");
+					})
+				).then(function(){
+					let html_ = [];
+
+					$.each(institutions, function(i, val) {
+						html_.push({id: val.id, text: val.name});
+					})
+					modal.find("select[name='institusi']").html('').select2({data: html_});
+
+					html_ = [];
+					$.each(province, function(i, val) {
+						html_.push({id: val.id, text: val.nama});
+					})
+					modal.find("select[name='province']").html('').select2({data: html_});
+					modal.find("select[name='province']").val(32).change();
+
+					html_ = [];
+					$.each(city, function(i, val) {
+						html_.push({id: val.id, text: val.nama});
+					})
+					modal.find("select[name='city']").html('').select2({data: html_});
+					modal.find("select[name='city']").val(3209).change();
+				})
+            })
+
+			$('#modal_addmagang').on('change', 'select[name="province"]', function(e){
+				const modal = $(this).closest('.modal'),
+					  id 	= $(this).val();
+
+				$.ajax({
+					url: `https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=${id}`,
+					type: 'GET',
+					dataType: 'json',
+					headers: '',
+					cache: false,
+					beforeSend: function(){
+						modal.find("select[name='city']").html('').select2({data: []});
+					}
+				}).done(function (data) {
+					let city = data.kota_kabupaten, html_ = [];
+					$.each(city, function(i, val) {
+						html_.push({id: val.id, text: val.nama});
+					})
+
+					modal.find("select[name='city']").html('').select2({data: html_});
+				}).fail(function(data){
+					console.log(data)
+					console.log("error");
+				})
+			});
+
+			$('#modal_addmagang').on('hide.bs.modal', function (e) {
                 const modal = $(this);
 
-                $.ajax({
-                    url: '{{ route('get_institutions') }}',
-                    type: 'POST',
-                    dataType: 'json'
-                }).done(function (data) {
-                    if(data.success){
-						// let html_ = [];
+				$('#tambah_magang')[0].reset();
+				$("#institusi_daftar").html('').select2({data: []});
+				$("#province_daftar").html('').select2({data: []});
+				$("#city_daftar").html('').select2({data: []});
 
-						// $.each(data.get.institutions, function(i, val) {
-						// 	html_.push({id: val.id, text: val.name});
-						// })
-						// $("#institusi_daftar").html('').select2({data: html_});
-						// html_ = [];
-						// $.each(data.get.rooms, function(i, val) {
-						// 	html_.push({id: val.id, text: val.name});
-						// })
-						// $("#rooms_daftar").html('').select2({data: html_});
-					} else {
-						alertError("Terjadi Kesalahan", data.msg)
-					}
-                }).fail(function(data){
-                    resp = JSON.parse(data.responseText)
-                    alertError("Terjadi Kesalahan", resp.message)
-                    console.log("error");
-                }); 
-            })
+				$('#modal_addmagang').find('button[data-fancybox]').removeAttr('href')
+				$('#modal_addmagang').find('button[data-fancybox]').removeClass('btn-secondary')
+				$('#modal_addmagang').find('button[data-fancybox]').addClass('btn-dark')
+			})
 
 			$('#tambah_magang').validate({
 				ignore: [],
@@ -353,7 +449,8 @@
 					type: { required: true },
 					start_date: { required: true, date: true }, end_date: { required: true, date: true },
 					phone: { required: true, digits: true, minlength: 11, maxlength: 14 },
-					city: { required: true }, address: { required: true },
+					city: { required: true }, province: { required: true },
+					address: { required: true },
 					ktm: { required: true, extension: "pdf|jpeg|jpg|png", filesize : 1 },
 					proposal: { required: true, extension: "pdf", filesize : 2 },
 					antigen: { required: true, extension: "pdf", filesize : 1 },
