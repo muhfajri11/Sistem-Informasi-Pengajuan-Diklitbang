@@ -20,148 +20,146 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-				<div class="profile-tab">
-					<div class="custom-tab-1">
-						<ul class="nav nav-tabs">
-							<li class="nav-item">
-								<a href="#reviews" data-bs-toggle="tab" class="nav-table nav-link active show">Review</a>
-							</li>
-							<li class="nav-item">
-								<a href="#pembayaran" data-bs-toggle="tab" class="nav-table nav-link">Pembayaran</a>
-							</li>
-                            <li class="nav-item">
-								<a href="#accept" data-bs-toggle="tab" class="nav-table nav-link">Diterima</a>
-							</li>
-							<li class="nav-item">
-								<a href="#done" data-bs-toggle="tab" class="nav-table nav-link">Selesai</a>
-							</li>
-						</ul>
-						<div class="tab-content pt-4">
-							<div id="reviews" class="tab-pane fade active show">
-								<div class="row">
-									<div class="col-12">
-										<div class="d-flex justify-content-between mb-4">
-											<h3 class="font-weight-bold">Data Pengajuan <span class="small text-light">(Review)</span></h3>
+				<div class="custom-tab-1">
+					<ul class="nav nav-tabs">
+						<li class="nav-item">
+							<a href="#reviews" data-bs-toggle="tab" class="nav-table nav-link active show">Review</a>
+						</li>
+						<li class="nav-item">
+							<a href="#pembayaran" data-bs-toggle="tab" class="nav-table nav-link">Pembayaran</a>
+						</li>
+						<li class="nav-item">
+							<a href="#accept" data-bs-toggle="tab" class="nav-table nav-link">Diterima</a>
+						</li>
+						<li class="nav-item">
+							<a href="#done" data-bs-toggle="tab" class="nav-table nav-link">Selesai</a>
+						</li>
+					</ul>
+					<div class="tab-content pt-4">
+						<div id="reviews" class="tab-pane fade active show">
+							<div class="row">
+								<div class="col-12">
+									<div class="d-flex justify-content-between mb-4">
+										<h3 class="font-weight-bold">Data Pengajuan <span class="small text-light">(Review)</span></h3>
+										<div class="btn-group">
+											<button type="button" data-table="#data_reviews" class="btn btn-primary btn_refresh">
+												<i class="fas fa-sync-alt"></i> Refresh Data
+											</button>
 											<div class="btn-group">
-												<button type="button" data-table="#data_reviews" class="btn btn-primary btn_refresh">
-													<i class="fas fa-sync-alt"></i> Refresh Data
-												</button>
-												<div class="btn-group">
-													<button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
-													<div class="dropdown-menu">
-														<a class="dropdown-item" data-bs-toggle="modal" href="#modal_addmagang">
-															<i class="fas fa-file-alt me-2"></i> Ajukan
-														</a>
-													</div>
+												<button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
+												<div class="dropdown-menu">
+													<a class="dropdown-item" data-bs-toggle="modal" href="#modal_addmagang">
+														<i class="fas fa-file-alt me-2"></i> Ajukan
+													</a>
 												</div>
 											</div>
 										</div>
-										<div class="table-responsive">
-											<table id="data_reviews" class="display dt-responsive">
-												<thead>
-													<tr>
-														<th>#</th>
-														<th>Nama</th>
-														<th>Jurusan</th>
-														<th>Mulai Magang</th>
-														<th>Status</th>
-														<th>Action</th>
-													</tr>
-												</thead>
-												<tbody>
-												</tbody>
-											</table>
-										</div>
+									</div>
+									<div class="table-responsive">
+										<table id="data_reviews" class="display dt-responsive">
+											<thead>
+												<tr>
+													<th>#</th>
+													<th>Nama</th>
+													<th>Jurusan</th>
+													<th>Mulai Magang</th>
+													<th>Status</th>
+													<th>Action</th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
-							<div id="pembayaran" class="tab-pane fade">
-                                <div class="row">
-									<div class="col-12">
-										<div class="d-flex justify-content-between mb-4">
-											<h3 class="font-weight-bold">Data Pengajuan <span class="small text-light">(Pembayaran)</span></h3>
-											<button type="button" data-table="#data_payments" class="btn btn-rounded btn-primary btn_refresh">
-												<span class="btn-icon-start text-primary">
-													<i class="fas fa-sync-alt"></i>
-												</span> Refresh Data
-											</button>
-										</div>
-										<div class="table-responsive">
-											<table id="data_payments" class="display dt-responsive">
-												<thead>
-													<tr>
-														<th>#</th>
-														<th>Nama</th>
-														<th>Jurusan</th>
-														<th>Mulai Magang</th>
-														<th>Status</th>
-														<th>Action</th>
-													</tr>
-												</thead>
-												<tbody>
-												</tbody>
-											</table>
-										</div>
+						</div>
+						<div id="pembayaran" class="tab-pane fade">
+							<div class="row">
+								<div class="col-12">
+									<div class="d-flex justify-content-between mb-4">
+										<h3 class="font-weight-bold">Data Pengajuan <span class="small text-light">(Pembayaran)</span></h3>
+										<button type="button" data-table="#data_payments" class="btn btn-rounded btn-primary btn_refresh">
+											<span class="btn-icon-start text-primary">
+												<i class="fas fa-sync-alt"></i>
+											</span> Refresh Data
+										</button>
+									</div>
+									<div class="table-responsive">
+										<table id="data_payments" class="display dt-responsive">
+											<thead>
+												<tr>
+													<th>#</th>
+													<th>Nama</th>
+													<th>Jurusan</th>
+													<th>Mulai Magang</th>
+													<th>Status</th>
+													<th>Action</th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
-                            <div id="accept" class="tab-pane fade">
-                                <div class="row">
-									<div class="col-12">
-										<div class="d-flex justify-content-between mb-4">
-											<h3 class="font-weight-bold">Data Pengajuan <span class="small text-light">(Diterima)</span></h3>
-											<button type="button" data-table="#data_accepts" class="btn btn-rounded btn-primary btn_refresh">
-												<span class="btn-icon-start text-primary">
-													<i class="fas fa-sync-alt"></i>
-												</span> Refresh Data
-											</button>
-										</div>
-										<div class="table-responsive">
-											<table id="data_accepts" class="display dt-responsive">
-												<thead>
-													<tr>
-														<th>#</th>
-														<th>Nama</th>
-														<th>Jurusan</th>
-														<th>Selesai Magang</th>
-														<th>Tipe Magang</th>
-														<th>Action</th>
-													</tr>
-												</thead>
-												<tbody>
-												</tbody>
-											</table>
-										</div>
+						</div>
+						<div id="accept" class="tab-pane fade">
+							<div class="row">
+								<div class="col-12">
+									<div class="d-flex justify-content-between mb-4">
+										<h3 class="font-weight-bold">Data Pengajuan <span class="small text-light">(Diterima)</span></h3>
+										<button type="button" data-table="#data_accepts" class="btn btn-rounded btn-primary btn_refresh">
+											<span class="btn-icon-start text-primary">
+												<i class="fas fa-sync-alt"></i>
+											</span> Refresh Data
+										</button>
+									</div>
+									<div class="table-responsive">
+										<table id="data_accepts" class="display dt-responsive">
+											<thead>
+												<tr>
+													<th>#</th>
+													<th>Nama</th>
+													<th>Jurusan</th>
+													<th>Selesai Magang</th>
+													<th>Tipe Magang</th>
+													<th>Action</th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
-							<div id="done" class="tab-pane fade">
-                                <div class="row">
-									<div class="col-12">
-										<div class="d-flex justify-content-between mb-4">
-											<h3 class="font-weight-bold">Data Pengajuan <span class="small text-light">(Selesai)</span></h3>
-											<button type="button" data-table="#data_dones" class="btn btn-rounded btn-primary btn_refresh">
-												<span class="btn-icon-start text-primary">
-													<i class="fas fa-sync-alt"></i>
-												</span> Refresh Data
-											</button>
-										</div>
-										<div class="table-responsive">
-											<table id="data_dones" class="display dt-responsive">
-												<thead>
-													<tr>
-														<th>#</th>
-														<th>Nama</th>
-														<th>Jurusan</th>
-														<th>Institusi</th>
-														<th>Tipe Magang</th>
-														<th>Action</th>
-													</tr>
-												</thead>
-												<tbody>
-												</tbody>
-											</table>
-										</div>
+						</div>
+						<div id="done" class="tab-pane fade">
+							<div class="row">
+								<div class="col-12">
+									<div class="d-flex justify-content-between mb-4">
+										<h3 class="font-weight-bold">Data Pengajuan <span class="small text-light">(Selesai)</span></h3>
+										<button type="button" data-table="#data_dones" class="btn btn-rounded btn-primary btn_refresh">
+											<span class="btn-icon-start text-primary">
+												<i class="fas fa-sync-alt"></i>
+											</span> Refresh Data
+										</button>
+									</div>
+									<div class="table-responsive">
+										<table id="data_dones" class="display dt-responsive">
+											<thead>
+												<tr>
+													<th>#</th>
+													<th>Nama</th>
+													<th>Jurusan</th>
+													<th>Institusi</th>
+													<th>Tipe Magang</th>
+													<th>Action</th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
@@ -173,6 +171,10 @@
     </div>
 
 	@include('dashboard.internship.components.madd_magang')
+
+	@include('dashboard.internship.components.medit_magang')
+
+	@include('dashboard.studibanding.components.madd_institusi')
 @endsection
 
 @section('script')
@@ -228,6 +230,354 @@
 			$('#start_date').pickadate('picker').set("min", "{{ date('Y-m-d') }}")
 			$('#end_date').pickadate('picker').set("disable", true)
 
+			const setDatatables = {
+				searching: true,
+				paging:true,
+				select: true,
+				info: true,         
+				language: {
+					paginate: {
+						next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+						previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>' 
+					},
+					searchPlaceholder: "Cari Sesuatu ..."
+				},
+				lengthChange: true,
+				"sAjaxDataProp": ""
+			}
+
+			const setBadgeStatus = status => {
+				switch(status){
+					case "reject":
+						return `
+						<span class="badge mx-auto badge-pill badge-danger">
+							${status}
+						</span>`;
+						break;
+					case "review":
+						return `
+						<span class="badge mx-auto badge-pill badge-dark">
+							${status}
+						</span>`;
+						break;
+					case "pay":
+						return `
+						<span class="badge mx-auto badge-pill badge-warning">
+							${status}
+						</span>`;
+						break;
+					case "accept":
+						return `
+						<span class="badge badge-pill badge-secondary">
+							${status}
+						</span>`;
+						break;
+					case "done":
+						return `
+						<span class="badge badge-pill badge-primary">
+							${status}
+						</span>`;
+						break;
+				}
+			}
+
+			const setBadgePay = pay => {
+				switch(pay){
+					case 0:
+						return `
+						<span class="badge mx-auto badge-pill badge-warning">
+							Belum Lunas
+						</span>`;
+						break;
+					case 1:
+						return `
+						<span class="badge mx-auto badge-pill badge-primary">
+							Lunas
+						</span>`;
+						break;
+				}
+			}
+
+			const setBadgeType = type_ => {
+				switch(type_){
+					case 'medic':
+						return `
+						<span class="badge mx-auto badge-pill badge-primary">
+							Medis
+						</span>`;
+						break;
+					case 'non-medic':
+						return `
+						<span class="badge mx-auto badge-pill badge-secondary">
+							Non Medis
+						</span>`;
+						break;
+				}
+			}
+
+			const dataReviews = setDatatables,
+                  dataPayments = setDatatables,
+                  dataAccept = setDatatables,
+				  dataDone = setDatatables;
+
+            $.extend(dataReviews, {
+                "ajax": {
+                    "type": "POST",
+                    "url": `{{ route('internship.all', 'review,reject') }}`,
+                    "timeout": 120000
+                },
+                "aoColumns": [
+                    {
+                        "mData": null,
+                        "render": function (data, row, type, meta) {
+                            return data.i;
+                        }
+                    },
+                    {
+                        "mData": null,
+                        "render": function (data, row, type, meta) {
+                            return data.name;
+                        }
+                    },
+                    {
+                        "mData": null,
+                        "render": function (data, row, type, meta) {
+                            return data.jurusan;
+                        }
+                    },
+                    {
+                        "mData": null,
+                        "render": function (data, row, type, meta) {
+                            return data.start_date;
+                        }
+                    },
+                    {
+                        "mData": null,
+                        "render": function (data, row, type, meta) {
+                            return setBadgeStatus(data.status);
+                        }
+                    },
+                    {
+                        "mData": null,
+                        "sortable": false,
+                        "render": function (data, row, type, meta) {
+                            
+                            let btn = `
+                            <div class="btn-group">
+                                <button data-id="${ data.id }"
+                                    class="btn btn-primary shadow btn-xs px-2"
+                                    data-bs-toggle="modal" data-bs-target="#modal_detailmagang">
+                                    <i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
+                                </button>
+                                <div class="btn-group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
+                                    <div class="dropdown-menu">
+                                        <button class="dropdown-item" data-id="${ data.id }"
+                                            data-bs-toggle="modal" data-bs-target="#modal_editmagang">
+                                            <i class="fas fa-cog me-1"></i> Edit
+                                        </button>
+										<button class="dropdown-item" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.id}">
+											<i class="fas fa-file me-1"></i> Upload Pembayaran
+										</button>
+                                        <button class="dropdown-item delete_magang" data-id="${ data.id }" data-name="${data.title}" data-from="#data_reviews">
+                                            <i class="fas fa-trash me-1"></i> Hapus
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>`;
+
+                            return btn;
+                        }
+                    }
+                ]
+            })
+
+            let reviews_datatable = $('#data_reviews').DataTable(dataReviews);
+
+			const reloadData = idTag => {
+				let text = '';
+				switch(idTag){
+					case '#data_reviews': text = "Reload Data Reviews"; break;
+					case '#data_payments': text = "Reload Data Payments"; break;
+					case '#data_accepts': text = "Reload Data Accepts"; break;
+					case '#data_done': text = "Reload Data Lulus"; break;
+				}
+
+				$(idTag).DataTable().ajax.reload(function(){
+					toastr.success("Berhasil refresh data", text, {
+						timeOut: 2000,
+						closeButton: !0,
+						debug: !1,
+						newestOnTop: !0,
+						progressBar: !0,
+						positionClass: "toast-top-right",
+						preventDuplicates: !0,
+						onclick: null,
+						showDuration: "300",
+						hideDuration: "1000",
+						extendedTimeOut: "1000",
+						showEasing: "swing",
+						hideEasing: "linear",
+						showMethod: "fadeIn",
+						hideMethod: "fadeOut",
+						tapToDismiss: !1
+					})
+				});
+			};
+
+			const checkDatatable = table => {
+				switch(table){
+					case 'reviews':
+						if(!$.fn.DataTable.isDataTable('#data_reviews')){
+							$('#data_reviews').DataTable(dataReviews);
+						} else {
+							reloadData('#data_reviews')
+						}
+					break;
+					case 'pembayaran':
+						if(!$.fn.DataTable.isDataTable('#data_payments')){
+							$.extend(dataPayments, {
+                                "ajax": {
+                                    "type": "POST",
+                                    "url": `{{ route('internship.all', 'pay') }}`,
+                                    "timeout": 120000
+                                },
+                                "aoColumns": [
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.i;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.name;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.jurusan;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.start_date;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return setBadgePay(data.paid);
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "sortable": false,
+                                        "render": function (data, row, type, meta) {
+                                            
+                                            let btn = `
+                                            <div class="btn-group">
+                                                <button data-id="${ data.id }"
+                                                    class="btn btn-primary shadow btn-xs px-2"
+                                                    data-bs-toggle="modal" data-bs-target="#modal_detailmagang">
+                                                    <i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
+                                                </button>
+                                                <div class="btn-group">
+                                                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
+                                                    <div class="dropdown-menu">
+                                                        <button class="dropdown-item" data-id="${ data.id }"
+                                                            data-bs-toggle="modal" data-bs-target="#modal_editmagang">
+                                                            <i class="fas fa-cog me-1"></i> Edit
+                                                        </button>
+														<button class="dropdown-item" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.id}">
+															<i class="fas fa-file me-1"></i> Upload Pembayaran
+														</button>
+                                                        <button class="dropdown-item delete_magang" data-id="${ data.id }" data-name="${data.title}" data-from="#data_payments">
+                                                            <i class="fas fa-trash me-1"></i> Hapus
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>`;
+
+                                            return btn;
+                                        }
+                                    }
+                                ]
+                            })
+
+							$('#data_payments').DataTable(dataPayments);
+						} else {
+							reloadData('#data_payments')
+						}
+					break;
+                    case 'accept':
+						if(!$.fn.DataTable.isDataTable('#data_accepts')){
+							$.extend(dataAccept, {
+                                "ajax": {
+                                    "type": "POST",
+                                    "url": `{{ route('internship.all', 'accept') }}`,
+                                    "timeout": 120000
+                                },
+                                "aoColumns": [
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.i;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.nama;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.jurusan;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.end_date;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return setBadgeType(data.type);
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "sortable": false,
+                                        "render": function (data, row, type, meta) {
+                                            
+                                            let btn = `
+                                            	<button data-id="${ data.id }"
+                                                    class="btn btn-primary shadow btn-xs px-2"
+                                                    data-bs-toggle="modal" data-bs-target="#modal_detailmagang">
+                                                    <i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
+                                                </button>`;
+
+                                            return btn;
+                                        }
+                                    }
+                                ]
+                            })
+
+							$('#data_accepts').DataTable(dataAccept);
+						} else {
+							reloadData('#data_accepts')
+						}
+					break;
+				}
+			}
+
 			$('.nav-table').on('shown.bs.tab', function (event) {
 				const active = event.target, // newly activated tab
 					previousActive = event.relatedTarget // previous active tab
@@ -242,6 +592,13 @@
 
 				checkDatatable(id_active)
 			})
+			
+			$('.tab-content').on('click', '.btn_refresh', function(e){
+				e.preventDefault();
+				const id_elm = $(this).data('table');
+
+				reloadData(id_elm);
+			})
 
 			$('.nav-daftar').on('shown.bs.tab', function (event) {
 				const active = event.target, // newly activated tab
@@ -254,42 +611,104 @@
 				id_active = id_active.split('#')[1],
 				id_previousActive = id_previousActive.split('#')[1]
 
-				if(id_active == 'berkas'){
+				if(id_active == 'berkas' || id_active == 'invoice'){
 					const htmlBack = `<button 
 						type="button" 
 						id="btnmagang_back" 
 					class="btn btn-secondary">Kembali</button>`;
 
+					$('#html_back').html('');
 					$('#html_back').append($(htmlBack));
-					btnSubmit.prop('type', 'submit');
-					btnSubmit.html('Simpan Data');
+					if(id_active == 'berkas'){
+						$('#html_back button').attr('data-back', 'biodata');
+						btnSubmit.prop('type', 'button');
+						btnSubmit.html('Lanjut');
+						btnSubmit.attr('data-next', 'invoice');
+					} else {
+						$('#html_back button').attr('data-back', 'berkas')
+						btnSubmit.prop('type', 'submit');
+						btnSubmit.html('Simpan Data');
+						btnSubmit.removeAttr('data-next');
+					}
 				} else {
 					$('#html_back').html('');
 					btnSubmit.prop('type', 'button');
 					btnSubmit.html('Lanjut');
+					btnSubmit.attr('data-next', 'berkas');
 				}
 			})
 
-			$('#btnmagang_submit').click(function(e){
-				const type = $(this).prop('type')
+			$('.nav-edit').on('shown.bs.tab', function (event) {
+				const active = event.target, // newly activated tab
+					previousActive = event.relatedTarget,	// previous active tab
+					modal = $(active).closest('.modal'),
+					btnSubmit = modal.find('#btnmagang_submit');
 
-				if(type == 'button') $('a[href="#berkas"]').tab('show')
+				let id_active = $(active).attr('href'),
+					id_previousActive = $(previousActive).attr('href');
+
+				id_active = id_active.split('#')[1],
+				id_previousActive = id_previousActive.split('#')[1]
+
+				if(id_active == 'berkas_edit' || id_active == 'invoice_edit'){
+					const htmlBack = `<button 
+						type="button" 
+						id="btnmagang_back" 
+					class="btn btn-secondary">Kembali</button>`;
+
+					modal.find('#html_back').html('');
+					modal.find('#html_back').append($(htmlBack));
+					if(id_active == 'berkas_edit'){
+						modal.find('#html_back button').attr('data-back', 'biodata_edit');
+						btnSubmit.prop('type', 'button');
+						btnSubmit.html('Lanjut');
+						btnSubmit.attr('data-next', 'invoice_edit');
+					} else {
+						modal.find('#html_back button').attr('data-back', 'berkas_edit')
+						btnSubmit.prop('type', 'submit');
+						btnSubmit.html('Simpan Data');
+						btnSubmit.removeAttr('data-next');
+					}
+				} else {
+					modal.find('#html_back').html('');
+					btnSubmit.prop('type', 'button');
+					btnSubmit.html('Lanjut');
+					btnSubmit.attr('data-next', 'berkas_edit');
+				}
 			})
 
-			$('#modal_addmagang').on('click', '#btnmagang_back', 
-				() => $('a[href="#biodata"]').tab('show'))
+			$('#modal_addmagang, #modal_editmagang').on('click', '#btnmagang_submit', function(e){
+				const modal = $(this).closest('.modal'),
+					  type = $(this).prop('type'),
+					  next = $(this).attr('data-next');
 
-			$('#modal_addmagang').on('change', '.form-daftar', function(e) {
+				if(type == 'button') modal.find(`a[href="#${next}"]`).tab('show')
+			})
+
+			$('#modal_addmagang, #modal_editmagang').on('click', '#btnmagang_back', function(){
+				const modal = $(this).closest('.modal'),
+					  next = $(this).attr('data-back');
+
+				modal.find(`a[href="#${next}"]`).tab('show')
+			})
+
+			$('#modal_addmagang, #modal_editmagang').on('change', '.form-daftar', function(e) {
 				const btn_preview = $(this).parent().parent(),
 					  form_file = $(this),
 					  reader = new FileReader();
 
 				if(this.files[0]){
+					const fileTypes = ['pdf'],
+						  extension = this.files[0].name.split('.').pop().toLowerCase(),  //file extension from input file
+            			  isSuccess = fileTypes.indexOf(extension) > -1;  //is extension in acceptable types
+
 					reader.onload = function(e) {
 						btn_preview.find('button').prop('disabled', false)
 						btn_preview.find('button').removeClass('btn-dark')
 						btn_preview.find('button').addClass('btn-secondary')
 						btn_preview.find('button').attr('href', e.target.result);
+
+						if(isSuccess) btn_preview.find('button').attr('data-type', 'pdf');
 					}
 					reader.readAsDataURL(this.files[0]);
 				} else {
@@ -297,11 +716,12 @@
 					btn_preview.find('button').addClass('btn-dark')
 					btn_preview.find('button').removeClass('btn-secondary')
 					btn_preview.find('button').removeAttr('href');
+					btn_preview.find('button').removeAttr('data-type');
 				}
 
 			});
 
-			$('#modal_addmagang').on('change', 'input[name="start_date"]', function(e) {
+			$('#modal_addmagang, #modal_editmagang').on('change', 'input[name="start_date"]', function(e) {
 				const modal = $(this).closest('.modal')
 					  minDate = new Date($(this).val());
 
@@ -313,7 +733,7 @@
 				})
 			});
 
-			$('#modal_addmagang').on('click', '.min_members', function(e){
+			$('#modal_addmagang, #modal_editmagang').on('click', '.min_members', function(e){
                 e.preventDefault();
                 const members = $(this).parent().find('input'),
                       membersNow = parseInt(members.val())
@@ -321,7 +741,7 @@
                 if(membersNow > 1) members.val(membersNow - 1)
             })
 
-            $('#modal_addmagang').on('click', '.add_members', function(e){
+            $('#modal_addmagang, #modal_editmagang').on('click', '.add_members', function(e){
                 e.preventDefault();
                 const members = $(this).parent().find('input'),
                       membersNow = parseInt(members.val())
@@ -329,9 +749,10 @@
                 if(membersNow > 0) members.val(membersNow + 1)
             })
 
-			$('#modal_addmagang').on('show.bs.modal', function (e) {
-                const modal = $(this);
-				let institutions, province, city;
+			$('#modal_addmagang, #modal_editmagang').on('show.bs.modal', function (e) {
+                const modal = $(this),
+					  data_id = $(e.relatedTarget).data('id');
+				let institutions, province;
 
                 $.when(
 					$.ajax({
@@ -361,21 +782,14 @@
 					}).fail(function(data){
 						console.log(data)
 						console.log("error");
-					}),
-					$.ajax({
-						url: 'https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=32',
-						type: 'GET',
-						dataType: 'json',
-						headers: '',
-						cache: false
-					}).done(function (data) {
-						city = data.kota_kabupaten
-					}).fail(function(data){
-						console.log(data)
-						console.log("error");
 					})
 				).then(function(){
 					let html_ = [];
+
+					if(modal.prop('id') == 'modal_addmagang'){
+						modal.find('input[name="name"]').val("{{ auth()->user()->name }}")
+						modal.find('input[name="phone"]').val("{{ auth()->user()->phone }}")
+					}
 
 					$.each(institutions, function(i, val) {
 						html_.push({id: val.id, text: val.name});
@@ -386,21 +800,53 @@
 					$.each(province, function(i, val) {
 						html_.push({id: val.id, text: val.nama});
 					})
-					modal.find("select[name='province']").html('').select2({data: html_});
-					modal.find("select[name='province']").val(32).change();
 
-					html_ = [];
-					$.each(city, function(i, val) {
-						html_.push({id: val.id, text: val.nama});
-					})
-					modal.find("select[name='city']").html('').select2({data: html_});
-					modal.find("select[name='city']").val(3209).change();
+					modal.find("select[name='province']").html('').select2({data: html_});
+					if(modal.prop('id') == 'modal_addmagang'){
+						modal.find("select[name='province']").attr('data-city', '3209');
+						modal.find("select[name='province']").val(32).change();
+					}
 				})
+
+				if(modal.prop('id') == 'modal_editmagang'){
+					$.ajax({
+						url: '{{ route('internship.get') }}',
+						type: 'POST',
+						data : {id: data_id},
+						dataType: 'json',
+						cache: false
+					}).done(function (data) {
+						if(data.success){
+							modal.find('input[name="name"]').val(data.get.name)
+							modal.find('input[name="nim"]').val(data.get.nim)
+							modal.find('input[name="jurusan"]').val(data.get.jurusan)
+							modal.find('select[name="institusi"]').val(data.get.institution_id).change()
+							modal.find('input[name="semester"]').val(data.get.semester)
+							modal.find('select[name="type"]').val(data.get.type).change()
+							modal.find('input[name="phone"]').val(data.get.phone)
+							modal.find("select[name='province']").attr('data-city', data.get.city);
+							modal.find("select[name='province']").val(data.get.province).change();
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					})
+				}
             })
 
-			$('#modal_addmagang').on('change', 'select[name="province"]', function(e){
+			$('#modal_addmagang, #modal_editmagang').on('change', 'select[name="province"]', function(e){
+				e.preventDefault();
 				const modal = $(this).closest('.modal'),
-					  id 	= $(this).val();
+					  id 	= $(this).val(),
+					  elm = $(this),
+					  checkattr = $(this).hasAttr('data-city');
+
+				if(checkattr) {
+					var data_id = $(this).attr('data-city');
+				}
 
 				$.ajax({
 					url: `https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=${id}`,
@@ -418,23 +864,64 @@
 					})
 
 					modal.find("select[name='city']").html('').select2({data: html_});
+
+					if(checkattr){
+						modal.find("select[name='city']").val(data_id).change()
+						elm.removeAttr('data-city')
+					}
 				}).fail(function(data){
 					console.log(data)
 					console.log("error");
 				})
 			});
 
+			$('#modal_addmagang').on('change', 'input[name="mou"]', function(e){
+				const modal = $(this).closest('.modal'),
+					  val = $(this).val();
+
+				if(val){
+					modal.find('#docmou_daftar').html('Punya')
+					modal.find('#pay_daftar').html(`Rp ${currency.format(150000)}`)
+				} else {
+					modal.find('#docmou_daftar').html('Tidak Punya')
+					modal.find('#pay_daftar').html(`Rp ${currency.format(300000)}`)
+				}
+			})
+
+			$('#modal_addmagang').on('click', '#btn_addinstitusi', function(e){
+                e.preventDefault();
+				const modal = $(this).closest('.modal');
+
+                modal.modal('hide');
+                $('#modal_addinstitusi').modal('show');
+            })
+
 			$('#modal_addmagang').on('hide.bs.modal', function (e) {
                 const modal = $(this);
 
-				$('#tambah_magang')[0].reset();
-				$("#institusi_daftar").html('').select2({data: []});
-				$("#province_daftar").html('').select2({data: []});
-				$("#city_daftar").html('').select2({data: []});
+				modal.find('form')[0].reset();
+				modal.find("select[name='institusi']").html('').select2({data: []});
+				modal.find("select[name='province']").html('').select2({data: []});
+				modal.find("select[name='city']").html('').select2({data: []});
 
-				$('#modal_addmagang').find('button[data-fancybox]').removeAttr('href')
-				$('#modal_addmagang').find('button[data-fancybox]').removeClass('btn-secondary')
-				$('#modal_addmagang').find('button[data-fancybox]').addClass('btn-dark')
+				modal.find('button[data-fancybox]').prop('disabled', true)
+				modal.find('button[data-fancybox]').removeAttr('href')
+				modal.find('button[data-fancybox]').removeClass('btn-secondary')
+				modal.find('button[data-fancybox]').addClass('btn-dark')
+				modal.find('button[data-fancybox]').removeAttr('data-type');
+
+				modal.find('input[name="start_date"]').val('')
+				modal.find('input[name="end_date"]').val('')
+				modal.find('input[name="end_date"]').pickadate('picker').set("disable", true)
+
+				modal.find('.docmou').html('Tidak Punya')
+				modal.find('.pay').html(`Rp ${currency.format(300000)}`)
+			})
+
+			$('#modal_addinstitusi').on('hide.bs.modal', function (e) {
+                const modal = $(this);
+
+				modal.find('form')[0].reset();
 			})
 
 			$('#tambah_magang').validate({
@@ -460,12 +947,89 @@
 					izin_pkl: { required: true, extension: "pdf", filesize : 1 },
 					akreditasi: { required: true, extension: "pdf", filesize : 1 },
 					mou: { required: false, extension: "pdf", filesize : 1 },
-					bukti_pkl: { required: false, extension: "pdf", filesize : 1 }
+					bukti_pkl: { required: false, extension: "pdf", filesize : 1 },
+					eviden_paid: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 1 },
 				},
 				submitHandler: function (form) {
-					let data_daftar = $(form).serializeObject();
+					let data_daftar = new FormData(form);
 
-					console.log(data_daftar)
+					$.ajax({
+						url: "{{ route('internship.store') }}",
+						type: 'POST',
+						data: data_daftar,
+						async: false,
+						processData: false,
+						contentType: false,
+						cache: false,
+						dataType: 'json',
+						enctype: 'multipart/form-data',
+						beforeSend: function(){
+							$('#modal_addmagang').modal('hide')
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function (data) {						
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						
+						if(data.success){
+							alertSuccess("Berhasil", data.msg)
+							reloadData('#data_reviews');
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					});   
+				}
+			})
+
+			$('#tambah_institusi').validate({
+				rules:{
+					name: { required: true, alphanumeric: true,
+                        remote: {
+							url: '{{ route("verify_institution") }}',
+							type: 'POST',
+							data: {
+								name: function(){
+									return $('#namainstitusi_daftar').val();
+								}
+							}
+						} }
+				},
+				submitHandler: function (form) {
+					$.ajax({
+						url: "{{ route('store_institution') }}",
+						method: 'POST',
+						data: {"name" : $('#namainstitusi_daftar').val()},
+						beforeSend: function(){
+							$('#modal_addinstitusi').modal('hide')
+							$('#tambah_institusi')[0].reset();
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function (data) {						
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						
+						if(data.success){
+							alertSuccess("Berhasil", data.msg)
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					});   
 				}
 			})
 

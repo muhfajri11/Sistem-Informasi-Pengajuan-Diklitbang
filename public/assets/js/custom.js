@@ -537,3 +537,7 @@ $.fn.serializeObject = function()
    });
    return o;
 };
+
+$.fn.hasAttr = function(name) {  
+   return this.attr(name) !== undefined;
+};

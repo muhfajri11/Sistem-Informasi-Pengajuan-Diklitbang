@@ -1,12 +1,13 @@
-<div class="modal fade" id="modal_addmagang" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modal_editmagang" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <form class="modal-content" id="tambah_magang" enctype="multipart/form-data" novalidate>
+        <form class="modal-content" id="edit_magang" enctype="multipart/form-data" novalidate>
             <div class="modal-header">
                 <h3 class="modal-title text-secondary"><i class="fas fa-file-alt me-2"></i> Ajukan Magang</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
             <div class="modal-body">
+                <input type="hidden" name="id" id="id_bukti" required>
                 <div class="col-12">
                     <div class="alert alert-secondary alert-alt fade show">
                         <h5>Aturan Biaya Magang (Pendaftaran)</h5>
@@ -17,17 +18,17 @@
                 <div class="custom-tab-1">
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
-                            <a href="#biodata" data-bs-toggle="tab" class="nav-daftar nav-link active show">Biodata</a>
+                            <a href="#biodata_edit" data-bs-toggle="tab" class="nav-edit nav-link active show">Biodata</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#berkas" data-bs-toggle="tab" class="nav-daftar nav-link">Berkas</a>
+                            <a href="#berkas_edit" data-bs-toggle="tab" class="nav-edit nav-link">Berkas</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#invoice" data-bs-toggle="tab" class="nav-daftar nav-link">Biaya</a>
+                            <a href="#invoice_edit" data-bs-toggle="tab" class="nav-edit nav-link">Biaya</a>
                         </li>
                     </ul>
                     <div class="tab-content pt-4">
-                        <div id="biodata" class="tab-pane fade active show">
+                        <div id="biodata_edit" class="tab-pane fade active show">
                             <div class="row">                                
                                 <div class="col-12 mb-2">
                                     <div class="form-group">
@@ -116,8 +117,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="berkas" class="tab-pane fade">
+                        <div id="berkas_edit" class="tab-pane fade">
                             <div class="row">
+                                <div class="col-12">
+                                    <div class="alert alert-warning alert-alt fade show">
+                                        <p class="mb-0">Kosongkan kolom input jika tidak ada perubahan berkas</p>
+                                    </div>
+                                </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
                                         <label for="ktm_daftar">KTM</label>
@@ -240,7 +246,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="invoice" class="tab-pane fade">
+                        <div id="invoice_edit" class="tab-pane fade">
                             <div class="row">
                                 <div class="col-12 col-sm-6 mb-2 d-flex align-items-center">
                                     <i class="fas fa-file fa-2x me-4 text-primary"></i>
@@ -275,7 +281,7 @@
             </div>
             <div class="modal-footer">
                 <div id="html_back"></div>
-                <button type="button" id="btnmagang_submit" data-next="berkas" class="btn btn-primary">Lanjut</button>
+                <button type="button" id="btnmagang_submit" data-next="berkas_edit" class="btn btn-primary">Lanjut</button>
             </div>
         </form>
     </div>

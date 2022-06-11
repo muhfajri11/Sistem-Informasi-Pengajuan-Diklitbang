@@ -16,16 +16,17 @@ class CreateInternshipsTable extends Migration
         Schema::create('internships', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('file_internship_id');
+            $table->foreignId('file_internship_id')->nullable();
             $table->foreignId('institution_id');
 
             $table->string('name');
             $table->string('nim', 100);
             $table->string('jurusan');
+            $table->tinyInteger('semester');
             $table->text('address');
 
-            $table->tinyInteger('province');
-            $table->tinyInteger('city');
+            $table->integer('province');
+            $table->integer('city');
             
             $table->string('phone');
 

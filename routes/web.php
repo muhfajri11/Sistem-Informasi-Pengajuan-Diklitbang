@@ -70,7 +70,9 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
 
     Route::get('/internship', 'InternshipController@index')->name('internship');
     Route::name('internship.')->prefix('internship')->group(function() {
-
+        Route::post('/all/{type}', 'InternshipController@all')->name('all');
+        Route::post('/get_once', 'InternshipController@get_once')->name('get');
+        Route::post('/store', 'InternshipController@store')->name('store');
     });
 
     Route::post('/get_institusi', 'InstitutionController@get')->name('get_institution');

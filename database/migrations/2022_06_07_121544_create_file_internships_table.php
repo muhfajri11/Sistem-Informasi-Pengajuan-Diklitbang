@@ -19,6 +19,7 @@ class CreateFileInternshipsTable extends Migration
             $table->string('akreditasi');
             $table->string('panduan_praktek');
             $table->string('ktm');
+            $table->string('transkrip');
             $table->string('izin_pkl');
             $table->string('izin_ortu');
             $table->string('antigen');
