@@ -33,4 +33,11 @@ class Controller extends BaseController
         return $image_name;
     }
 
+    public function deleteImage($data){
+        $name_file = $data['path'].$data['image'];
+        $result = \Storage::delete($name_file);
+
+        return $result;
+    }
+
 }

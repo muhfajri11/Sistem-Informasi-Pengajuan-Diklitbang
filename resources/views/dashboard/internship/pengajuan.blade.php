@@ -383,7 +383,7 @@
 										<button class="dropdown-item" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.id}">
 											<i class="fas fa-file me-1"></i> Upload Pembayaran
 										</button>
-                                        <button class="dropdown-item delete_magang" data-id="${ data.id }" data-name="${data.title}" data-from="#data_reviews">
+                                        <button class="dropdown-item delete_magang" data-id="${ data.id }" data-name="${data.name}" data-from="#data_reviews">
                                             <i class="fas fa-trash me-1"></i> Hapus
                                         </button>
                                     </div>
@@ -1242,6 +1242,47 @@
                 const modal = $(this);
 
 				modal.find('form')[0].reset();
+			})
+
+			$('#data_reviews').on('click', ".delete_magang", function(e){
+				e.preventDefault();
+				const id = $(this).data('id'),
+					  name = $(this).data('name'),
+					  id_elm = $(this).data('from');
+
+				Swal.fire({
+					title: `Apakah kamu yakin ingin menghapus ${name}?`,
+					showDenyButton: true,
+					showConfirmButton: false,
+					showCancelButton: true,
+					denyButtonText: `Hapus`
+				}).then((result) => {
+					if (result.isDenied) {
+						$.ajax({
+							url: "{{ route('internship.delete') }}",
+							data: {id: id, _method: "DELETE"},
+							method: 'POST',
+							async:false,
+							dataType: 'json',
+							beforeSend: function(){
+								$('#preloader').removeClass('d-none');
+								$('#main-wrapper').removeClass('show');
+							}
+						}).done(function(data){
+							if(data.success){
+								alertWarning("Berhasil Hapus Pengajuan", data.msg)
+								reloadData(id_elm)
+							} else {
+								alertError("Terjadi Kesalahan", data.msg)
+							}
+
+							$('#preloader').addClass('d-none');
+							$('#main-wrapper').addClass('show');
+						}).fail(function(data){
+							console.log(data.responseText)
+						});
+					}
+				})
 			})
 
 			$('#edit_magang').validate({

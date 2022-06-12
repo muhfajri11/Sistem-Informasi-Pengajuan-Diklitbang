@@ -76,6 +76,7 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::patch('/update', 'InternshipController@update')->name('update');
 
         Route::put('/update_eviden', 'InternshipController@update_eviden')->name('update_eviden');
+        Route::delete('/delete', 'InternshipController@delete')->name('delete');
     });
 
     Route::post('/get_institusi', 'InstitutionController@get')->name('get_institution');

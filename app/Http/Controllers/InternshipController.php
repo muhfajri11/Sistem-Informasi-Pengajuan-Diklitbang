@@ -60,7 +60,7 @@ class InternshipController extends Controller
     }
 
     public function get_once(Request $request){
-        $intern = Internship::with('rooms', 'user', 'institution', 'file_internship')->find(1);
+        $intern = Internship::with('rooms', 'user', 'institution', 'file_internship')->find($request->id);
 
         $intern->start_date = Carbon::createFromFormat('Y-m-d', $intern->start_date)->format('d F Y');
         $intern->end_date = Carbon::createFromFormat('Y-m-d', $intern->end_date)->format('d F Y');
@@ -485,4 +485,167 @@ class InternshipController extends Controller
 
         return response()->json(['success' => true, 'msg' => "Berhasil upload bukti pembayaran"], 200);
     }
+
+    public function delete(){
+        $req = request()->all();
+
+        $intern = Internship::with('file_internship')->find($req['id']);
+
+        $delete_image = $this->deleteImage([
+            'path'  => "public/magang/proposal/",
+            'image' => $intern->file_internship->proposal
+        ]);
+
+        if(!$delete_image){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'File tidak terdeteksi Proposal'
+            ], 500);
+        }
+
+        $delete_image = $this->deleteImage([
+            'path'  => "public/magang/akreditasi/",
+            'image' => $intern->file_internship->akreditasi
+        ]);
+
+        if(!$delete_image){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'File tidak terdeteksi Akreditasi'
+            ], 500);
+        }
+
+        $delete_image = $this->deleteImage([
+            'path'  => "public/magang/panduanpraktek/",
+            'image' => $intern->file_internship->panduan_praktek
+        ]);
+
+        if(!$delete_image){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'File tidak terdeteksi Panduan Praktek'
+            ], 500);
+        }
+
+        $delete_image = $this->deleteImage([
+            'path'  => "public/magang/ktm/",
+            'image' => $intern->file_internship->ktm
+        ]);
+
+        if(!$delete_image){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'File tidak terdeteksi KTM'
+            ], 500);
+        }
+
+        $delete_image = $this->deleteImage([
+            'path'  => "public/magang/transkrip/",
+            'image' => $intern->file_internship->transkrip
+        ]);
+
+        if(!$delete_image){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'File tidak terdeteksi Transkrip'
+            ], 500);
+        }
+
+        $delete_image = $this->deleteImage([
+            'path'  => "public/magang/izinpkl/",
+            'image' => $intern->file_internship->izin_pkl
+        ]);
+
+        if(!$delete_image){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'File tidak terdeteksi Surat Izin Magang'
+            ], 500);
+        }
+
+        $delete_image = $this->deleteImage([
+            'path'  => "public/magang/izinortu/",
+            'image' => $intern->file_internship->izin_ortu
+        ]);
+
+        if(!$delete_image){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'File tidak terdeteksi Surat Izin Orang Tua'
+            ], 500);
+        }
+
+        $delete_image = $this->deleteImage([
+            'path'  => "public/magang/antigen/",
+            'image' => $intern->file_internship->antigen
+        ]);
+
+        if(!$delete_image){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'File tidak terdeteksi Antigen'
+            ], 500);
+        }
+        
+        if($intern->file_internship->mou){
+            $delete_image = $this->deleteImage([
+                'path'  => "public/magang/mou/",
+                'image' => $intern->file_internship->mou
+            ]);
+
+            if(!$delete_image){
+                return response()->json([
+                    'success' => false,
+                    'msg'     => 'File tidak terdeteksi MOU'
+                ], 500);
+            }
+        }
+
+        if($intern->file_internship->bukti_pkl){
+            $delete_image = $this->deleteImage([
+                'path'  => "public/magang/buktipkl/",
+                'image' => $intern->file_internship->bukti_pkl
+            ]);
+
+            if(!$delete_image){
+                return response()->json([
+                    'success' => false,
+                    'msg'     => 'File tidak terdeteksi Pengalaman Magang'
+                ], 500);
+            }
+        }
+
+        if($intern->file_internship->eviden_paid){
+            $delete_image = $this->deleteImage([
+                'path'  => "public/magang/evidenpaid/",
+                'image' => $intern->file_internship->eviden_paid
+            ]);
+
+            if(!$delete_image){
+                return response()->json([
+                    'success' => false,
+                    'msg'     => 'File tidak terdeteksi Bukti Pembayaran'
+                ], 500);
+            }
+        }
+        
+        $intern->rooms()->detach();
+        $intern->file_internship()->delete();
+        $intern = Internship::where([
+            'id'      => $req['id']
+        ])->delete();
+
+        if(!$intern){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'Terjadi Kesalahan'
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg'     => 'Berhasil Hapus Data'
+        ], 200);
+    }
+
 }
