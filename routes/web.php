@@ -73,6 +73,9 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::post('/all/{type}', 'InternshipController@all')->name('all');
         Route::post('/get_once', 'InternshipController@get_once')->name('get');
         Route::post('/store', 'InternshipController@store')->name('store');
+        Route::patch('/update', 'InternshipController@update')->name('update');
+
+        Route::put('/update_eviden', 'InternshipController@update_eviden')->name('update_eviden');
     });
 
     Route::post('/get_institusi', 'InstitutionController@get')->name('get_institution');

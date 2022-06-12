@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <form class="modal-content" id="edit_magang" enctype="multipart/form-data" novalidate>
             <div class="modal-header">
-                <h3 class="modal-title text-secondary"><i class="fas fa-file-alt me-2"></i> Ajukan Magang</h3>
+                <h3 class="modal-title text-secondary"><i class="fas fa-cog me-2"></i> Update Pengajuan Magang</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
@@ -126,7 +126,7 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="ktm_daftar">KTM</label>
+                                        <label for="ktm_daftar">KTM <span id="btnedit_ktm"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
                                                 <input type="file" class="form-file-input form-daftar form-control" name="ktm" required>
@@ -138,7 +138,7 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="proposal_daftar">Proposal Magang</label>
+                                        <label for="proposal_daftar">Proposal Magang <span id="btnedit_proposal"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
                                                 <input type="file" class="form-file-input form-daftar form-control" name="proposal" required>
@@ -150,7 +150,7 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="antigen_daftar">Bukti Antigen</label>
+                                        <label for="antigen_daftar">Bukti Antigen <span id="btnedit_antigen"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
                                                 <input type="file" class="form-file-input form-daftar form-control" name="antigen" required>
@@ -162,7 +162,7 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="izinortu_daftar">Surat Izin Orang Tua (Materai)</label>
+                                        <label for="izinortu_daftar">Surat Izin Orang Tua (Materai) <span id="btnedit_izinortu"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
                                                 <input type="file" class="form-file-input form-daftar form-control" name="izin_ortu" required>
@@ -174,7 +174,7 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="proposal_daftar">Transkrip Kuliah</label>
+                                        <label for="proposal_daftar">Transkrip Kuliah <span id="btnedit_transkrip"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
                                                 <input type="file" class="form-file-input form-daftar form-control" name="transkrip" required>
@@ -186,7 +186,7 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="proposal_daftar">Panduan Praktek</label>
+                                        <label for="proposal_daftar">Panduan Praktek <span id="btnedit_panduanpraktek"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
                                                 <input type="file" class="form-file-input form-daftar form-control" name="panduan_praktek" required>
@@ -198,7 +198,7 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="proposal_daftar">Surat Izin Magang (dari Institusi)</label>
+                                        <label for="proposal_daftar">Surat Izin Magang (dari Institusi) <span id="btnedit_izinmagang"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
                                                 <input type="file" class="form-file-input form-daftar form-control" name="izin_pkl" required>
@@ -210,7 +210,7 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="akreditasi_daftar">Bukti Akreditasi Institusi</label>
+                                        <label for="akreditasi_daftar">Bukti Akreditasi Institusi <span id="btnedit_akreditasi"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
                                                 <input type="file" class="form-file-input form-daftar form-control" name="akreditasi" required>
@@ -222,7 +222,7 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="mou_daftar">MOU (Institusi dengan RS) <span class="text-light">(opsional)</span></label>
+                                        <label for="mou_daftar">MOU (Institusi dengan RS) <span class="text-light">(opsional)</span> <span id="btnedit_mou"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
                                                 <input type="file" class="form-file-input form-daftar form-control" name="mou" required>
@@ -234,7 +234,7 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="buktipkl_daftar">Pengalaman Magang Sebelumnya <span class="text-light">(opsional)</span></label>
+                                        <label for="buktipkl_daftar">Pengalaman Magang Sebelumnya <span class="text-light">(opsional)</span> <span id="btnedit_buktipkl"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
                                                 <input type="file" class="form-file-input form-daftar form-control" name="bukti_pkl" required>
@@ -252,19 +252,19 @@
                                     <i class="fas fa-file fa-2x me-4 text-primary"></i>
                                     <div>
                                         <p class="small text-right mb-0">Memiliki Dokumen MOU</p>
-                                        <h4 class="text-right docmou" id="docmou_daftar">Tidak Punya</h4>
+                                        <h4 class="text-right docmou" id="docmou_edit">Tidak Punya</h4>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 mb-2 d-flex align-items-center">
                                     <i class="fas fa-wallet fa-2x me-4 text-primary"></i>
                                     <div>
                                         <p class="small text-right mb-0">Biaya Pendaftaran</p>
-                                        <h4 class="text-right pay" id="pay_daftar">Rp 300.000</h4>
+                                        <h4 class="text-right pay" id="pay_edit">Rp 300.000</h4>
                                     </div>
                                 </div>
                                 <div class="col-12 mb-2">
                                     <div class="form-group">
-                                        <label for="ktm_daftar">Bukti Pembayaran <span class="small text-light">(opsional)</span></label>
+                                        <label for="ktm_daftar">Bukti Pembayaran <span class="small text-light">(opsional)</span> <span id="btnedit_evidenpaid"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
                                                 <input type="file" class="form-file-input form-daftar form-control" name="eviden_paid" required>

@@ -175,6 +175,8 @@
 	@include('dashboard.internship.components.medit_magang')
 
 	@include('dashboard.studibanding.components.madd_institusi')
+
+	@include('dashboard.internship.components.mupload_pembayaran')
 @endsection
 
 @section('script')
@@ -708,7 +710,11 @@
 						btn_preview.find('button').addClass('btn-secondary')
 						btn_preview.find('button').attr('href', e.target.result);
 
-						if(isSuccess) btn_preview.find('button').attr('data-type', 'pdf');
+						if(isSuccess){
+							btn_preview.find('button').attr('data-type', 'pdf')
+						} else {
+							btn_preview.find('button').removeAttr('data-type');
+						}
 					}
 					reader.readAsDataURL(this.files[0]);
 				} else {
@@ -789,6 +795,8 @@
 					if(modal.prop('id') == 'modal_addmagang'){
 						modal.find('input[name="name"]').val("{{ auth()->user()->name }}")
 						modal.find('input[name="phone"]').val("{{ auth()->user()->phone }}")
+					} else {
+						modal.find('#id_bukti').val(data_id)
 					}
 
 					$.each(institutions, function(i, val) {
@@ -817,6 +825,9 @@
 						cache: false
 					}).done(function (data) {
 						if(data.success){
+							const htmlBtnShow = `<button class="btn btn-secondary btn-xs ms-2" data-fancybox></button>`;
+							let htmlBtn, check;
+
 							modal.find('input[name="name"]').val(data.get.name)
 							modal.find('input[name="nim"]').val(data.get.nim)
 							modal.find('input[name="jurusan"]').val(data.get.jurusan)
@@ -826,6 +837,89 @@
 							modal.find('input[name="phone"]').val(data.get.phone)
 							modal.find("select[name='province']").attr('data-city', data.get.city);
 							modal.find("select[name='province']").val(data.get.province).change();
+							modal.find('input[name="start_date"]').pickadate('picker').set('select', data.get.start_date, { format: 'yyyy-mm-dd' })
+							modal.find('input[name="end_date"]').pickadate('picker').set('select', data.get.end_date, { format: 'yyyy-mm-dd' })
+
+							modal.find('textarea[name="address"]').val(data.get.address)
+							if(data.get.file_internship.mou){
+								modal.find('#docmou_edit').html('Punya')
+							} else {
+								modal.find('#docmou_edit').html('Tidak Punya')
+							}
+
+							modal.find('#pay_edit').html(`Rp ${currency.format(data.get.total_paid)}`)
+
+							htmlBtn = $(htmlBtnShow).html('Lihat KTM').attr('href', data.get.file_internship.ktm)
+							check = data.get.file_internship.ktm.split('.')[1];
+							if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
+
+							modal.find('#btnedit_ktm').append(htmlBtn)
+
+							htmlBtn = $(htmlBtnShow).html('Lihat Proposal').attr({
+								href: data.get.file_internship.proposal,
+								"data-type": 'pdf'
+							})
+							modal.find('#btnedit_proposal').append(htmlBtn)
+
+							htmlBtn = $(htmlBtnShow).html('Lihat Antigen').attr({
+								href: data.get.file_internship.antigen,
+								"data-type": 'pdf'
+							})
+							modal.find('#btnedit_antigen').append(htmlBtn)
+
+							htmlBtn = $(htmlBtnShow).html('Lihat Izin Ortu').attr('href', data.get.file_internship.izin_ortu)
+							check = data.get.file_internship.izin_ortu.split('.')[1];
+							if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
+
+							modal.find('#btnedit_izinortu').append(htmlBtn)
+
+							htmlBtn = $(htmlBtnShow).html('Lihat Transkrip').attr({
+								href: data.get.file_internship.transkrip,
+								"data-type": 'pdf'
+							})
+							modal.find('#btnedit_transkrip').append(htmlBtn)
+
+							htmlBtn = $(htmlBtnShow).html('Lihat Panduan Praktek').attr({
+								href: data.get.file_internship.panduan_praktek,
+								"data-type": 'pdf'
+							})
+							modal.find('#btnedit_panduanpraktek').append(htmlBtn)
+
+							htmlBtn = $(htmlBtnShow).html('Lihat Izin Magang').attr({
+								href: data.get.file_internship.izin_pkl,
+								"data-type": 'pdf'
+							})
+							modal.find('#btnedit_izinmagang').append(htmlBtn)
+
+							htmlBtn = $(htmlBtnShow).html('Lihat Akreditasi').attr({
+								href: data.get.file_internship.akreditasi,
+								"data-type": 'pdf'
+							})
+							modal.find('#btnedit_akreditasi').append(htmlBtn)
+
+							if(data.get.file_internship.mou){
+								htmlBtn = $(htmlBtnShow).html('Lihat Mou').attr({
+									href: data.get.file_internship.mou,
+									"data-type": 'pdf'
+								})
+								modal.find('#btnedit_mou').append(htmlBtn)
+							}
+
+							if(data.get.file_internship.bukti_pkl){
+								htmlBtn = $(htmlBtnShow).html('Lihat Bukti Magang').attr({
+									href: data.get.file_internship.bukti_pkl,
+									"data-type": 'pdf'
+								})
+								modal.find('#btnedit_bukti').append(htmlBtn)
+							}
+
+							if(data.get.file_internship.eviden_paid){
+								htmlBtn = $(htmlBtnShow).html('Lihat Bukti Pembayaran').attr('href', data.get.file_internship.eviden_paid)
+								check = data.get.file_internship.eviden_paid.split('.')[1];
+								if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
+
+								modal.find('#btnedit_evidenpaid').append(htmlBtn)
+							}
 						} else {
 							alertError("Terjadi Kesalahan", data.msg)
 						}
@@ -836,6 +930,59 @@
 					})
 				}
             })
+
+			$('#modal_uploadpembayaran').on('show.bs.modal', function (e) {
+				const modal = $(this),
+					  id = $(e.relatedTarget).data('id');
+
+				$('#modal_detailmagang').modal('hide');
+				modal.find('#id_bukti').val(id)
+
+				$.ajax({
+					url: "{{ route('internship.get') }}",
+					data: {id: id},
+					type: 'POST',
+					async:false,
+					dataType: 'json',
+					beforeSend: function(){
+						$('#preloader').removeClass('d-none');
+						$('#main-wrapper').removeClass('show');
+					}
+				}).done(function(data){
+					if(data.success){
+						const btnShowEviden = `
+							<button class="btn btn-secondary btn-xs" data-fancybox></button>`;
+
+						if(data.get.file_internship.mou){
+							modal.find('#docmou_view').html("Punya");
+						} else {
+							modal.find('#docmou_view').html("Tidak Punya");
+						}
+						modal.find('#pay_view').html("Rp " + currency.format(data.get.total_paid));
+
+						if(data.get.file_internship.eviden_paid){
+							const htmlBtn = $(btnShowEviden).html('Lihat Bukti Pembayaran').attr('href', data.get.file_internship.eviden_paid)
+							const check = data.get.file_internship.eviden_paid.split('.')[1];
+							if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
+
+							modal.find('#btn_evidenview').append(htmlBtn)
+						}
+
+						if(data.get.eviden_paid){
+							modal.find('#btn_evidenview').append($(btnShowEviden).attr('href', data.get.eviden_paid))
+						} else {
+							modal.find('#btn_evidenview').html('')
+						}
+					} else {
+						alertError("Berhasil", data.msg)
+					}
+
+					$('#preloader').addClass('d-none');
+					$('#main-wrapper').addClass('show');
+				}).fail(function(data){
+					console.log(data.responseText)
+				});
+			})
 
 			$('#modal_addmagang, #modal_editmagang').on('change', 'select[name="province"]', function(e){
 				e.preventDefault();
@@ -896,7 +1043,7 @@
                 $('#modal_addinstitusi').modal('show');
             })
 
-			$('#modal_addmagang').on('hide.bs.modal', function (e) {
+			$('#modal_addmagang, #modal_editmagang').on('hide.bs.modal', function (e) {
                 const modal = $(this);
 
 				modal.find('form')[0].reset();
@@ -916,12 +1063,89 @@
 
 				modal.find('.docmou').html('Tidak Punya')
 				modal.find('.pay').html(`Rp ${currency.format(300000)}`)
+
+				if(modal.prop('id') == 'modal_editmagang'){
+					const nameId = ['ktm', 'proposal', 'antigen', 'izinortu', 'transkrip',
+						'panduanpraktek', 'izinmagang', 'akreditasi', 'mou', 'buktipkl', 'evidenpaid'];
+
+					$.each(nameId, function(i, val){
+						modal.find(`#btnedit_${val}`).html('')
+					})
+				}
 			})
 
 			$('#modal_addinstitusi').on('hide.bs.modal', function (e) {
                 const modal = $(this);
 
 				modal.find('form')[0].reset();
+			})
+
+			$('#edit_magang').validate({
+				ignore: [],
+				rules:{
+					name: { required: true, alphanumeric: true },
+					nim: { required: true, digits: true },
+					date: { required: true, date: true },
+					jurusan: { required: true, alphanumeric: true },
+					institusi: { required: true },
+					semester: { required: true, digits: true, min: 1 },
+					type: { required: true },
+					start_date: { required: true, date: true }, end_date: { required: true, date: true },
+					phone: { required: true, digits: true, minlength: 11, maxlength: 14 },
+					city: { required: true }, province: { required: true },
+					address: { required: true },
+					ktm: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 1 },
+					proposal: { required: false, extension: "pdf", filesize : 2 },
+					antigen: { required: false, extension: "pdf", filesize : 1 },
+					izin_ortu: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 1 },
+					transkrip: { required: false, extension: "pdf", filesize : 1 },
+					panduan_praktek: { required: false, extension: "pdf", filesize : 1 },
+					izin_pkl: { required: false, extension: "pdf", filesize : 1 },
+					akreditasi: { required: false, extension: "pdf", filesize : 1 },
+					mou: { required: false, extension: "pdf", filesize : 1 },
+					bukti_pkl: { required: false, extension: "pdf", filesize : 1 },
+					eviden_paid: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 1 },
+				},
+				submitHandler: function (form) {
+					let data_daftar = new FormData(form);
+					data_daftar.append('_method', 'PATCH');
+
+					console.log('test')
+
+					$.ajax({
+						url: "{{ route('internship.update') }}",
+						type: 'POST',
+						data: data_daftar,
+						async: false,
+						processData: false,
+						contentType: false,
+						cache: false,
+						dataType: 'json',
+						enctype: 'multipart/form-data',
+						beforeSend: function(){
+							$('#modal_editmagang').modal('hide')
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function (data) {						
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						
+						if(data.success){
+							alertSuccess("Berhasil", data.msg)
+							reloadData('#data_reviews');
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					});   
+				}
 			})
 
 			$('#tambah_magang').validate({
@@ -1010,6 +1234,51 @@
 						beforeSend: function(){
 							$('#modal_addinstitusi').modal('hide')
 							$('#tambah_institusi')[0].reset();
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function (data) {						
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						
+						if(data.success){
+							alertSuccess("Berhasil", data.msg)
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					});   
+				}
+			})
+
+			$('#upload_bukti').validate({
+				rules:{
+					eviden_paid: { required: true, extension: "pdf|jpeg|jpg|png", filesize : 2 }
+				},
+				submitHandler: function (form) {
+					const formData = new FormData(form);
+
+					formData.append('_method', 'PUT');
+
+					$.ajax({
+						url: "{{ route('internship.update_eviden') }}",
+						type: 'POST',
+						data: formData,
+						async: false,
+						processData: false,
+						contentType: false,
+						cache: false,
+						dataType: 'json',
+						enctype: 'multipart/form-data',
+						beforeSend: function(){
+							$('#modal_uploadpembayaran').modal('hide')
+							$('#upload_bukti')[0].reset();
 							$('#preloader').removeClass('d-none');
 							$('#main-wrapper').removeClass('show');
 						}
