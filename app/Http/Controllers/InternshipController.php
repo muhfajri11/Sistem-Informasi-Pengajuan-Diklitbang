@@ -62,6 +62,9 @@ class InternshipController extends Controller
     public function get_once(Request $request){
         $intern = Internship::with('rooms', 'user', 'institution', 'file_internship')->find(1);
 
+        $intern->start_date = Carbon::createFromFormat('Y-m-d', $intern->start_date)->format('d F Y');
+        $intern->end_date = Carbon::createFromFormat('Y-m-d', $intern->end_date)->format('d F Y');
+
         $intern->file_internship->proposal = Storage::url('magang/proposal/'.$intern->file_internship->proposal);
         $intern->file_internship->akreditasi = Storage::url('magang/akreditasi/'.$intern->file_internship->akreditasi);
         $intern->file_internship->panduan_praktek = Storage::url('magang/panduanpraktek/'.$intern->file_internship->panduan_praktek);

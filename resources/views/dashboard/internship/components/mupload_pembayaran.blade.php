@@ -26,8 +26,11 @@
                     <div class="col-12 mt-2">
                         <div class="form-group">
                             <label for="eviden_daftar">Bukti Pembayaran Biaya Studi Banding <span id="btn_evidenview"></span></label>
-                            <div class="form-file">
-                                <input type="file" class="form-file-input form-control" name="eviden_paid" id="eviden_upload" required>
+                            <div class="input-group">
+                                <div class="form-file">
+                                    <input type="file" class="form-file-input form-daftar form-control" name="eviden_paid" required>
+                                </div>
+                                <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
                             </div>
                             <span class="small text-light">*File berbentuk .pdf, .jpeg, .jpg, atau .png</span>
                         </div>
