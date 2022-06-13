@@ -151,9 +151,6 @@
 @endsection
 
 @section('script')
-	<script src="{{ asset('assets/vendor/select2/js/select2.full.min.js') }}"></script>
-	<script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
-
     <script src="{{ asset('assets/vendor/pickadate/picker.js') }}"></script>
     <script src="{{ asset('assets/vendor/pickadate/picker.date.js') }}"></script>
 
@@ -161,40 +158,7 @@
 
     <script>
         $(document).ready(function(){
-            var currency = new Intl.NumberFormat('id-ID');
 
-			$.validator.setDefaults({
-				highlight: function(element) {
-					$(element).closest('.form-group').addClass('has-error');
-				},
-				unhighlight: function(element) {
-					$(element).closest('.form-group').removeClass('has-error');
-				},
-				errorElement: 'span',
-				errorClass: 'text-danger',
-				errorPlacement: function(error, element) {
-					if(element.parent('.input-group').length) {
-						error.insertAfter(element.parent());
-					} else {
-						error.insertAfter(element);
-					}
-				}
-			});
-
-			$.validator.addMethod("alphanumeric", function(value, element) {
-				return this.optional(element) || /^[a-z\d\-\s\?]+$/i.test(value);
-			}, "Letters and numbers only please");
-
-			$.validator.addMethod('filesize', function (value, element, param) {
-				return this.optional(element) || (element.files[0].size <= param * 1000000)
-			}, 'File size must be less than {0} MB');
-
-			$.validator.addMethod("extension", function(value, element, param) {
-				param = typeof param === "string" ? param.replace(/,/g, '|') : "png|jpe?g|gif";
-				return this.optional(element) || value.match(new RegExp(".(" + param + ")$", "i"));
-			},  "Please enter a value with a valid extension.");
-
-            $(".select2_").select2();
             $('.datepicker-default').pickadate({
                 format: 'd mmmm yyyy',
                 min: "{{ date('Y-m-d') }}",
@@ -202,22 +166,6 @@
                 hiddenName: true
             });
 			
-			const setDatatables = {
-				searching: true,
-				paging:true,
-				select: true,
-				info: true,         
-				language: {
-					paginate: {
-						next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
-						previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>' 
-					},
-					searchPlaceholder: "Cari Sesuatu ..."
-				},
-				lengthChange: true,
-				"sAjaxDataProp": ""
-			}
-
 			const setBadgeStatus = status => {
 				switch(status){
 					case "reject":

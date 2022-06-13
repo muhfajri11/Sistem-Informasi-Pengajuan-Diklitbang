@@ -84,14 +84,13 @@ class ComparativeController extends Controller
         $user = auth()->user();
 
         if($request->hasFile('eviden_paid')){
-            $path = 'public/studibanding/eviden_paid';
-            $image = $request->file('eviden_paid');
-
-            $extension = $request->file('eviden_paid')->getClientOriginalExtension();
-            $name = str_replace(' ', '', strtolower($user->name));
-
-            $image_eviden = "comparativeeviden_".$name."_".$request->id.".".$extension;
-            $img_store = $request->file('eviden_paid')->storeAs($path, $image_eviden);
+            $image_eviden = $this->uploadImage([
+                'path'      => 'public/studibanding/eviden_paid',
+                'file'      => $request->file('eviden_paid'),
+                'user'      => $user,
+                'id'        => $request->id,
+                'prefix'    => 'comparativeeviden_'
+            ]);
 
             $update = Comparative::find($request->id)->update(['eviden_paid' => $image_eviden]);
 
@@ -113,16 +112,15 @@ class ComparativeController extends Controller
 
     public function delete(){
         $req = request()->all();
-        $path_eviden = 'public/studibanding/eviden_paid/';
-        $path_attach = 'public/studibanding/lampiran/';
-
         $comparative = Comparative::find($req['id']);
 
         if($comparative->eviden_paid){
-            $name_file = $path_eviden.$comparative->eviden_paid;
-            $delete_eviden = Storage::delete($name_file);
+            $delete_image = $this->deleteImage([
+                'path'  => 'public/studibanding/eviden_paid/',
+                'image' => $comparative->eviden_paid
+            ]);
 
-            if(!$delete_eviden){
+            if(!$delete_image){
                 return response()->json([
                     'success' => false,
                     'msg'     => 'File tidak terdeteksi Bukti Pembayaran'
@@ -130,10 +128,12 @@ class ComparativeController extends Controller
             }
         }
 
-        $name_file = $path_attach.$comparative->attach;
-        $delete_attach = Storage::delete($name_file);
+        $delete_image = $this->deleteImage([
+            'path'  => 'public/studibanding/lampiran/',
+            'image' => $comparative->attach
+        ]);
 
-        if(!$delete_attach){
+        if(!$delete_image){
             return response()->json([
                 'success' => false,
                 'msg'     => 'File tidak terdeteksi Lampiran'
@@ -159,16 +159,13 @@ class ComparativeController extends Controller
     }
 
     public function store(Request $request){
-        
-        
         $req = $request->all();
         $user = auth()->user();
-        unset($req['eviden_paid']);
 
         $req['user_id'] = $user->id;
         $req['institution_id'] = $req['institution'];
-        $req['status'] = 'review';
-        unset($req['institution']);
+
+        unset($req['institution'], $req['eviden_paid']);
 
         if($req['members'] < 10){
             $req['total_paid'] = $req['members'] * 300000;
@@ -176,13 +173,9 @@ class ComparativeController extends Controller
             $req['total_paid'] = $req['members'] * 240000;
         }
 
-        $req['paid'] = 0;
         $req['attach'] = "-";
         $req['questions'] = json_encode($req['questions']);
-        // return response()->json([
-        //     'success' => false,
-        //     'msg'     => $req
-        // ], 500);
+    
         $comparative = Comparative::create($req);
         $comparative->rooms()->attach($req['rooms']);
 
@@ -193,44 +186,33 @@ class ComparativeController extends Controller
             ], 200);
         }
 
-        if($request->hasFile('attach')){
-            $path = 'public/studibanding/lampiran';
-            $image = $request->file('attach');
-
-            $extension = $request->file('attach')->getClientOriginalExtension();
-            $name = str_replace(' ', '', strtolower($user->name));
-
-            $image_attach = "comparativeattach_".$name."_".$comparative->id.".".$extension;
-            $img_store = $request->file('attach')->storeAs($path, $image_attach);
-
-            $update = Comparative::find($comparative->id)->update(['attach' => $image_attach]);
-
-            if(!$update){
-                return response()->json([
-                    'success' => false,
-                    'msg'     => 'Gagal menyimpan data attach'
-                ], 200);
-            }
-        }
+        $image_attach = $this->uploadImage([
+            'path'      => 'public/studibanding/lampiran',
+            'file'      => $request->file('attach'),
+            'user'      => $user,
+            'id'        => $comparative->id,
+            'prefix'    => 'comparativeattach_'
+        ]);
+        $data['attach'] = $image_attach;
 
         if($request->hasFile('eviden_paid')){
-            $path = 'public/studibanding/eviden_paid';
-            $image = $request->file('eviden_paid');
+            $image_eviden = $this->uploadImage([
+                'path'      => 'public/studibanding/eviden_paid',
+                'file'      => $request->file('eviden_paid'),
+                'user'      => $user,
+                'id'        => $comparative->id,
+                'prefix'    => 'comparativeeviden_'
+            ]);
+            $data['eviden_paid'] = $image_eviden;
+        }
 
-            $extension = $request->file('eviden_paid')->getClientOriginalExtension();
-            $name = str_replace(' ', '', strtolower($user->name));
+        $update = Comparative::find($comparative->id)->update($data);
 
-            $image_eviden = "comparativeeviden_".$name."_".$comparative->id.".".$extension;
-            $img_store = $request->file('eviden_paid')->storeAs($path, $image_eviden);
-
-            $update = Comparative::find($comparative->id)->update(['eviden_paid' => $image_eviden]);
-
-            if(!$update){
-                return response()->json([
-                    'success' => false,
-                    'msg'     => 'Gagal menyimpan data eviden'
-                ], 200);
-            }
+        if(!$update){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'Gagal menyimpan data eviden'
+            ], 200);
         }
 
         return response()->json([
@@ -240,12 +222,11 @@ class ComparativeController extends Controller
     }
 
     public function update(Request $request){
-        
         $req = $request->all();
         $user = auth()->user();
 
         $req['institution_id'] = $req['institution'];
-        unset($req['institution'], $req['eviden_paid']);
+        unset($req['institution'], $req['attach'], $req['eviden_paid']);
 
         if($req['members'] < 10){
             $req['total_paid'] = $req['members'] * 300000;
@@ -254,6 +235,32 @@ class ComparativeController extends Controller
         }
 
         $req['questions'] = json_encode($req['questions']);
+
+        $comparative = Comparative::find($req['id']);
+        $comparative->rooms()->sync($req['rooms']);
+
+        if($request->hasFile('attach')){
+            $image_attach = $this->uploadImage([
+                'path'      => 'public/studibanding/lampiran',
+                'file'      => $request->file('attach'),
+                'user'      => $user,
+                'id'        => $comparative->id,
+                'prefix'    => 'comparativeattach_'
+            ]);
+            $req['attach'] = $image_attach;
+        }
+
+        if($request->hasFile('eviden_paid')){
+            $image_eviden = $this->uploadImage([
+                'path'      => 'public/studibanding/eviden_paid',
+                'file'      => $request->file('eviden_paid'),
+                'user'      => $user,
+                'id'        => $comparative->id,
+                'prefix'    => 'comparativeeviden_'
+            ]);
+            $req['eviden_paid'] = $image_eviden;
+        }
+
         $comparative = Comparative::find($req['id'])->update($req);
 
         if(!$comparative){
@@ -261,48 +268,6 @@ class ComparativeController extends Controller
                 'success' => false,
                 'msg'     => 'Gagal update data pengajuan'
             ], 200);
-        }
-        $comparative = Comparative::find($req['id']);
-        $comparative->rooms()->sync($req['rooms']);
-
-        if($request->hasFile('attach')){
-            $path = 'public/studibanding/lampiran';
-            $image = $request->file('attach');
-
-            $extension = $request->file('attach')->getClientOriginalExtension();
-            $name = str_replace(' ', '', strtolower($user->name));
-
-            $image_attach = "comparativeattach_".$name."_".$comparative->id.".".$extension;
-            $img_store = $request->file('attach')->storeAs($path, $image_attach);
-
-            $update = Comparative::find($comparative->id)->update(['attach' => $image_attach]);
-
-            if(!$update){
-                return response()->json([
-                    'success' => false,
-                    'msg'     => 'Gagal menyimpan data attach'
-                ], 200);
-            }
-        }
-
-        if($request->hasFile('eviden_paid')){
-            $path = 'public/studibanding/eviden_paid';
-            $image = $request->file('eviden_paid');
-
-            $extension = $request->file('eviden_paid')->getClientOriginalExtension();
-            $name = str_replace(' ', '', strtolower($user->name));
-
-            $image_eviden = "comparativeeviden_".$name."_".$comparative->id.".".$extension;
-            $img_store = $request->file('eviden_paid')->storeAs($path, $image_eviden);
-
-            $update = Comparative::find($comparative->id)->update(['eviden_paid' => $image_eviden]);
-
-            if(!$update){
-                return response()->json([
-                    'success' => false,
-                    'msg'     => 'Gagal menyimpan data eviden'
-                ], 200);
-            }
         }
 
         return response()->json([

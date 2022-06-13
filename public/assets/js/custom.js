@@ -121,17 +121,17 @@
 		});
 	}
 	
-	var handleDzScroll = function() {
-		jQuery('.dlab-scroll').each(function(){
-			var scroolWidgetId = jQuery(this).attr('id');
-			const ps = new PerfectScrollbar('#'+scroolWidgetId, {
-			  wheelSpeed: 2,
-			  wheelPropagation: true,
-			  minScrollbarLength: 20
-			});
-            ps.isRtl = false;
-		})
-	}
+	// var handleDzScroll = function() {
+	// 	jQuery('.dlab-scroll').each(function(){
+	// 		var scroolWidgetId = jQuery(this).attr('id');
+	// 		const ps = new PerfectScrollbar('#'+scroolWidgetId, {
+	// 		  wheelSpeed: 2,
+	// 		  wheelPropagation: true,
+	// 		  minScrollbarLength: 20
+	// 		});
+    //         ps.isRtl = false;
+	// 	})
+	// }
 	
 	var handleMenuTabs = function() {
 		if(screenWidth <= 991 ){
@@ -167,15 +167,15 @@
 		});
 	}
 	
-	var handlePerfectScrollbar = function() {
-		if(jQuery('.dlabnav-scroll').length > 0)
-		{
-			//const qs = new PerfectScrollbar('.dlabnav-scroll');
-			const qs = new PerfectScrollbar('.dlabnav-scroll');
+	// var handlePerfectScrollbar = function() {
+	// 	if(jQuery('.dlabnav-scroll').length > 0)
+	// 	{
+	// 		//const qs = new PerfectScrollbar('.dlabnav-scroll');
+	// 		const qs = new PerfectScrollbar('.dlabnav-scroll');
 			
-			qs.isRtl = false;
-		}
-	}
+	// 		qs.isRtl = false;
+	// 	}
+	// }
 
 	var handleBtnNumber = function() {
 		$('.btn-number').on('click', function(e) {
@@ -308,20 +308,20 @@
         $(".chatbox .msg_card_body").css('height',ch);
     }
     
-	var domoPanel = function(){
-		const ps = new PerfectScrollbar('.dlab-demo-content');
-		$('.dlab-demo-trigger').on('click', function() {
-				$('.dlab-demo-panel').addClass('show');
-		  });
-		  $('.dlab-demo-close, .bg-close').on('click', function() {
-				$('.dlab-demo-panel').removeClass('show');
-		  });
+	// var domoPanel = function(){
+	// 	const ps = new PerfectScrollbar('.dlab-demo-content');
+	// 	$('.dlab-demo-trigger').on('click', function() {
+	// 			$('.dlab-demo-panel').addClass('show');
+	// 	  });
+	// 	  $('.dlab-demo-close, .bg-close').on('click', function() {
+	// 			$('.dlab-demo-panel').removeClass('show');
+	// 	  });
 		  
-		  $('.dlab-demo-bx').on('click', function() {
-			  $('.dlab-demo-bx').removeClass('demo-active');
-			  $(this).addClass('demo-active');
-		  });
-	} 
+	// 	  $('.dlab-demo-bx').on('click', function() {
+	// 		  $('.dlab-demo-bx').removeClass('demo-active');
+	// 		  $(this).addClass('demo-active');
+	// 	  });
+	// } 
 	
 	var handleDatetimepicker = function(){
 		if(jQuery("#datetimepicker1").length>0) {
@@ -386,10 +386,10 @@
 			handleMinHeight();
 			handleDataAction();
 			handleHeaderHight();
-			handleDzScroll();
+			// handleDzScroll();
 			handleMenuTabs();
 			handleChatbox();
-			handlePerfectScrollbar();
+			// handlePerfectScrollbar();
 			handleBtnNumber();
 			handleDzChatUser();
 			handleDzFullScreen();
@@ -399,7 +399,7 @@
 			handleLightgallery();
 			handleCustomFileInput();
 			vHeight();
-			domoPanel();
+			// domoPanel();
 			handleDatetimepicker();
 			handleCkEditor();
 		},
@@ -541,3 +541,54 @@ $.fn.serializeObject = function()
 $.fn.hasAttr = function(name) {  
    return this.attr(name) !== undefined;
 };
+
+$.validator.setDefaults({
+	highlight: function(element) {
+		$(element).closest('.form-group').addClass('has-error');
+	},
+	unhighlight: function(element) {
+		$(element).closest('.form-group').removeClass('has-error');
+	},
+	errorElement: 'span',
+	errorClass: 'text-danger',
+	errorPlacement: function(error, element) {
+		if(element.parent('.input-group').length) {
+			error.insertAfter(element.parent());
+		} else {
+			element.closest('.form-group').append(error)
+		}
+	}
+});
+
+$.validator.addMethod("alphanumeric", function(value, element) {
+	return this.optional(element) || /^[a-z\d\-\s\?]+$/i.test(value);
+}, "Letters and numbers only please");
+
+$.validator.addMethod('filesize', function (value, element, param) {
+	return this.optional(element) || (element.files[0].size <= param * 1000000)
+}, 'File size must be less than {0} MB');
+
+$.validator.addMethod("extension", function(value, element, param) {
+	param = typeof param === "string" ? param.replace(/,/g, '|') : "png|jpe?g|gif";
+	return this.optional(element) || value.match(new RegExp(".(" + param + ")$", "i"));
+},  "Please enter a value with a valid extension.");
+
+$(".select2_").select2();
+
+const setDatatables = {
+	searching: true,
+	paging:true,
+	select: true,
+	info: true,         
+	language: {
+		paginate: {
+			next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',
+			previous: '<i class="fa fa-angle-double-left" aria-hidden="true"></i>' 
+		},
+		searchPlaceholder: "Cari Sesuatu ..."
+	},
+	lengthChange: true,
+	"sAjaxDataProp": ""
+}
+
+var currency = new Intl.NumberFormat('id-ID');

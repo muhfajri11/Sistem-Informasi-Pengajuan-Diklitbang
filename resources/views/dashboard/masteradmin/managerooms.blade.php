@@ -47,108 +47,15 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal_addruangan" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form class="modal-content" id="tambah_ruangan" novalidate>
-                <div class="modal-header">
-                    <h3 class="modal-title text-secondary"><i class="fas fa-hospitals me-2"></i> Tambah Ruangan</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12 col-md-6 mb-4">
-                            <div class="form-group">
-                                <label for="nama_tambah">Nama Ruangan</label>
-                                <input type="text" name="name" class="form-control" id="nama_tambah" required>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 mb-4">
-                            <div class="form-group">
-                                <label for="rate_tambah">Pilih Rating</label>
-                                <select id="rate_tambah" class="select2_" name="rate">
-                                    @foreach ($rates as $rate => $val)
-                                        <option value="{{ $val }}">{{ $rate }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Simpan Data</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    @include('dashboard.masteradmin.components.ruangan.madd_ruangan')
 
-    <div class="modal fade" id="modal_editruangan" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form class="modal-content" id="edit_ruangan" novalidate>
-                <div class="modal-header">
-                    <h3 class="modal-title text-secondary"><i class="fas fa-hospitals me-2"></i> Edit Ruangan</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="id_edit" required>
-                    <div class="row">
-                        <div class="col-12 col-md-6 mb-4">
-                            <div class="form-group">
-                                <label for="nama_edit">Nama Ruangan</label>
-                                <input type="text" name="name" class="form-control" id="nama_edit" required>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 mb-4">
-                            <div class="form-group">
-                                <label for="rate_edit">Pilih Rating</label>
-                                <select id="rate_edit" class="select2_" name="rate">
-                                    @foreach ($rates as $rate => $val)
-                                        <option value="{{ $val }}">{{ $rate }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Simpan Data</button>
-                </div>
-            </form>
-        </div>
-    </div>
+	@include('dashboard.masteradmin.components.ruangan.medit_ruangan')
+
 @endsection
 
 @section('script')
-	<script src="{{ asset('assets/vendor/select2/js/select2.full.min.js') }}"></script>
-	<script src="{{ asset('assets/js/jquery.validate.min.js') }}"></script>
-
     <script>
         $(document).ready(function(){
-
-			$.validator.setDefaults({
-				highlight: function(element) {
-					$(element).closest('.form-group').addClass('has-error');
-				},
-				unhighlight: function(element) {
-					$(element).closest('.form-group').removeClass('has-error');
-				},
-				errorElement: 'span',
-				errorClass: 'text-danger',
-				errorPlacement: function(error, element) {
-					if(element.parent('.input-group').length) {
-						error.insertAfter(element.parent());
-					} else {
-						error.insertAfter(element);
-					}
-				}
-			});
-
-			$.validator.addMethod("alphanumeric", function(value, element) {
-				return this.optional(element) || /^[a-z\d\-\s]+$/i.test(value);
-			}, "Letters and numbers only please");
-
-			$(".select2_").select2();
 
             const setBadgeRooms = rate => {
 				switch(rate){
