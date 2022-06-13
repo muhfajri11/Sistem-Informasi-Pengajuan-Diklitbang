@@ -332,15 +332,21 @@
 						permission.val('').change();
 					}
 				}).done(function(data){
-					const id = [];
-					$.each(data.permissions, function(i, val){
-						id.push(val)
-					})
+					if(data.success){
+						const id = [];
+						$.each(data.permissions, function(i, val){
+							id.push(val)
+						})
 
-					permission.val(id).change();
-					permission.prop('disabled', false);
+						permission.val(id).change();
+						permission.prop('disabled', false);
+					} else {
+						alertError('Terjadi Kesalahan', data.msg)
+					}
 				}).fail(function(data){
-					console.log(data.responseText)
+					resp = JSON.parse(data.responseText)
+					alertError("Terjadi Kesalahan", resp.message)
+					console.log("error");
 				});
 			});
 
@@ -486,7 +492,7 @@
 				}
 			})
 
-			$('#modal_detailpengguna').on('shown.bs.modal', function (e) {
+			$('#modal_detailpengguna').on('show.bs.modal', function (e) {
 				const modal = $(this),
 					  data_id = $(e.relatedTarget).data('id');
 
@@ -501,33 +507,42 @@
 						$('#main-wrapper').removeClass('show');
 					}
 				}).done(function(data){
-					modal.find('#nama_view').val(data.name)
-					modal.find('#email_view').val(data.email)
-					if(data.is_verified){
-						modal.find('#email_check').addClass('bg-primary text-white');
+					if(data.success){
+						modal.find('#nama_view').val(data.name)
+						modal.find('#email_view').val(data.email)
+						if(data.is_verified){
+							modal.find('#email_check').addClass('bg-primary text-white');
+						} else {
+							modal.find('#email_check').removeClass('bg-primary text-white');
+						}
+
+						modal.find('#phone_view').val(data.phone)
+						modal.find('#role_view').html(data.role)
+						
+						let collect = ``;
+						$.each(data.permissions, function(i, val){
+							collect += setBadgeRoles(val.name) + " ";
+						})
+
+						modal.find('#permissions_view').html(collect)
+						modal.find('#created_view').html(data.created_at)
 					} else {
-						modal.find('#email_check').removeClass('bg-primary text-white');
+						alertError("Terjadi Kesalahan", data.msg)
 					}
-
-					modal.find('#phone_view').val(data.phone)
-					modal.find('#role_view').html(data.role)
-					
-					let collect = ``;
-					$.each(data.permissions, function(i, val){
-						collect += setBadgeRoles(val.name) + " ";
-					})
-
-					modal.find('#permissions_view').html(collect)
-					modal.find('#created_view').html(data.created_at)
 
 					$('#preloader').addClass('d-none');
 					$('#main-wrapper').addClass('show');
 				}).fail(function(data){
-					console.log(data.responseText)
+					$('#preloader').addClass('d-none');
+					$('#main-wrapper').addClass('show');
+
+					resp = JSON.parse(data.responseText)
+                    alertError("Terjadi Kesalahan", resp.message)
+                    console.log("error");
 				});
 			})
 
-			$('#modal_editpengguna').on('shown.bs.modal', function (e) {
+			$('#modal_editpengguna').on('show.bs.modal', function (e) {
 				const modal = $(this),
 					  data_id = $(e.relatedTarget).data('id');
 
@@ -542,24 +557,33 @@
 						$('#main-wrapper').removeClass('show');
 					}
 				}).done(function(data){
-					modal.find('#id_edit').val(data_id);
-					modal.find('#nama_edit').val(data.name);
-					modal.find('#email_edit').val(data.email);
-					modal.find('#phone_edit').val(data.phone);
+					if(data.success){
+						modal.find('#id_edit').val(data_id);
+						modal.find('#nama_edit').val(data.name);
+						modal.find('#email_edit').val(data.email);
+						modal.find('#phone_edit').val(data.phone);
 
-					modal.find('#role_edit').val(data.role_id).change()
+						modal.find('#role_edit').val(data.role_id).change()
 
-					const id = [];
-					$.each(data.permissions, function(i, val){
-						id.push(val.id)
-					})
+						const id = [];
+						$.each(data.permissions, function(i, val){
+							id.push(val.id)
+						})
 
-					modal.find('#permissions_edit').val(id).change();
+						modal.find('#permissions_edit').val(id).change();
+					} else {
+						alertError("Terjadi Kesalahan", data.msg)
+					}
 
 					$('#preloader').addClass('d-none');
 					$('#main-wrapper').addClass('show');
 				}).fail(function(data){
-					console.log(data.responseText)
+					$('#preloader').addClass('d-none');
+					$('#main-wrapper').addClass('show');
+
+					resp = JSON.parse(data.responseText)
+                    alertError("Terjadi Kesalahan", resp.message)
+                    console.log("error");
 				});
 			})
 
@@ -597,7 +621,12 @@
 							$('#preloader').addClass('d-none');
 							$('#main-wrapper').addClass('show');
 						}).fail(function(data){
-							console.log(data.responseText)
+							$('#preloader').addClass('d-none');
+							$('#main-wrapper').addClass('show');
+
+							resp = JSON.parse(data.responseText)
+							alertError("Terjadi Kesalahan", resp.message)
+							console.log("error");
 						});
 					}
 				})

@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Institution;
-use App\Room;
-use App\User;
+use App\{Institution, Room, User};
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+
+use Spatie\Permission\Models\{Permission, Role};
 
 class DashboardController extends Controller
 {
@@ -30,6 +29,7 @@ class DashboardController extends Controller
     }
 
     public function get_users(){
+        // for datatables
         $users = User::get();
         $response = [];
 
@@ -50,6 +50,13 @@ class DashboardController extends Controller
         $req = request()->all();
 
         $user = User::find($req['id']);
+        if(!$user){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'User tidak terdaftar!'
+            ], 200);
+        }
+
         $response = [];
 
         $response['name'] = $user['name'];
@@ -66,8 +73,9 @@ class DashboardController extends Controller
             $response['permissions'][$i]['id'] = $data['id'];
         });
 
-        echo json_encode($response);
-        exit;
+        return response()->json(['success' => true], 200);
+        // echo json_encode($response);
+        // exit;
     }
 
     public function add_user(){
@@ -165,6 +173,7 @@ class DashboardController extends Controller
     }
 
     public function get_roles(){
+        //for datatables
         $roles = Role::with('permissions')->get();
         $response = [];
 
@@ -185,18 +194,30 @@ class DashboardController extends Controller
         $req = request()->all();
 
         $roles = Role::with('permissions')->find($req['id_role'], ['id']);
+        if(!$roles){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'Terjadi Kesalahan'
+            ], 200);
+        }
+
         $data_permissions = collect($roles['permissions']);
 
         $data_permissions->each(function($permission, $i) use (&$roles){
             $roles['permissions'][$i] = $permission['id'];
         });
 
-        echo json_encode($roles);
-        exit;
+        return response()->json(['success' => true], 200);
     }
 
     public function get_permissions(){
         $permissions = Permission::with('roles')->get();
+        if(!$permissions){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'Terjadi Kesalahan'
+            ], 200);
+        }
         $response = [];
 
         $permissions->each(function($data, $i) use (&$response){
@@ -204,8 +225,9 @@ class DashboardController extends Controller
             $response[$i]['name'] = $data['name'];
         });
 
-        echo json_encode($response);
-        exit;
+        return response()->json(['success' => true], 200);
+        // echo json_encode($response);
+        // exit;
     }
 
     public function get_institutions(){

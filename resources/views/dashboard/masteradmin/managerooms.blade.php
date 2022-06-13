@@ -280,7 +280,7 @@
 				}
 			})
 
-            $('#modal_editruangan').on('shown.bs.modal', function (e) {
+            $('#modal_editruangan').on('show.bs.modal', function (e) {
 				const modal = $(this),
 					  data_id = $(e.relatedTarget).data('id');
 
@@ -295,14 +295,21 @@
 						$('#main-wrapper').removeClass('show');
 					}
 				}).done(function(data){
-					modal.find('#id_edit').val(data_id);
-					modal.find('#nama_edit').val(data.name);
-					modal.find('#rate_edit').val(data.rate).change()
-
 					$('#preloader').addClass('d-none');
 					$('#main-wrapper').addClass('show');
+					
+					if(data.success){
+						modal.find('#id_edit').val(data_id);
+						modal.find('#nama_edit').val(data.name);
+						modal.find('#rate_edit').val(data.rate).change()
+					} else {
+						alertError('Terjadi Kesalahan', data.msg)
+					}
+
 				}).fail(function(data){
-					console.log(data.responseText)
+					resp = JSON.parse(data.responseText)
+					alertError("Terjadi Kesalahan", resp.message)
+					console.log("error");
 				});
 			})
 
@@ -340,7 +347,9 @@
 							$('#preloader').addClass('d-none');
 							$('#main-wrapper').addClass('show');
 						}).fail(function(data){
-							console.log(data.responseText)
+							resp = JSON.parse(data.responseText)
+							alertError("Terjadi Kesalahan", resp.message)
+							console.log("error");
 						});
 					}
 				})

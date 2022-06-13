@@ -83,8 +83,11 @@
                     <div class="col-12 mb-4">
                         <div class="form-group">
                             <label for="lampiran_edit">Lampiran <span id="btnedit_attachview"></span></label>
-                            <div class="form-file">
-                                <input type="file" class="form-file-input form-control" name="attach" id="lampiran_edit">
+                            <div class="input-group">
+                                <div class="form-file">
+                                    <input type="file" class="form-file-input form-daftar form-control" name="attach" id="lampiran_edit">
+                                </div>
+                                <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
                             </div>
                             <span class="small text-light">*Kosongkan jika tidak ada perubahan, File berbentuk .pdf</span>
                         </div>
@@ -117,8 +120,11 @@
                                             <div class="col-12 mt-2">
                                                 <div class="form-group">
                                                     <label for="eviden_edit">Bukti Pembayaran <span id="btnedit_evidenview"></span></label>
-                                                    <div class="form-file">
-                                                        <input type="file" class="form-file-input form-control" name="eviden_paid" id="eviden_edit">
+                                                    <div class="input-group">
+                                                        <div class="form-file">
+                                                            <input type="file" class="form-file-input form-daftar form-control" name="eviden_paid" id="eviden_edit">
+                                                        </div>
+                                                        <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
                                                     </div>
                                                     <span class="small text-light">*Kosongkan jika tidak ada perubahan, File berbentuk .pdf, .jpeg, .jpg, atau .png</span>
                                                 </div>

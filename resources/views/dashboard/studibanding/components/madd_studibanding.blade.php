@@ -82,8 +82,11 @@
                     <div class="col-12 mb-4">
                         <div class="form-group">
                             <label for="lampiran_daftar">Lampiran</label>
-                            <div class="form-file">
-                                <input type="file" class="form-file-input form-control" name="attach" required>
+                            <div class="input-group">
+                                <div class="form-file">
+                                    <input type="file" class="form-file-input form-daftar form-control" name="attach" required>
+                                </div>
+                                <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
                             </div>
                             <span class="small text-light">*File berbentuk .pdf</span>
                         </div>
@@ -116,8 +119,11 @@
                                             <div class="col-12 mt-2">
                                                 <div class="form-group">
                                                     <label for="eviden_daftar">Bukti Pembayaran <span class="small text-light">(opsional)</span></label>
-                                                    <div class="form-file">
-                                                        <input type="file" class="form-file-input form-control" name="eviden_paid">
+                                                    <div class="input-group">
+                                                        <div class="form-file">
+                                                            <input type="file" class="form-file-input form-daftar form-control" name="eviden_paid">
+                                                        </div>
+                                                        <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
                                                     </div>
                                                     <span class="small text-light">*File berbentuk .pdf, .jpeg, .jpg, atau .png</span>
                                                 </div>

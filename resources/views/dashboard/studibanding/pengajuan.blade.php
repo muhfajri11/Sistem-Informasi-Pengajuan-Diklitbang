@@ -840,11 +840,11 @@
 								let rooms = ``, rooms_id = [];
 								const listQuestion = $('#list_questionEdit'),
 									btnLampiran = `
-										<button class="btn btn-secondary btn-xs ms-2" data-fancybox="detail" data-type="pdf">
+										<button class="btn btn-secondary btn-xs ms-2" data-fancybox data-type="pdf">
 											Lihat Lampiran
 										</button>`, 
 									btnShowEviden = `
-										<button class="btn btn-secondary btn-xs ms-2" data-fancybox="detail">
+										<button class="btn btn-secondary btn-xs ms-2" data-fancybox>
 											Lihat Bukti Pembayaran
 										</button>`
 									formQuestion = `
@@ -929,10 +929,10 @@
 							<button class="btn btn-dark" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.get.id}">
 								Upload Bukti Pembayaran
 							</button>`, btnLampiran = `
-							<button class="btn btn-secondary" data-fancybox="detail" data-type="pdf">
+							<button class="btn btn-secondary" data-fancybox data-type="pdf">
 								Lihat Lampiran
 							</button>`, btnShowEviden = `
-							<button class="btn btn-secondary" data-fancybox="detail">
+							<button class="btn btn-secondary" data-fancybox>
 								Lihat Bukti Pembayaran
 							</button>`;
 
@@ -993,7 +993,7 @@
 				}).done(function(data){
 					if(data.success){
 						const btnShowEviden = `
-							<button class="btn btn-secondary btn-xs" data-fancybox="detail">
+							<button class="btn btn-secondary btn-xs" data-fancybox>
 								Lihat Bukti Pembayaran
 							</button>`;
 
@@ -1064,6 +1064,12 @@
 				$("#institusi_daftar").html('').select2({data: []});
 				$("#rooms_daftar").html('').select2({data: []});
 				modal.find('.form_question:not(:first)').remove();
+
+				modal.find('button[data-fancybox]').prop('disabled', true)
+				modal.find('button[data-fancybox]').removeAttr('href')
+				modal.find('button[data-fancybox]').removeClass('btn-secondary')
+				modal.find('button[data-fancybox]').addClass('btn-dark')
+				modal.find('button[data-fancybox]').removeAttr('data-type');
 			})
 
 			$('#modal_editstudibanding').on('hide.bs.modal', function (e) {
@@ -1079,7 +1085,46 @@
 
 				modal.find('#btnedit_attachview').html('');
 				modal.find('#btnedit_evidenview').html('');
+
+				modal.find('button[data-fancybox]').prop('disabled', true)
+				modal.find('button[data-fancybox]').removeAttr('href')
+				modal.find('button[data-fancybox]').removeClass('btn-secondary')
+				modal.find('button[data-fancybox]').addClass('btn-dark')
+				modal.find('button[data-fancybox]').removeAttr('data-type');
 			})
+
+			$('#modal_addstudibanding, #modal_editstudibanding, #modal_uploadpembayaran').on('change', '.form-daftar', function(e) {
+				const btn_preview = $(this).parent().parent(),
+					  form_file = $(this),
+					  reader = new FileReader();
+
+				if(this.files[0]){
+					const fileTypes = ['pdf'],
+						  extension = this.files[0].name.split('.').pop().toLowerCase(),  //file extension from input file
+            			  isSuccess = fileTypes.indexOf(extension) > -1;  //is extension in acceptable types
+
+					reader.onload = function(e) {
+						btn_preview.find('button').prop('disabled', false)
+						btn_preview.find('button').removeClass('btn-dark')
+						btn_preview.find('button').addClass('btn-secondary')
+						btn_preview.find('button').attr('href', e.target.result);
+
+						if(isSuccess){
+							btn_preview.find('button').attr('data-type', 'pdf')
+						} else {
+							btn_preview.find('button').removeAttr('data-type');
+						}
+					}
+					reader.readAsDataURL(this.files[0]);
+				} else {
+					btn_preview.find('button').prop('disabled', true)
+					btn_preview.find('button').addClass('btn-dark')
+					btn_preview.find('button').removeClass('btn-secondary')
+					btn_preview.find('button').removeAttr('href');
+					btn_preview.find('button').removeAttr('data-type');
+				}
+
+			});
         });
     </script>
 @endsection

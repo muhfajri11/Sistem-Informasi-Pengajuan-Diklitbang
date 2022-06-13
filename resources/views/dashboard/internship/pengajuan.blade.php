@@ -352,7 +352,7 @@
 					case '#data_reviews': text = "Reload Data Reviews"; break;
 					case '#data_payments': text = "Reload Data Payments"; break;
 					case '#data_accepts': text = "Reload Data Accepts"; break;
-					case '#data_done': text = "Reload Data Lulus"; break;
+					case '#data_dones': text = "Reload Data Lulus"; break;
 				}
 
 				$(idTag).DataTable().ajax.reload(function(){
@@ -525,6 +525,68 @@
 							$('#data_accepts').DataTable(dataAccept);
 						} else {
 							reloadData('#data_accepts')
+						}
+					break;
+					case 'done':
+						if(!$.fn.DataTable.isDataTable('#data_dones')){
+							$.extend(dataDone, {
+                                "ajax": {
+                                    "type": "POST",
+                                    "url": `{{ route('internship.all', 'done') }}`,
+                                    "timeout": 120000
+                                },
+                                "aoColumns": [
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.i;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.nama;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.jurusan;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.institution;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return setBadgeType(data.type);
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "sortable": false,
+                                        "render": function (data, row, type, meta) {
+                                            
+                                            let btn = `
+                                            	<button data-id="${ data.id }"
+                                                    class="btn btn-primary shadow btn-xs px-2"
+                                                    data-bs-toggle="modal" data-bs-target="#modal_detailmagang">
+                                                    <i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
+                                                </button>`;
+
+                                            return btn;
+                                        }
+                                    }
+                                ]
+                            })
+
+							$('#data_dones').DataTable(dataAccept);
+						} else {
+							reloadData('#data_dones')
 						}
 					break;
 				}
