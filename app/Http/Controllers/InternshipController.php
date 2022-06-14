@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\FileInternship;
-use App\Institution;
-use App\Internship;
+use App\{Internship, FileInternship, Institution};
+
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;

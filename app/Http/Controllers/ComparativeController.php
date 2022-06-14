@@ -51,6 +51,7 @@ class ComparativeController extends Controller
             $response[$i]['members'] = $data['members']." Orang";
             $response[$i]['status'] = $data['status'];
             $response[$i]['paid'] = $data['paid'];
+            $response[$i]['attach'] = Storage::url('studibanding/lampiran/'.$data['attach']);
         });
 
         echo json_encode($response);

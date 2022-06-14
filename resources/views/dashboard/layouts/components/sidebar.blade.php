@@ -22,7 +22,7 @@
 							<span class="nav-text">Magang</span>
 						</a>
 						<ul aria-expanded="false">
-							<li><a href="#!">Data Pengajuan</a></li>
+							<li><a href="{{ route('internship.approve') }}">Persetujuan</a></li>
 							<li><a href="{{ route('internship') }}">Pengajuan</a></li>
 							<li><a href="#!">Pengaturan</a></li>
 						</ul>
@@ -33,7 +33,7 @@
 							<span class="nav-text">Studi Banding</span>
 						</a>
 						<ul aria-expanded="false">
-							<li><a href="#!">Data Pengajuan</a></li>
+							<li><a href="{{ route('studi_banding.approve') }}">Persetujuan</a></li>
 							<li><a href="{{ route('studi_banding') }}">Pengajuan</a></li>
 						</ul>
 					</li>

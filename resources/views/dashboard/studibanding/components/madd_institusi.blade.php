@@ -1,5 +1,5 @@
 <div class="modal fade" id="modal_addinstitusi" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-sm">
         <form class="modal-content" id="tambah_institusi" novalidate>
             <div class="modal-header">
                 <h3 class="modal-title text-secondary"><i class="fas fa-university me-2"></i> Tambah Institusi</h3>

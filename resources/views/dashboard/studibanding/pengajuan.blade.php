@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/pickadate/themes/default.date.css') }}">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset('assets/vendor/fancyapps/fancy.css') }}">
+	
 @endsection
 
 @section('content')
@@ -54,7 +55,7 @@
 											</div>
 										</div>
 										<div class="table-responsive">
-											<table id="data_reviews" class="display dt-responsive">
+											<table id="data_reviews" class="display" style="width: 100%">
 												<thead>
 													<tr>
 														<th>#</th>
@@ -84,7 +85,7 @@
 											</button>
 										</div>
 										<div class="table-responsive">
-											<table id="data_payments" class="display dt-responsive">
+											<table id="data_payments" class="display" style="width: 100%">
 												<thead>
 													<tr>
 														<th>#</th>
@@ -114,7 +115,7 @@
 											</button>
 										</div>
 										<div class="table-responsive">
-											<table id="data_accepts" class="display dt-responsive">
+											<table id="data_accepts" class="display" style="width: 100%">
 												<thead>
 													<tr>
 														<th>#</th>
