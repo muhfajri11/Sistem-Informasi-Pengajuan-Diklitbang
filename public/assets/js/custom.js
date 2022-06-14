@@ -555,7 +555,12 @@ $.validator.setDefaults({
 		if(element.parent('.input-group').length) {
 			error.insertAfter(element.parent());
 		} else {
-			element.closest('.form-group').append(error)
+			if(element.closest('.form-group').length){
+				element.closest('.form-group').append(error)
+			} else {
+				
+				element.parent().append(error);
+			}
 		}
 	}
 });

@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/pickadate/themes/default.date.css') }}">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset('assets/vendor/fancyapps/fancy.css') }}">
+    <style>
+        .ck-balloon-panel{z-index:9999 !important}
+    </style>
 @endsection
 
 @section('content')
@@ -185,6 +188,8 @@
     @include('dashboard.studibanding.components.mdetail_studibanding')
 
     @include('dashboard.studibanding.components.modal_status')
+
+    @include('dashboard.studibanding.components.modal_message')
 @endsection
 
 @section('script')
@@ -192,9 +197,35 @@
     <script src="{{ asset('assets/vendor/pickadate/picker.date.js') }}"></script>
 
 	<script src="{{ asset('assets/vendor/fancyapps/fancybox.umd.js') }}"></script>
+    <script src="{{ asset('assets/vendor/ckeditor/ckeditor.js') }}"></script>
 
     <script>
+        let theEditor;
+
+        ClassicEditor
+            .create( document.querySelector( '#editor' ) )
+            .then( editor => {
+                theEditor = editor; // Save for later use.
+            } )
+            .catch( error => {
+                console.error( error );
+            } );
+
+        function getDataFromTheEditor() {
+            return theEditor.getData();
+        }
+
+        function setDataFromTheEditor(text) {
+            return theEditor.setData(text);
+        }
+
         $(document).ready(function(){
+
+            $.validator.addMethod('ckrequired', function (value, element, params) {
+                var idname = $(element).attr('id');
+                var messageLength =  $.trim ( getDataFromTheEditor() );
+                return !params  || messageLength.length !== 0;
+            }, "This field is required.");
 
             $('.datepicker-default').pickadate({
                 format: 'd mmmm yyyy',
@@ -339,7 +370,7 @@
 					case '#data_reviews': text = "Reload Data Reviews"; break;
 					case '#data_payments': text = "Reload Data Payments"; break;
 					case '#data_accepts': text = "Reload Data Accepts"; break;
-                    case '#data_reject': text = "Reload Data Rejects"; break;
+                    case '#data_rejects': text = "Reload Data Rejects"; break;
 				}
 
 				$(idTag).DataTable().ajax.reload(function(){
@@ -536,10 +567,10 @@
 					break;
                     case 'reject':
 						if(!$.fn.DataTable.isDataTable('#data_rejects')){
-                            $.extend(dataAccept, {
+                            $.extend(dataReject, {
                                 "ajax": {
                                     "type": "POST",
-                                    "url": `{{ route('studi_banding.all', 'accept') }}`,
+                                    "url": `{{ route('studi_banding.all', 'reject') }}`,
                                     "timeout": 120000
                                 },
                                 "aoColumns": [
@@ -610,7 +641,7 @@
                                 ]
                             })
 
-							$('#data_accepts').DataTable(dataAccept);
+							$('#data_rejects').DataTable(dataReject);
                         } else {
                             reloadData('#data_rejects')
                         }
@@ -640,7 +671,7 @@
 				reloadData(id_elm);
 			})
 
-            $('#modal_ubahstatus').on('show.bs.modal', function (e) {
+            $('#modal_ubahstatus, #modal_sendmsg').on('show.bs.modal', function (e) {
                 const modal = $(this),
                       id    = $(e.relatedTarget).data('id'),
                       data_status    = $(e.relatedTarget).data('status'),
@@ -663,22 +694,29 @@
 
                         modal.find('input[name="id"]').val(id)
                         modal.find('form').attr('data-table', data_table)
-                        modal.find('#title_status').html(data.get.title)
-                        modal.find('#institusi_status').html(data.get.institution.name)
-                        modal.find('#status_status').html(setBadgeStatus(data.get.status))
-                        modal.find('#statuspay_status').html(setBadgePay(data.get.paid))
                         
-                        check = data.get.paid? true : false;
-                        modal.find('#switch').prop('checked', check);
+                        if(modal.attr('id') == 'modal_ubahstatus'){
+                            modal.find('#title_status').html(data.get.title)
+                            modal.find('#institusi_status').html(data.get.institution.name)
+                            modal.find('#status_status').html(setBadgeStatus(data.get.status))
+                            modal.find('#statuspay_status').html(setBadgePay(data.get.paid))
+                            
+                            check = data.get.paid? true : false;
+                            modal.find('#switch').prop('checked', check);
 
-                        modal.find('select[name="status"]').html('').select2({data: status})
-                        modal.find('select[name="status"]').val(data_status).change();
+                            modal.find('select[name="status"]').html('').select2({data: status})
+                            modal.find('select[name="status"]').val(data_status).change();
 
-                        check = data.get.eviden_paid? 
-                            $(btnShowEviden).attr('href', data.get.eviden_paid) :
-                            `<strong>Tidak ada bukti</strong>`;
+                            check = data.get.eviden_paid? 
+                                $(btnShowEviden).attr('href', data.get.eviden_paid) :
+                                `<strong>Tidak ada bukti</strong>`;
 
-                        modal.find('#eviden_status').html(check)
+                            modal.find('#eviden_status').html(check)
+                        } else {
+                            modal.find('#title_msg').html(data.get.title)
+                            modal.find('#institusi_msg').html(data.get.institution.name)
+                            modal.find('#mail_msg').html(data.get.user.email)
+                        }
 					} else {
 						alertError("Terjadi Kesalahan", data.msg)
 					}
@@ -689,19 +727,91 @@
                 }); 
             })
 
+            $('#modal_ubahstatus, #modal_sendmsg').on('hide.bs.modal', function (e) {
+                const modal = $(this);
+
+                modal.find('form')[0].reset()
+                
+                if(modal.attr('id') == 'modal_ubahstatus'){
+                    modal.find('#title_status').html('')
+                    modal.find('#institusi_status').html('')
+                    modal.find('#status_status').html('')
+                    modal.find('#statuspay_status').html('')
+                    modal.find('#switch').prop('checked', false);
+
+                    modal.find('select[name="status"]').html('').select2({data: []})
+                    modal.find('#eviden_status').html('')
+                } else {
+                    modal.find('#title_msg').html('')
+                    modal.find('#institusi_msg').html('')
+                    modal.find('#mail_msg').html('')
+                    setDataFromTheEditor('')
+                }
+            })
+
+            $('#modal_detailstudibanding').on('show.bs.modal', function (e) {
+				const modal = $(this),
+					  data_id = $(e.relatedTarget).data('id');
+
+				$.ajax({
+					url: "{{ route('studi_banding.get') }}",
+					data: {id: data_id},
+					type: 'POST',
+					async:false,
+					dataType: 'json',
+					beforeSend: function(){
+						$('#preloader').removeClass('d-none');
+						$('#main-wrapper').removeClass('show');
+					}
+				}).done(function(data){
+                    $('#preloader').addClass('d-none');
+					$('#main-wrapper').addClass('show');
+
+					if(data.success){
+						let rooms = ``, questionView = `
+							<tr></tr>`, btnLampiran = `
+							<button class="btn btn-secondary" data-fancybox data-type="pdf">
+								Lihat Lampiran
+							</button>`, btnShowEviden = `
+							<button class="btn btn-secondary" data-fancybox>
+								Lihat Bukti Pembayaran
+							</button>`;
+
+						$.each(data.get.rooms, function(i, val){
+							rooms += val.name + ", ";
+						})
+
+						modal.find('#title_view').html(data.get.title);
+						modal.find('#rooms_view').html(rooms);
+						modal.find('#institution_view').html(data.get.institution.name);
+						modal.find('#visit_view').html(data.get.visit);
+						modal.find('#members_view').html(data.get.members);
+						modal.find('#pay_view').html("Rp " + currency.format(data.get.total_paid));
+						modal.find('#status_view').html(setBadgeStatus(data.get.status));
+						modal.find('#statuspay_view').html(setBadgePay(data.get.paid));
+						modal.find('#question_view table tbody').html('');
+						modal.find('#attach_view').html($(btnLampiran).attr('href', data.get.attach));
+						modal.find('#eviden_view').html('')
+
+						$.each(data.get.questions, function(i, val){
+							modal.find('#question_view table tbody').append($(questionView).append(`<th>${val}</th>`));
+						})
+
+						if(data.get.eviden_paid){
+							modal.find('#eviden_view').html($(btnShowEviden).attr('href', data.get.eviden_paid))
+						} else {
+							modal.find('#eviden_view').html('<strong>Tidak ada bukti</strong>')
+						}
+
+					} else {
+						alertError("Berhasil", data.msg)
+					}
+				}).fail(function(data){
+					console.log(data.responseText)
+				});
+			})
+
             $('#ubah_status').validate({
-				rules:{
-					name: { required: true, alphanumeric: true,
-                        remote: {
-							url: '{{ route("verify_institution") }}',
-							type: 'POST',
-							data: {
-								name: function(){
-									return $('#namainstitusi_daftar').val();
-								}
-							}
-						} }
-				},
 				submitHandler: function (form) {
                     const dataForm = $(form).serializeObject(),
                           table = $(form).data('table');
@@ -726,6 +836,49 @@
 						if(data.success){
 							alertSuccess("Berhasil", data.msg)
                             reloadData("#" + table);
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					});   
+				}
+			})
+
+            $('#send_msg').validate({
+                ignore : [],
+				rules:{
+					title: { required: true, alphanumeric: true },
+                    body:{
+                        ckrequired: true
+                    }
+				},
+				submitHandler: function (form) {
+                    const dataForm = $(form).serializeObject(),
+                          table = $(form).data('table');
+
+					$.ajax({
+						url: "{{ route('send_msg') }}",
+						method: 'POST',
+						data: dataForm,
+						beforeSend: function(){
+							$('#modal_sendmsg').modal('hide')
+							$('#send_msg')[0].reset();
+                            setDataFromTheEditor('')
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function (data) {						
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						
+						if(data.success){
+							alertSuccess("Berhasil", data.msg)
 						} else {
 							alertError("Terjadi Kesalahan", data.msg)
 						}

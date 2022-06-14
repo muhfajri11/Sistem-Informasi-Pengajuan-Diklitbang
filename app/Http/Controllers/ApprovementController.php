@@ -133,4 +133,33 @@ class ApprovementController extends Controller
 
         return $log_mail;
     }
+
+    public function send_message(Request $request){
+        $comparative = Comparative::with('user')->find($request->id);
+
+        $details = [
+            'user_id'   => $comparative->user_id,
+            'email'     => $comparative->user->email,
+            'title'     => $request->title,
+            'body'      => $request->body
+        ];
+
+        $log_mail = Message::create($details);
+
+        if($log_mail){
+            Mail::to($details['email'])->send(new SendMail($details));
+        }
+
+        if(!$log_mail){
+            return response()->json([
+                'success' => false,
+                'msg'    => "Terjadi kesalahan mengirim email"
+            ], 200);    
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg'    => "Berhasil mengirim pesan ke ".$details['email']
+        ], 200);    
+    }
 }

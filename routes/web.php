@@ -33,6 +33,7 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
     Route::get('/manajemenrole', 'DashboardController@manage_role')->name('manage_role');
     Route::post('/institutionroom', 'DashboardController@get_institutionroom')->name('get_institutionroom');
     Route::post('/institution', 'DashboardController@get_institutions')->name('get_institutions');
+    Route::post('/send_msg', 'ApprovementController@send_message')->name('send_msg');
     
     Route::name('manage_role.')->prefix('manajemenrole')->group(function() {
         Route::post('/users', 'DashboardController@get_users')->name('users');
@@ -88,5 +89,3 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
     Route::post('/verify_institusi', 'InstitutionController@check')->name('verify_institution');
     Route::post('/store_institusi', 'InstitutionController@store')->name('store_institution');
 });
-
-
