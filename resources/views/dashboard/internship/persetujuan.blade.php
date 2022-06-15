@@ -304,7 +304,7 @@
             $.extend(dataReviews, {
                 "ajax": {
                     "type": "POST",
-                    "url": `{{ route('internship.all', 'review', 1) }}`,
+                    "url": `{{ route('internship.all', ['type' => 'review', 'admin' => 1]) }}`,
                     "timeout": 120000
                 },
                 "aoColumns": [
@@ -421,7 +421,7 @@
 							$.extend(dataPayments, {
                                 "ajax": {
                                     "type": "POST",
-                                    "url": `{{ route('internship.all', 'pay', 1) }}`,
+                                    "url": `{{ route('internship.all', ['type' => 'pay', 'admin' => 1]) }}`,
                                     "timeout": 120000
                                 },
                                 "aoColumns": [
@@ -501,7 +501,7 @@
 							$.extend(dataAccept, {
                                 "ajax": {
                                     "type": "POST",
-                                    "url": `{{ route('internship.all', 'accept', 1) }}`,
+                                    "url": `{{ route('internship.all', ['type' => 'accept', 'admin' => 1]) }}`,
                                     "timeout": 120000
                                 },
                                 "aoColumns": [
@@ -585,7 +585,7 @@
 							$.extend(dataDone, {
                                 "ajax": {
                                     "type": "POST",
-                                    "url": `{{ route('internship.all', 'done,reject', 1) }}`,
+                                    "url": `{{ route('internship.all', ['type' => 'done,reject', 'admin' => 1]) }}`,
                                     "timeout": 120000
                                 },
                                 "aoColumns": [

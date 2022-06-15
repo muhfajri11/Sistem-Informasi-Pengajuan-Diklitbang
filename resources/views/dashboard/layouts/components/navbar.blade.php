@@ -24,6 +24,7 @@
 		<!--**********************************
 			Chat box start
 		***********************************-->
+		@role('user')
 		<div class="chatbox">
 			<div class="chatbox-close"></div>
 			<div class="card mb-sm-3 mb-md-0 contacts_card dlab-chat-user-box">
@@ -86,6 +87,7 @@
 				</div>
 			</div>
 		</div>
+		@endrole
 		<!--**********************************
 			Chat box End
 		***********************************-->
@@ -105,6 +107,7 @@
 						<ul class="navbar-nav header-right">
 
 							<li class="nav-item dropdown notification_dropdown">
+								@role('user')
 								<a class="nav-link bell-link " data-id="{{ auth()->user()->id }}" href="javascript:void(0);">
 									<svg xmlns="http://www.w3.org/2000/svg" width="19.375" height="24" viewBox="0 0 19.375 24">
 										<g id="_006-notification" data-name="006-notification" transform="translate(-341.252 -61.547)">
@@ -113,6 +116,7 @@
 									  </svg>
 									<span class="badge light text-white bg-primary rounded-circle pop_msg">76</span>
 								</a>
+								@endrole
 							</li>	
 							<li class="nav-item dropdown header-profile">
 								<span>{{ Auth::user()->name }}</span>

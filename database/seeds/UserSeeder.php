@@ -49,6 +49,14 @@ class UserSeeder extends Seeder
             switch($data['email']){
                 case "master@test.com":
                     $user->assignRole('masteradmin');
+                    // $permissions = $user->getAllPermissions();
+
+                    // $name_permissions = [];
+                    // $permissions->each(function($data) use(&$name_permissions){
+                    //     $name_permissions[] = $data->name;
+                    // });
+
+                    // $user->syncPermissions($name_permissions);
                     break;
                 case "pendidikan@test.com":
                     $user->assignRole('pendidikan');

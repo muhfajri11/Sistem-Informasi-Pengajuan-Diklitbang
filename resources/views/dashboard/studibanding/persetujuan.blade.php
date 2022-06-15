@@ -286,7 +286,7 @@
             $.extend(dataReviews, {
                 "ajax": {
                     "type": "POST",
-                    "url": `{{ route('studi_banding.all', 'review', 1) }}`,
+                    "url": `{{ route('studi_banding.all', ['type' => 'review', 'admin' => 1]) }}`,
                     "timeout": 120000
                 },
                 "aoColumns": [
@@ -409,7 +409,7 @@
 							$.extend(dataPayments, {
                                 "ajax": {
                                     "type": "POST",
-                                    "url": `{{ route('studi_banding.all', 'pay', 1) }}`,
+                                    "url": `{{ route('studi_banding.all', ['type' => 'pay', 'admin' => 1]) }}`,
                                     "timeout": 120000
                                 },
                                 "aoColumns": [
@@ -489,7 +489,7 @@
 							$.extend(dataAccept, {
                                 "ajax": {
                                     "type": "POST",
-                                    "url": `{{ route('studi_banding.all', 'accept', 1) }}`,
+                                    "url": `{{ route('studi_banding.all', ['type' => 'accept', 'admin' => 1]) }}`,
                                     "timeout": 120000
                                 },
                                 "aoColumns": [
@@ -570,7 +570,7 @@
                             $.extend(dataReject, {
                                 "ajax": {
                                     "type": "POST",
-                                    "url": `{{ route('studi_banding.all', 'reject', 1) }}`,
+                                    "url": `{{ route('studi_banding.all', ['reject' => 'review', 'admin' => 1]) }}`,
                                     "timeout": 120000
                                 },
                                 "aoColumns": [

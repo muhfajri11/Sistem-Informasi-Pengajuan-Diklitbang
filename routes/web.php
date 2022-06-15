@@ -30,7 +30,11 @@ Route::post('/reset_password', 'Auth\ForgotPasswordController@resetPassword')->n
 Route::middleware('verified')->prefix('dashboard')->group(function(){
     Route::get('/', 'DashboardController@index')->name('dashboard');
     
-    Route::get('/manajemenrole', 'DashboardController@manage_role')->name('manage_role');
+    Route::group(['middleware' => ['permission:master']], function () {
+        Route::get('/manajemenrole', 'DashboardController@manage_role')->name('manage_role');
+        Route::get('/manajemenruangan', 'RoomController@index')->name('manage_room');
+    });
+
     Route::post('/institutionroom', 'DashboardController@get_institutionroom')->name('get_institutionroom');
     Route::post('/institution', 'DashboardController@get_institutions')->name('get_institutions');
     
@@ -54,7 +58,6 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::post('/permissions', 'DashboardController@get_permissions')->name('permissions');
     });
 
-    Route::get('/manajemenruangan', 'RoomController@index')->name('manage_room');
     Route::name('manage_room.')->prefix('manajemenruangan')->group(function() {
         Route::post('/rooms', 'RoomController@get_rooms')->name('rooms');
         Route::post('/room', 'RoomController@get_room')->name('get_room');
@@ -64,9 +67,17 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::delete('/delete_room', 'RoomController@delete_room')->name('delete_room');
     });
 
-    Route::get('/studibanding', 'ComparativeController@index')->name('studi_banding');
+    Route::group(['middleware' => ['permission:pendidikan']], function () {
+        Route::get('/studibanding/approvement', 'ApprovementController@comparative_approve')->name('studi_banding.approve');
+        Route::get('/internship/approvement', 'ApprovementController@internship_approve')->name('internship.approve');
+    });
+
+    Route::group(['middleware' => ['permission:user']], function () {
+        Route::get('/studibanding', 'ComparativeController@index')->name('studi_banding');
+        Route::get('/internship', 'InternshipController@index')->name('internship');
+    });
+
     Route::name('studi_banding.')->prefix('studibanding')->group(function() {
-        Route::get('/approvement', 'ApprovementController@comparative_approve')->name('approve');
 
         Route::post('/all/{type}/{admin?}', 'ComparativeController@all')->name('all');
         Route::post('/get_once', 'ComparativeController@get_once')->name('get');
@@ -77,9 +88,7 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::delete('/delete', 'ComparativeController@delete')->name('delete');
     });
 
-    Route::get('/internship', 'InternshipController@index')->name('internship');
     Route::name('internship.')->prefix('internship')->group(function() {
-        Route::get('/approvement', 'ApprovementController@internship_approve')->name('approve');
         Route::post('/set_rooms', 'ApprovementController@set_rooms')->name('set_rooms');
 
         Route::post('/all/{type}/{admin?}', 'InternshipController@all')->name('all');

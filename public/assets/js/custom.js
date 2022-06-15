@@ -780,8 +780,8 @@ jQuery(window).on('load',function () {
 		jQuery('#contentload_listmsg').addClass('d-none').fadeOut('slow')
 	}).fail(function(data){
 		jQuery('#contentload_listmsg').addClass('d-none').fadeOut('slow')
-		resp = JSON.parse(data.responseText)
-		console.log(resp.message)
+		// resp = JSON.parse(data.responseText)
+		console.log(data.responseText.message)
 		console.log("error");
 	})
 });

@@ -28,7 +28,7 @@ class RoleSeeder extends Seeder
                     $role->givePermissionTo(['penelitian']);
                     break;
                 case 'pendidikan':
-                    $role->givePermissionTo(['penelitian']);
+                    $role->givePermissionTo(['pendidikan']);
                     break;
                 case 'user':
                     $role->givePermissionTo(['user']);
