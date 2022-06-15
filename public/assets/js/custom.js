@@ -157,13 +157,175 @@
 			});
 		}
 	}
+
+	var handleDeleteChat = function(){
+		jQuery('.delete-all-msg').on('click',function(){
+			Swal.fire({
+				title: `Apakah kamu yakin ingin menghapus semua pesan?`,
+				showDenyButton: true,
+				showConfirmButton: false,
+				showCancelButton: true,
+				denyButtonText: `Hapus`
+			}).then((result) => {
+				if (result.isDenied) {
+					$.ajax({
+						url: window.location.origin +"/dashboard/messages/delete",
+						data: {_method: "DELETE"},
+						method: 'POST',
+						async:false,
+						dataType: 'json',
+						beforeSend: function(){
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function(data){
+						if(data.success){
+							alertWarning("Berhasil", data.msg)
+							jQuery('#content_listmsg').html('<li class="text-center font-w700">Tidak ada pemberitahuan</li>');
+							jQuery('.dlab-chat-user-box').find('.delete-all-msg').hide()
+							jQuery('.pop_msg').hide()
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						console.log(data.responseText)
+					});
+				}
+			})
+		})
+
+		jQuery('.delete-msg').on('click',function(){
+			Swal.fire({
+				title: `Apakah kamu yakin ingin menghapus pesan?`,
+				showDenyButton: true,
+				showConfirmButton: false,
+				showCancelButton: true,
+				denyButtonText: `Hapus`
+			}).then((result) => {
+				if (result.isDenied) {
+					$.ajax({
+						url: window.location.origin+"/dashboard/messages/delete/"+jQuery(this).data('id'),
+						data: {_method: "DELETE"},
+						method: 'POST',
+						async:false,
+						dataType: 'json',
+						beforeSend: function(){
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function(data){
+						if(data.success){
+							alertWarning("Berhasil", data.msg)
+							jQuery('.dlab-chat-history-back').trigger('click');
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						console.log(data.responseText)
+					});
+				}
+			})
+		})
+	}
 	
 	var handleChatbox = function() {
 		jQuery('.bell-link').on('click',function(){
 			jQuery('.chatbox').addClass('active');
+
+			jQuery.ajax({
+				url: window.location.origin +"/dashboard/messages",
+				type: 'POST',
+				async:false,
+				dataType: 'json',
+				beforeSend: function(){
+					jQuery('#contentload_listmsg').removeClass('d-none').fadeIn('slow')
+				}
+			}).done(function (data) {
+				if(data.success){
+					const listMsg = `
+						<li class="dlab-chat-user">
+							<p class="title_msg font-w700 mb-1 text-truncate"></p>
+							<p class="body_msg mb-1 text-truncate small"></p>
+							<p class="mb-0 small">
+								<font class="date_msg"></font> &centerdot; <font class="from_msg"></font>
+							</p>
+						</li>`,
+						emptyMsg = `<li class="text-center font-w700">Tidak ada pemberitahuan</li>`;
+
+					const ucwords = function(str) {
+						return (str + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+							return $1.toUpperCase();
+						});
+					}
+					const strip = function(html){
+						let doc = new DOMParser().parseFromString(html, 'text/html');
+						return doc.body.textContent || "";
+					}
+
+					jQuery('#content_listmsg').html('')
+
+					if(data.get.length > 0){
+						let countRead = 0;
+						jQuery('.dlab-chat-user-box').find('.delete-all-msg').show()
+						jQuery.each(data.get, (i, val) => {
+							let setMsg = jQuery(listMsg),
+								dateCreate = new Date(val.updated_at);
+
+							if(!val.is_read) {
+								setMsg.addClass('bg-primary text-white')
+								countRead++;
+							}
+
+							setMsg.attr('data-id', val.id);
+							setMsg.find('.title_msg').html(val.title)
+							setMsg.find('.body_msg').html(strip(val.body))
+							setMsg.find('.date_msg').html(`
+								${dateCreate.getDay()} 
+								${dateCreate.toLocaleString('default', { month: 'short' })} 
+								${dateCreate.getFullYear()}`)
+							setMsg.find('.from_msg').html(ucwords(val.from))
+	
+							jQuery('#content_listmsg').append(setMsg)
+						})
+
+						if(countRead > 0){
+							jQuery('.pop_msg').show()
+							jQuery('.pop_msg').html(countRead)
+						} else {
+							jQuery('.pop_msg').hide()
+						}
+					} else {
+						jQuery('.pop_msg').hide()
+						jQuery('.dlab-chat-user-box').find('.delete-all-msg').hide()
+						jQuery('#content_listmsg').append(jQuery(emptyMsg));
+					}
+
+				} else {
+					console.log(data.msg)
+				}
+
+				jQuery('#contentload_listmsg').addClass('d-none').fadeOut('slow')
+			}).fail(function(data){
+				jQuery('#contentload_listmsg').addClass('d-none').fadeOut('slow')
+				resp = JSON.parse(data.responseText)
+				console.log(resp.message)
+				console.log("error");
+			})
 		});
 		jQuery('.chatbox-close').on('click',function(){
 			jQuery('.chatbox').removeClass('active');
+			jQuery('#contentload_listmsg').addClass('d-none').fadeIn('slow')
+			jQuery('#content_listmsg').html('')
 		});
 	}
 	
@@ -197,16 +359,160 @@
 	}
 	
 	var handleDzChatUser = function() {
-		jQuery('.dlab-chat-user-box .dlab-chat-user').on('click',function(){
+		// Open Detail Notifikasi
+		jQuery('.dlab-chat-user-box').on('click', '.dlab-chat-user', function(){
 			jQuery('.dlab-chat-user-box').addClass('d-none');
 			jQuery('.dlab-chat-history-box').removeClass('d-none');
+			const id = jQuery(this).data('id');
             //$(".chatbox .msg_card_body").height(vHeightArea());
             //$(".chatbox .msg_card_body").css('height',vHeightArea());
+			jQuery.ajax({
+				url: window.location.origin +"/dashboard/messages/read_msg/1",
+				data: {id: id},
+				type: 'POST',
+				async:false,
+				dataType: 'json',
+				beforeSend: function(){
+					jQuery('#contentload_msg').removeClass('d-none').fadeIn('slow')
+				}
+			}).done(function (data) {
+				if(data.success){
+					const container = jQuery('#content_msg .col-12'),
+						  dateCreate = new Date(data.get.updated_at);
+
+					const ucwords = function(str) {
+						return (str + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+							return $1.toUpperCase();
+						});
+					}
+
+					if(data.get.internship){
+						container.find('.additional_contentmsg').html(`
+							<dt>Nama Lengkap</dt>
+							<dd>${data.get.internship.name}</dd>
+
+							<dt>Jurusan & Tipe Magang</dt>
+							<dd>${data.get.internship.jurusan} &centerdot; ${ucwords(data.get.internship.type)}</dd>
+						`);
+					}
+
+					if(data.get.comparative){
+						container.find('.additional_contentmsg').html(`
+							<dt>Tema Pertemuan</dt>
+							<dd>${data.get.internship.title}</dd>
+
+							<dt>Insitusi</dt>
+							<dd>${data.get.internship.insitution.name}</dd>
+						`);
+					}
+					container.closest('.dlab-chat-history-box').find('.from_contentmsg').html(ucwords(data.get.from))
+					container.closest('.dlab-chat-history-box').find('.delete-msg').attr('data-id', data.get.id)
+					container.find('.title_contentmsg').html(data.get.title);
+					container.find('.body_contentmsg').html(data.get.body);
+					container.find('.date_contentmsg').html(`
+								${dateCreate.getDay()} 
+								${dateCreate.toLocaleString('default', { month: 'short' })} 
+								${dateCreate.getFullYear()}`)
+				} else {
+					console.log(data.msg)
+				}
+
+				jQuery('#contentload_msg').addClass('d-none').fadeOut('slow')
+			}).fail(function(data){
+				jQuery('#contentload_msg').addClass('d-none').fadeOut('slow')
+				resp = JSON.parse(data.responseText)
+				console.log(resp.message)
+				console.log("error");
+			})
+
+			jQuery('#contentload_listmsg').addClass('d-none').fadeIn('slow')
+			jQuery('#content_listmsg').html('')
 		}); 
 		
+		// Back List Notifikasi
 		jQuery('.dlab-chat-history-back').on('click',function(){
 			jQuery('.dlab-chat-user-box').removeClass('d-none');
 			jQuery('.dlab-chat-history-box').addClass('d-none');
+
+			jQuery.ajax({
+				url: window.location.origin +"/dashboard/messages",
+				type: 'POST',
+				async:false,
+				dataType: 'json',
+				beforeSend: function(){
+					jQuery('#contentload_listmsg').removeClass('d-none').fadeIn('slow')
+				}
+			}).done(function (data) {
+				if(data.success){
+					const listMsg = `
+						<li class="dlab-chat-user">
+							<p class="title_msg font-w700 mb-1 text-truncate"></p>
+							<p class="body_msg mb-1 text-truncate small"></p>
+							<p class="mb-0 small">
+								<font class="date_msg"></font> &centerdot; <font class="from_msg"></font>
+							</p>
+						</li>`,
+						emptyMsg = `<li class="text-center font-w700">Tidak ada pemberitahuan</li>`;
+
+					const ucwords = function(str) {
+						return (str + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
+							return $1.toUpperCase();
+						});
+					}
+					const strip = function(html){
+						let doc = new DOMParser().parseFromString(html, 'text/html');
+						return doc.body.textContent || "";
+					}
+
+					jQuery('#content_listmsg').html('')
+
+					if(data.get.length > 0){
+						let countRead = 0;
+						jQuery('.dlab-chat-user-box').find('.delete-all-msg').show()
+						jQuery.each(data.get, (i, val) => {
+							let setMsg = jQuery(listMsg),
+								dateCreate = new Date(val.updated_at);
+
+							if(!val.is_read){
+								setMsg.addClass('bg-primary text-white')
+								countRead++;
+							}
+
+							setMsg.attr('data-id', val.id);
+							setMsg.find('.title_msg').html(val.title)
+							setMsg.find('.body_msg').html(strip(val.body))
+							setMsg.find('.date_msg').html(`
+								${dateCreate.getDay()} 
+								${dateCreate.toLocaleString('default', { month: 'short' })} 
+								${dateCreate.getFullYear()}`)
+							setMsg.find('.from_msg').html(ucwords(val.from))
+	
+							jQuery('#content_listmsg').append(setMsg)
+						})
+
+						if(countRead > 0){
+							jQuery('.pop_msg').show()
+							jQuery('.pop_msg').html(countRead)
+						} else {
+							jQuery('.pop_msg').hide()
+						}
+					} else {
+						jQuery('.pop_msg').hide()
+						jQuery('.dlab-chat-user-box').find('.delete-all-msg').hide()
+						jQuery('#content_listmsg').append(jQuery(emptyMsg));
+					}
+
+				} else {
+					console.log(data.msg)
+				}
+
+				jQuery('#contentload_listmsg').addClass('d-none').fadeOut('slow')
+			}).fail(function(data){
+				jQuery('#contentload_listmsg').addClass('d-none').fadeOut('slow')
+				resp = JSON.parse(data.responseText)
+				console.log(resp.message)
+				console.log("error");
+			})
 		}); 
 		
 		jQuery('.dlab-fullscreen').on('click',function(){
@@ -389,6 +695,7 @@
 			// handleDzScroll();
 			handleMenuTabs();
 			handleChatbox();
+			handleDeleteChat();
 			// handlePerfectScrollbar();
 			handleBtnNumber();
 			handleDzChatUser();
@@ -428,7 +735,11 @@ jQuery(document).ready(function() {
 	$('[data-bs-toggle="popover"]').popover();
     'use strict';
 	Travl .init();
-	
+
+	// $('.btn-delete-msg').on('click', function(e){
+	// 	e.stopPropagation();
+	// })
+
 });
 /* Document.ready END */
 
@@ -440,6 +751,39 @@ jQuery(window).on('load',function () {
 			Travl .handleMenuPosition();
 	}, 1000);
 	
+	jQuery.ajax({
+		url: window.location.origin +"/dashboard/messages",
+		type: 'POST',
+		async:false,
+		dataType: 'json'
+	}).done(function (data) {
+		if(data.success){
+			if(data.get.length > 0){
+				let countRead = 0;
+				jQuery.each(data.get, function(i, val){
+					if(!val.is_read) countRead++;
+				})
+
+				if(countRead > 0){
+					jQuery('.pop_msg').show()
+					jQuery('.pop_msg').html(countRead)
+				} else {
+					jQuery('.pop_msg').hide()
+				}
+			} else {
+				jQuery('.pop_msg').hide()
+			}
+		} else {
+			console.log(data.msg)
+		}
+
+		jQuery('#contentload_listmsg').addClass('d-none').fadeOut('slow')
+	}).fail(function(data){
+		jQuery('#contentload_listmsg').addClass('d-none').fadeOut('slow')
+		resp = JSON.parse(data.responseText)
+		console.log(resp.message)
+		console.log("error");
+	})
 });
 /*  Window Load END */
 /* Window Resize START */

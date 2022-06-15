@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Institution, Room, User};
+use App\{Comparative, Institution, Internship, Message, Room, User};
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -270,5 +270,68 @@ class DashboardController extends Controller
             'success' => true,
             'get'    => $data
         ], 200);
+    }
+
+    public function get_messages($admin = null){
+        $data = $admin ? Message::with('user')->get() : auth()->user()->messages;
+
+        if(!$data){
+            return response()->json([
+                'success' => false,
+                'msg'     => "Terjadi Kesalahan"
+            ], 200);
+        }
+        
+        return response()->json([
+            'success' => true,
+            'get'     => $data
+        ], 200);
+    }
+
+    public function read_message(Request $request, $get = null){
+        $update = Message::find($request->id)->update(['is_read' => 1]);
+
+        if(!$update){
+            return response()->json([
+                'success' => false,
+                'msg'     => "Terjadi Kesalahan"
+            ], 200);
+        }
+
+        if($get){
+            $msg = Message::with('user')->find($request->id);
+            switch($msg->from){
+                case "internship":
+                    $msg->internship = Internship::find($msg->table_id);
+                break;
+                case "comparative":
+                    $msg->comparative = Comparative::find($msg->table_id);
+                break;
+            }
+            $data = ['success' => true, 'msg' => "Berhasil membaca pesan", 'get' => $msg];
+        } else {
+            $data = ['success' => true,'msg' => "Berhasil membaca pesan"];
+        }
+        
+        return response()->json($data, 200);
+    }
+
+    public function delete_message(Request $request, $msg_id = null){
+        if($msg_id){
+            $delete = Message::where('id', $msg_id)->delete();
+            $data = ['success' => true,'msg' => "Berhasil menghapus pesan"];
+        } else {
+            $delete = Message::where('user_id', auth()->user()->id)->delete();
+            $data = ['success' => true,'msg' => "Berhasil menghapus semua pesan"];
+        }
+
+        if(!$delete){
+            return response()->json([
+                'success' => false,
+                'msg'     => "Terjadi Kesalahan"
+            ], 200);
+        }
+
+        return response()->json($data, 200);
     }
 }

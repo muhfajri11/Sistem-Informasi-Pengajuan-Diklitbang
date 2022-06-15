@@ -36,6 +36,10 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
     
     Route::post('/send_msg', 'ApprovementController@send_message')->name('send_msg');
     Route::post('/changestatus', 'ApprovementController@changestatus')->name('changestatus');
+
+    Route::post('/messages/{admin?}', 'DashboardController@get_messages')->name('messages');
+    Route::post('/messages/read_msg/{get?}', 'DashboardController@read_message')->name('messages.read');
+    Route::delete('/messages/delete/{msg_id?}', 'DashboardController@delete_message')->name('messages.delete');
     
     Route::name('manage_role.')->prefix('manajemenrole')->group(function() {
         Route::post('/users', 'DashboardController@get_users')->name('users');
