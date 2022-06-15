@@ -19,7 +19,7 @@ class InternshipController extends Controller
         return view('dashboard.internship.pengajuan');
     }
 
-    public function all($type){
+    public function all($type, $admin = null){
         $user = auth()->user();
 
         if(strpos($type, ',')){
@@ -28,11 +28,14 @@ class InternshipController extends Controller
             $type2 = $type[1];
             $type = $type[0];
         }
+        
+        if($admin){
+            $data = ['status'  => $type];
+        } else {
+            $data = ['user_id' => $user->id, 'status'  => $type];
+        }
 
-        $comparatives = Internship::where([
-            'user_id' => $user->id,
-            'status'  => $type
-        ]);
+        $comparatives = Internship::with('institution')->where($data);
 
         if(isset($type2)){
             $comparatives->orWhere('status', $type2);
@@ -46,6 +49,7 @@ class InternshipController extends Controller
             $response[$i]['id'] = $data['id'];
             $response[$i]['file_internship_id'] = $data['file_internship_id'];
             $response[$i]['name'] = $data['name'];
+            $response[$i]['institution'] = $data['institution']->name;
             $response[$i]['jurusan'] = ucwords($data['jurusan']);
             $response[$i]['start_date'] = Carbon::createFromFormat('Y-m-d', $data['start_date'])->format('d F Y');
             $response[$i]['end_date'] = Carbon::createFromFormat('Y-m-d', $data['end_date'])->format('d F Y');

@@ -127,6 +127,14 @@
                                         <div class="text-right" id="statuspay_view"></div>
                                     </div>
                                 </div>
+                                <div class="col-12 is_rooms d-none"><hr></div>
+                                <div class="col-12 mb-2 d-flex align-items-center is_rooms d-none">
+                                    <i class="fas fa-hospital-alt fa-2x me-4 text-primary"></i>
+                                    <div>
+                                        <p class="small text-right mb-0">Penempatan Ruangan</p>
+                                        <div class="text-right font-w700" id="rooms_view"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div id="berkas_view" class="tab-pane fade">

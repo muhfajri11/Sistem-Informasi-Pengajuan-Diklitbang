@@ -33,7 +33,9 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
     Route::get('/manajemenrole', 'DashboardController@manage_role')->name('manage_role');
     Route::post('/institutionroom', 'DashboardController@get_institutionroom')->name('get_institutionroom');
     Route::post('/institution', 'DashboardController@get_institutions')->name('get_institutions');
+    
     Route::post('/send_msg', 'ApprovementController@send_message')->name('send_msg');
+    Route::post('/changestatus', 'ApprovementController@changestatus')->name('changestatus');
     
     Route::name('manage_role.')->prefix('manajemenrole')->group(function() {
         Route::post('/users', 'DashboardController@get_users')->name('users');
@@ -61,9 +63,8 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
     Route::get('/studibanding', 'ComparativeController@index')->name('studi_banding');
     Route::name('studi_banding.')->prefix('studibanding')->group(function() {
         Route::get('/approvement', 'ApprovementController@comparative_approve')->name('approve');
-        Route::post('/changestatus', 'ApprovementController@comparative_changestatus')->name('changestatus');
 
-        Route::post('/all/{type}', 'ComparativeController@all')->name('all');
+        Route::post('/all/{type}/{admin?}', 'ComparativeController@all')->name('all');
         Route::post('/get_once', 'ComparativeController@get_once')->name('get');
         Route::post('/store', 'ComparativeController@store')->name('store');
         Route::patch('/update', 'ComparativeController@update')->name('update');
@@ -75,8 +76,9 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
     Route::get('/internship', 'InternshipController@index')->name('internship');
     Route::name('internship.')->prefix('internship')->group(function() {
         Route::get('/approvement', 'ApprovementController@internship_approve')->name('approve');
+        Route::post('/set_rooms', 'ApprovementController@set_rooms')->name('set_rooms');
 
-        Route::post('/all/{type}', 'InternshipController@all')->name('all');
+        Route::post('/all/{type}/{admin?}', 'InternshipController@all')->name('all');
         Route::post('/get_once', 'InternshipController@get_once')->name('get');
         Route::post('/store', 'InternshipController@store')->name('store');
         Route::patch('/update', 'InternshipController@update')->name('update');

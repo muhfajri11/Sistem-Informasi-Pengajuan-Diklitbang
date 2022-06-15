@@ -286,7 +286,7 @@
             $.extend(dataReviews, {
                 "ajax": {
                     "type": "POST",
-                    "url": `{{ route('studi_banding.all', 'review') }}`,
+                    "url": `{{ route('studi_banding.all', 'review', 1) }}`,
                     "timeout": 120000
                 },
                 "aoColumns": [
@@ -409,7 +409,7 @@
 							$.extend(dataPayments, {
                                 "ajax": {
                                     "type": "POST",
-                                    "url": `{{ route('studi_banding.all', 'pay') }}`,
+                                    "url": `{{ route('studi_banding.all', 'pay', 1) }}`,
                                     "timeout": 120000
                                 },
                                 "aoColumns": [
@@ -489,7 +489,7 @@
 							$.extend(dataAccept, {
                                 "ajax": {
                                     "type": "POST",
-                                    "url": `{{ route('studi_banding.all', 'accept') }}`,
+                                    "url": `{{ route('studi_banding.all', 'accept', 1) }}`,
                                     "timeout": 120000
                                 },
                                 "aoColumns": [
@@ -570,7 +570,7 @@
                             $.extend(dataReject, {
                                 "ajax": {
                                     "type": "POST",
-                                    "url": `{{ route('studi_banding.all', 'reject') }}`,
+                                    "url": `{{ route('studi_banding.all', 'reject', 1) }}`,
                                     "timeout": 120000
                                 },
                                 "aoColumns": [
@@ -816,11 +816,12 @@
                     const dataForm = $(form).serializeObject(),
                           table = $(form).data('table');
 
+                    dataForm.from = 'comparative';
                     if(dataForm.switch_pay) delete dataForm.switch_pay;
 
                     dataForm.paid = $(form).find('input[name="switch_pay"]').prop('checked')? 1 : 0;
 					$.ajax({
-						url: "{{ route('studi_banding.changestatus') }}",
+						url: "{{ route('changestatus') }}",
 						method: 'POST',
 						data: dataForm,
 						beforeSend: function(){
@@ -861,7 +862,8 @@
 				submitHandler: function (form) {
                     const dataForm = $(form).serializeObject(),
                           table = $(form).data('table');
-
+                    
+                    dataForm.from = 'comparative';
 					$.ajax({
 						url: "{{ route('send_msg') }}",
 						method: 'POST',

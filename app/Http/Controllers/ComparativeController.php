@@ -21,7 +21,7 @@ class ComparativeController extends Controller
         return view('dashboard.studibanding.pengajuan', compact('rooms', 'institutions'));
     }
 
-    public function all($type){
+    public function all($type, $admin = null){
         $user = auth()->user();
 
         if(strpos($type, ',')){
@@ -31,10 +31,13 @@ class ComparativeController extends Controller
             $type = $type[0];
         }
 
-        $comparatives = Comparative::where([
-            'user_id' => $user->id,
-            'status'  => $type
-        ]);
+        if($admin){
+            $data = ['status'  => $type];
+        } else {
+            $data = ['user_id' => $user->id, 'status'  => $type];
+        }
+
+        $comparatives = Comparative::where($data);
 
         if(isset($type2)){
             $comparatives->orWhere('status', $type2);

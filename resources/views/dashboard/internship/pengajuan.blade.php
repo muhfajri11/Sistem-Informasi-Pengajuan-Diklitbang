@@ -1037,6 +1037,18 @@
 							modal.find('#docmou_view').html('Tidak Punya')
 						}
 
+						if(data.get.rooms.length > 0){
+							let rooms_ = ``;
+							$.each(data.get.rooms, (i, val) => {
+								rooms_ += val.name + ", ";
+							})
+							modal.find('#rooms_view').html(rooms_)
+							modal.find('.is_rooms').removeClass('d-none')
+						} else {
+							modal.find('.is_rooms').addClass('d-none')
+							modal.find('#rooms_view').html('')
+						}
+
 						modal.find('#pay_view').html(`Rp ${currency.format(data.get.total_paid)}`)
 
 						htmlBtn = $(htmlBtnShow).html('Lihat KTM').attr('href', data.get.file_internship.ktm)
