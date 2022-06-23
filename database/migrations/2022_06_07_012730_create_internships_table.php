@@ -22,6 +22,7 @@ class CreateInternshipsTable extends Migration
             $table->string('name');
             $table->string('nim', 100);
             $table->string('jurusan');
+            $table->string('jenjang');
             $table->tinyInteger('semester');
             $table->text('address');
 
@@ -32,7 +33,11 @@ class CreateInternshipsTable extends Migration
 
             $table->date('start_date');
             $table->date('end_date');
-            $table->enum('type', ['non-medic', 'medic']);
+            $table->string('type');
+
+            $table->string('jenjang_price')->default(0);
+            $table->string('type_price')->default(0);
+            $table->string('mou_price')->default(0);
 
             $table->enum('status', ['reject', 'review', 'pay', 'accept', 'done'])->default('review');
             $table->tinyInteger('paid')->default(0);

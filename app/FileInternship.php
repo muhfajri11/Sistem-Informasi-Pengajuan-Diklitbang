@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FileInternship extends Model
 {
     protected $fillable = [
-        'proposal', 'akreditasi', 'panduan_praktek', 'ktm', 'transkrip', 'izin_pkl',
+        'proposal', 'panduan_praktek', 'ktm_ktp', 'jadwal', 'izin_pkl',
         'izin_ortu', 'antigen', 'mou', 'bukti_pkl'
     ];
 

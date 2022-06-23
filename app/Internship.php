@@ -3,12 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Internship extends Model
 {
     protected $fillable = [
-        'user_id', 'file_internship_id', 'institution_id', 'name', 'nim', 'jurusan', 'semester', 'address',
-        'province', 'city', 'phone', 'start_date', 'end_date', 'type', 'status', 'paid', 'total_paid'
+        'user_id', 'file_internship_id', 'institution_id', 'name', 'nim', 'jurusan', 'semester', 'jenjang', 'address',
+        'province', 'city', 'phone', 'start_date', 'end_date', 'type', 'jenjang_price', 'type_price', 'mou_price',
+        'status', 'paid', 'total_paid'
     ];
 
     public function file_internship(){
@@ -40,6 +42,18 @@ class Internship extends Model
             return false;
         } 
         return true;
+    }
+
+    public static function deleteMessage($user_id, $id){
+        $messages = DB::table('messages')->where('user_id', $user_id)->where('table_id', $id)->where('from', 'internship')->get();
         
+        if(count($messages) > 0){
+            $delete = DB::table('messages')->where('user_id', $user_id)->where('table_id', $id)->where('from', 'internship')->delete();
+            if(!$delete) return false;
+        } else {
+            return true;
+        }
+
+        return true;
     }
 }

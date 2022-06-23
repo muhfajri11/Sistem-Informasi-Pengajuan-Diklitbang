@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <form class="modal-content" id="edit_magang" enctype="multipart/form-data" novalidate>
             <div class="modal-header">
-                <h3 class="modal-title text-secondary"><i class="fas fa-cog me-2"></i> Update Pengajuan Magang</h3>
+                <h3 class="modal-title text-secondary"><i class="fas fa-cog me-2"></i> Update Pengajuan PKL</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
@@ -10,7 +10,7 @@
                 <input type="hidden" name="id" id="id_bukti" required>
                 <div class="col-12">
                     <div class="alert alert-secondary alert-alt fade show">
-                        <h5>Aturan Biaya Magang (Pendaftaran)</h5>
+                        <h5>Aturan Biaya PKL (Pendaftaran)</h5>
                         <p class="mb-1">Memiliki dokumen MOU dikenakan biaya <span class="badge badge-pill badge-secondary">Rp 150.000</span></p>
                         <p class="mb-1">Tidak memiliki dokumen MOU dikenakan biaya <span class="badge badge-pill badge-secondary">Rp 300.000</span></p>
                     </div>
@@ -67,22 +67,29 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <div class="col-12 col-md-4 mb-2">
+                                <div class="col-12 col-md-6 mb-2">
                                     <div class="form-group">
-                                        <label for="type_daftar">Tipe Magang</label>
+                                        <label for="type_daftar">Tipe PKL</label>
                                         <select class="select2_ mb-2" name="type" required>
                                             <option value="medic">Medis</option>
                                             <option value="non-medic">Non Medis</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-4 mb-2">
+                                <div class="col-12 col-md-6 mb-2">
+                                    <div class="form-group">
+                                        <label for="jenjangan_daftar">Jenjang Pendidikan</label>
+                                        <select class="select2_ mb-2" name="jenjang" id="jenjang_edit" required>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 mb-2">
                                     <div class="form-group">
                                         <label for="start_date">Tanggal Mulai</label>
                                         <input name="start_date" class="datepicker-default form-control mb-2" id="start_date">
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-4 mb-2">
+                                <div class="col-12 col-md-6 mb-2">
                                     <div class="form-group">
                                         <label for="end_date">Tanggal Selesai</label>
                                         <input name="end_date" class="datepicker-default form-control mb-2" id="end_date">
@@ -126,10 +133,10 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="ktm_daftar">KTM <span id="btnedit_ktm"></span></label>
+                                        <label for="ktm_daftar">KTM/KTP <span id="btnedit_ktm"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
-                                                <input type="file" class="form-file-input form-daftar form-control" name="ktm" required>
+                                                <input type="file" class="form-file-input form-daftar form-control" name="ktm_ktp" required>
                                             </div>
                                             <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
                                         </div>
@@ -138,7 +145,7 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="proposal_daftar">Proposal Magang <span id="btnedit_proposal"></span></label>
+                                        <label for="proposal_daftar">Proposal PKL <span id="btnedit_proposal"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
                                                 <input type="file" class="form-file-input form-daftar form-control" name="proposal" required>
@@ -174,10 +181,10 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="proposal_daftar">Transkrip Kuliah <span id="btnedit_transkrip"></span></label>
+                                        <label for="proposal_daftar">Jadwal Praktek <span id="btnedit_jadwal"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
-                                                <input type="file" class="form-file-input form-daftar form-control" name="transkrip" required>
+                                                <input type="file" class="form-file-input form-daftar form-control" name="jadwal" required>
                                             </div>
                                             <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
                                         </div>
@@ -198,7 +205,7 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="proposal_daftar">Surat Izin Magang (dari Institusi) <span id="btnedit_izinmagang"></span></label>
+                                        <label for="proposal_daftar">Surat Izin Pengajuan PKL (dari Institusi) <span id="btnedit_izinmagang"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
                                                 <input type="file" class="form-file-input form-daftar form-control" name="izin_pkl" required>
@@ -210,34 +217,22 @@
                                 </div>
                                 <div class="col-12 col-lg-6 mb-2">
                                     <div class="form-group">
-                                        <label for="akreditasi_daftar">Bukti Akreditasi Institusi <span id="btnedit_akreditasi"></span></label>
+                                        <label for="buktipkl_daftar">Pengalaman PKL<span class="text-light">(opsional)</span> <span id="btnedit_buktipkl"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
-                                                <input type="file" class="form-file-input form-daftar form-control" name="akreditasi" required>
+                                                <input type="file" class="form-file-input form-daftar form-control" name="bukti_pkl" required>
                                             </div>
                                             <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
                                         </div>
                                         <span class="small text-light">*File berbentuk .pdf</span>
                                     </div>
                                 </div>
-                                <div class="col-12 col-lg-6 mb-2">
+                                <div class="col-12 mb-2">
                                     <div class="form-group">
                                         <label for="mou_daftar">MOU (Institusi dengan RS) <span class="text-light">(opsional)</span> <span id="btnedit_mou"></span></label>
                                         <div class="input-group">
                                             <div class="form-file">
-                                                <input type="file" class="form-file-input form-daftar form-control" name="mou" required>
-                                            </div>
-                                            <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
-                                        </div>
-                                        <span class="small text-light">*File berbentuk .pdf</span>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-lg-6 mb-2">
-                                    <div class="form-group">
-                                        <label for="buktipkl_daftar">Pengalaman Magang Sebelumnya <span class="text-light">(opsional)</span> <span id="btnedit_buktipkl"></span></label>
-                                        <div class="input-group">
-                                            <div class="form-file">
-                                                <input type="file" class="form-file-input form-daftar form-control" name="bukti_pkl" required>
+                                                <input type="file" class="form-file-input form-daftar form-control" id="mou_edit" name="mou" data-from="edit" required>
                                             </div>
                                             <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
                                         </div>
@@ -248,6 +243,50 @@
                         </div>
                         <div id="invoice_edit" class="tab-pane fade">
                             <div class="row">
+                                <div class="col-12 mb-2">
+                                    <div class="accordion accordion-primary" id="invoice_edit">
+                                        <div class="accordion-item">
+                                            <div class="accordion-header  rounded-lg" id="invoiceEditAccordion" data-bs-toggle="collapse" data-bs-target="#invoiceEdit" aria-controls="invoiceEdit"   aria-expanded="true" role="button">
+                                                <span class="accordion-header-icon"></span>
+                                                <span class="accordion-header-text">Rincian Biaya PKL</span>
+                                                <span class="accordion-header-indicator"></span>
+                                            </div>
+                                            <div id="invoiceEdit" class="collapse" aria-labelledby="invoiceEditAccordion" data-bs-parent="#invoice_edit">
+                                                <div class="accordion-body-text">
+                                                    <div class="row mt-1">
+                                                        <div class="col-12">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <th>Memiliki MOU</th>
+                                                                            <td class="have_mou">Tidak Punya</td>
+                                                                            <td class="price_havemou">Rp 0</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>Tipe PKL</th>
+                                                                            <td class="tipe_pkl">Medis</td>
+                                                                            <td class="price_tipepkl">Rp 0</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>Jenjang Pend.</th>
+                                                                            <td class="jenjang">D3</td>
+                                                                            <td class="price_jenjang">Rp 0</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th colspan="2">Total Biaya</th>
+                                                                            <th class="price_total">Rp 0</th>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-12 col-sm-6 mb-2 d-flex align-items-center">
                                     <i class="fas fa-file fa-2x me-4 text-primary"></i>
                                     <div>

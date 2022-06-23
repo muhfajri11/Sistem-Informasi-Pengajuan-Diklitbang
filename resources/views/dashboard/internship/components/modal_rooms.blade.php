@@ -33,7 +33,7 @@
                     <div class="col-12 col-sm-6 mb-3 d-flex align-items-center">
                         <i class="fas fa-receipt fa-2x me-4 text-primary"></i>
                         <div>
-                            <p class="small text-right mb-0">Pengalaman Magang</p>
+                            <p class="small text-right mb-0">Pengalaman PKL</p>
                             <div class="text-right" id="exp_room"><strong>Tidak ada bukti</strong></div>
                         </div>
                     </div>

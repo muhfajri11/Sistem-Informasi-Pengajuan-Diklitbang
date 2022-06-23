@@ -37,6 +37,7 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
 
     Route::post('/institutionroom', 'DashboardController@get_institutionroom')->name('get_institutionroom');
     Route::post('/institution', 'DashboardController@get_institutions')->name('get_institutions');
+    Route::post('/settings', 'DashboardController@get_settings')->name('get_settings');
     
     Route::post('/send_msg', 'ApprovementController@send_message')->name('send_msg');
     Route::post('/changestatus', 'ApprovementController@changestatus')->name('changestatus');

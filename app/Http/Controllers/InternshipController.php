@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Internship, FileInternship, Institution};
+use App\{Internship, FileInternship, Institution, Setting};
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -71,7 +71,7 @@ class InternshipController extends Controller
         $intern->file_internship->proposal = Storage::url('magang/proposal/'.$intern->file_internship->proposal);
         $intern->file_internship->akreditasi = Storage::url('magang/akreditasi/'.$intern->file_internship->akreditasi);
         $intern->file_internship->panduan_praktek = Storage::url('magang/panduanpraktek/'.$intern->file_internship->panduan_praktek);
-        $intern->file_internship->ktm = Storage::url('magang/ktm/'.$intern->file_internship->ktm);
+        $intern->file_internship->ktm_ktp = Storage::url('magang/ktm_ktp/'.$intern->file_internship->ktm_ktp);
         $intern->file_internship->transkrip = Storage::url('magang/transkrip/'.$intern->file_internship->transkrip);
         $intern->file_internship->izin_pkl = Storage::url('magang/izinpkl/'.$intern->file_internship->izin_pkl);
         $intern->file_internship->izin_ortu = Storage::url('magang/izinortu/'.$intern->file_internship->izin_ortu);
@@ -112,11 +112,37 @@ class InternshipController extends Controller
             $req['institusi']
         );
 
-        if($request->hasFile('mou')){
-            $req['total_paid'] = 150000;
-        } else {
-            $req['total_paid'] = 300000;
+        $data = ['name' => 'jenjang_pendidikan', 'list' => $req['jenjang']];
+        $jenjang = Setting::getValueSpecific($data)? Setting::getValueSpecific($data):false;
+        $data = ['name' => 'tipe_internship', 'list' => $req['type']];
+        $tipe = Setting::getValueSpecific($data)? Setting::getValueSpecific($data):false;
+        $mou_data = Setting::byName(['fee']);
+
+        $checkData = [
+            [$jenjang, "Data Jenjang Pendidikan"],
+            [$tipe, "Data Tipe PKL"]
+        ];
+
+        foreach($checkData as $data){
+            if(!$data[0]) return response()->json([
+                'success' => false,
+                'msg'     => $data[1]." tidak tersedia"
+            ], 200);
         }
+        
+        $price_jenjang = $jenjang->fee;
+        $price_tipe = $tipe->fee;
+
+        if($request->hasFile('mou')){
+            $price_mou = $mou_data->value->internship->mou;
+        } else {
+            $price_mou = $mou_data->value->internship->no_mou;
+        }
+
+        $req['jenjang_price'] = $price_jenjang;
+        $req['type_price'] = $price_tipe;
+        $req['mou_price'] = $price_mou;
+        $req['total_paid'] = $price_jenjang + $price_tipe + $price_mou;
 
         $canMagang = Internship::can_magang($req['nim']);
 
@@ -149,14 +175,6 @@ class InternshipController extends Controller
             'prefix'    => 'magangproposal_'
         ]);
 
-        $image_akreditasi = $this->uploadImage([
-            'path'      => 'public/magang/akreditasi',
-            'file'      => $request->file('akreditasi'),
-            'user'      => $user,
-            'id'        => $intern->id,
-            'prefix'    => 'magangakreditasi_'
-        ]);
-
         $image_panduanpraktek = $this->uploadImage([
             'path'      => 'public/magang/panduanpraktek',
             'file'      => $request->file('panduan_praktek'),
@@ -166,19 +184,19 @@ class InternshipController extends Controller
         ]);
 
         $image_ktm = $this->uploadImage([
-            'path'      => 'public/magang/ktm',
-            'file'      => $request->file('ktm'),
+            'path'      => 'public/magang/ktm_ktp',
+            'file'      => $request->file('ktm_ktp'),
             'user'      => $user,
             'id'        => $intern->id,
-            'prefix'    => 'magangktm_'
+            'prefix'    => 'magangktmktp_'
         ]);
 
-        $image_transkrip = $this->uploadImage([
-            'path'      => 'public/magang/transkrip',
-            'file'      => $request->file('transkrip'),
+        $image_jadwal = $this->uploadImage([
+            'path'      => 'public/magang/jadwal',
+            'file'      => $request->file('jadwal'),
             'user'      => $user,
             'id'        => $intern->id,
-            'prefix'    => 'magangtranskrip_'
+            'prefix'    => 'magangjadwal_'
         ]);
 
         $image_izinpkl = $this->uploadImage([
@@ -237,10 +255,9 @@ class InternshipController extends Controller
 
         $data_image = [
             'proposal'          => $image_proposal,
-            'akreditasi'        => $image_akreditasi,
             'panduan_praktek'   => $image_panduanpraktek,
-            'ktm'               => $image_ktm,
-            'transkrip'         => $image_transkrip,
+            'ktm_ktp'           => $image_ktm,
+            'jadwal'            => $image_jadwal,
             'izin_pkl'          => $image_izinpkl,
             'izin_ortu'         => $image_izinortu,
             'antigen'           => $image_antigen
@@ -276,15 +293,48 @@ class InternshipController extends Controller
         $req['start_date'] = $req['start_date_submit'];
         $req['end_date'] = $req['end_date_submit'];
 
+        $getData = Internship::find($request->id);
+
         unset(
             $req['start_date_submit'],
             $req['end_date_submit'],
             $req['institusi']
         );
 
-        if($request->hasFile('mou')){
-            $req['total_paid'] = 150000;
+        $data = ['name' => 'jenjang_pendidikan', 'list' => $req['jenjang']];
+        $jenjang = Setting::getValueSpecific($data)? Setting::getValueSpecific($data):false;
+        $data = ['name' => 'tipe_internship', 'list' => $req['type']];
+        $tipe = Setting::getValueSpecific($data)? Setting::getValueSpecific($data):false;
+        $mou_data = Setting::byName(['fee']);
+
+        $checkData = [
+            [$jenjang, "Data Jenjang Pendidikan"],
+            [$tipe, "Data Tipe PKL"]
+        ];
+
+        foreach($checkData as $data){
+            if(!$data[0]) return response()->json([
+                'success' => false,
+                'msg'     => $data[1]." tidak tersedia"
+            ], 200);
         }
+        
+        $price_jenjang = $jenjang->fee;
+        $price_tipe = $tipe->fee;
+        $price_mou = $getData->mou_price;
+
+        if($request->hasFile('mou')){
+            $price_mou = $mou_data->value->internship->mou;
+        }
+
+        $req['jenjang_price'] = $price_jenjang;
+        $req['type_price'] = $price_tipe;
+        $req['mou_price'] = $price_mou;
+        $req['total_paid'] = $price_jenjang + $price_tipe + $price_mou;
+
+        // if($request->hasFile('mou')){
+        //     $req['total_paid'] = 150000;
+        // }
 
         // return response()->json([
         //     'success' => false,
@@ -319,18 +369,6 @@ class InternshipController extends Controller
             $data_image['proposal'] = $image_proposal;
         }
 
-        if($request->hasFile('akreditasi')){
-            $image_akreditasi = $this->uploadImage([
-                'path'      => 'public/magang/akreditasi',
-                'file'      => $request->file('akreditasi'),
-                'user'      => $user,
-                'id'        => $intern->id,
-                'prefix'    => 'magangakreditasi_'
-            ]);
-            
-            $data_image['akreditasi'] = $image_akreditasi;
-        }
-
         if($request->hasFile('panduan_praktek')){
             $image_panduanpraktek = $this->uploadImage([
                 'path'      => 'public/magang/panduanpraktek',
@@ -343,28 +381,28 @@ class InternshipController extends Controller
             $data_image['panduan_praktek'] = $image_panduanpraktek;
         }
 
-        if($request->hasFile('ktm')){
+        if($request->hasFile('ktm_ktp')){
             $image_ktm = $this->uploadImage([
-                'path'      => 'public/magang/ktm',
-                'file'      => $request->file('ktm'),
+                'path'      => 'public/magang/ktm_ktp',
+                'file'      => $request->file('ktm_ktp'),
                 'user'      => $user,
                 'id'        => $intern->id,
-                'prefix'    => 'magangktm_'
+                'prefix'    => 'magangktmktp_'
             ]);
 
             $data_image['ktm'] = $image_ktm;
         }
 
-        if($request->hasFile('transkrip')){
-            $image_transkrip = $this->uploadImage([
-                'path'      => 'public/magang/transkrip',
-                'file'      => $request->file('transkrip'),
+        if($request->hasFile('jadwal')){
+            $image_jadwal = $this->uploadImage([
+                'path'      => 'public/magang/jadwal',
+                'file'      => $request->file('jadwal'),
                 'user'      => $user,
                 'id'        => $intern->id,
-                'prefix'    => 'magangtranskrip_'
+                'prefix'    => 'magangjadwal_'
             ]);
 
-            $data_image['transkrip'] = $image_transkrip;
+            $data_image['jadwal'] = $image_jadwal;
         }
 
         if($request->hasFile('izin_pkl')){
@@ -507,18 +545,6 @@ class InternshipController extends Controller
         }
 
         $delete_image = $this->deleteImage([
-            'path'  => "public/magang/akreditasi/",
-            'image' => $intern->file_internship->akreditasi
-        ]);
-
-        if(!$delete_image){
-            return response()->json([
-                'success' => false,
-                'msg'     => 'File tidak terdeteksi Akreditasi'
-            ], 500);
-        }
-
-        $delete_image = $this->deleteImage([
             'path'  => "public/magang/panduanpraktek/",
             'image' => $intern->file_internship->panduan_praktek
         ]);
@@ -531,26 +557,26 @@ class InternshipController extends Controller
         }
 
         $delete_image = $this->deleteImage([
-            'path'  => "public/magang/ktm/",
-            'image' => $intern->file_internship->ktm
+            'path'  => "public/magang/ktm_ktp/",
+            'image' => $intern->file_internship->ktm_ktp
         ]);
 
         if(!$delete_image){
             return response()->json([
                 'success' => false,
-                'msg'     => 'File tidak terdeteksi KTM'
+                'msg'     => 'File tidak terdeteksi KTM/KTP'
             ], 500);
         }
 
         $delete_image = $this->deleteImage([
-            'path'  => "public/magang/transkrip/",
-            'image' => $intern->file_internship->transkrip
+            'path'  => "public/magang/jadwal/",
+            'image' => $intern->file_internship->jadwal
         ]);
 
         if(!$delete_image){
             return response()->json([
                 'success' => false,
-                'msg'     => 'File tidak terdeteksi Transkrip'
+                'msg'     => 'File tidak terdeteksi Jadwal Praktek'
             ], 500);
         }
 
@@ -634,6 +660,16 @@ class InternshipController extends Controller
         
         $intern->rooms()->detach();
         $intern->file_internship()->delete();
+
+        $msg = Internship::deleteMessage($intern->user_id, $intern->id);
+
+        if(!$msg){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'Terjadi Kesalahan'
+            ], 200);
+        }
+        
         $intern = Internship::where([
             'id'      => $req['id']
         ])->delete();

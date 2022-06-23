@@ -1,6 +1,6 @@
 @extends('dashboard.layouts.app')
 
-@section('title', "Persetujuan Magang")
+@section('title', "Persetujuan PKL")
 
 @section('style')
 	<link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}">
@@ -62,8 +62,8 @@
 													<th>#</th>
 													<th>Nama</th>
 													<th>Jurusan</th>
-													<th>Mulai Magang</th>
-													<th>Tipe Magang</th>
+													<th>Mulai</th>
+													<th>Tipe</th>
 													<th>Action</th>
 												</tr>
 											</thead>
@@ -97,7 +97,7 @@
 													<th>#</th>
 													<th>Nama</th>
 													<th>Jurusan</th>
-													<th>Mulai Magang</th>
+													<th>Mulai</th>
 													<th>Bukti</th>
 													<th>Action</th>
 												</tr>
@@ -132,8 +132,8 @@
 													<th>#</th>
 													<th>Nama</th>
 													<th>Jurusan</th>
-													<th>Selesai Magang</th>
-													<th>Tipe Magang</th>
+													<th>Selesai</th>
+													<th>Tipe</th>
 													<th>Action</th>
 												</tr>
 											</thead>
@@ -335,7 +335,7 @@
                     {
                         "mData": null,
                         "render": function (data, row, type, meta) {
-                            return setBadgeType(data.type);
+                            return data.type;
                         }
                     },
                     {
@@ -532,7 +532,7 @@
                                     {
                                         "mData": null,
                                         "render": function (data, row, type, meta) {
-                                            return setBadgeType(data.type);
+                                            return data.type;
                                         }
                                     },
                                     {
@@ -723,7 +723,7 @@
 				}
 			})
 
-            $('#modal_detailmagang').on('show.bs.modal', function (e) {
+			$('#modal_detailmagang').on('show.bs.modal', function (e) {
 				const modal = $(this),
 					  data_id = $(e.relatedTarget).data('id');
 
@@ -739,11 +739,8 @@
 					}
 				}).done(function(data){
 					if(data.success){
-						let btnEviden = `
-							<button class="btn btn-dark" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.get.id}">
-								Upload Bukti Pembayaran
-							</button>`, 
-							htmlBtnShow = `<button class="btn btn-secondary btn-xs" data-fancybox></button>`,
+						let btnEviden = `<h5>Tidak ada berkas</h5>`, 
+							htmlBtnShow = `<button class="btn btn-secondary btn-xs" data-fancybox>Buka</button>`,
 							province, city, htmlBtn, check;
 
 						modal.find('#name_view').html(data.get.name);
@@ -751,7 +748,8 @@
 						modal.find('#institusi_view').html(data.get.institution.name);
 						modal.find('#semester_view').html(`Semester ${data.get.semester}`);
 						modal.find('#jurusan_view').html(data.get.jurusan);
-						modal.find('#type_view').html(setBadgeType(data.get.type));
+						modal.find('#type_view').html(data.get.type);
+						modal.find('#jenjang_view').html(data.get.jenjang);
 						modal.find('#start_view').html(data.get.start_date);
 						modal.find('#end_view').html(data.get.end_date);
 						modal.find('#address_view').html(data.get.address);
@@ -760,9 +758,21 @@
 
 						if(data.get.file_internship.mou){
 							modal.find('#docmou_view').html('Punya')
+							modal.find('.have_mou').html('Punya')
 						} else {
 							modal.find('#docmou_view').html('Tidak Punya')
+							modal.find('.have_mou').html('Tidak Punya')
 						}
+
+						modal.find('.price_havemou').html(`Rp ${currency.format(data.get.mou_price)}`)
+
+						modal.find('.tipe_pkl').html(`${data.get.type}`)
+						modal.find('.price_tipepkl').html(`Rp ${currency.format(data.get.type_price)}`)
+
+						modal.find('.jenjang').html(`${data.get.jenjang}`)
+						modal.find('.price_jenjang').html(`Rp ${currency.format(data.get.jenjang_price)}`)
+
+						modal.find('.price_total').html(`Rp ${currency.format(data.get.total_paid)}`)
 
 						if(data.get.rooms.length > 0){
 							let rooms_ = ``;
@@ -778,82 +788,76 @@
 
 						modal.find('#pay_view').html(`Rp ${currency.format(data.get.total_paid)}`)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat KTM').attr('href', data.get.file_internship.ktm)
-						check = data.get.file_internship.ktm.split('.')[1];
+						htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.ktm_ktp)
+						check = data.get.file_internship.ktm_ktp.split('.')[1];
 						if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
 
-						modal.find('#ktm_view').append(htmlBtn)
+						modal.find('#ktm_view').html(htmlBtn)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat Proposal').attr({
+						htmlBtn = $(htmlBtnShow).attr({
 							href: data.get.file_internship.proposal,
 							"data-type": 'pdf'
 						})
-						modal.find('#proposal_view').append(htmlBtn)
+						modal.find('#proposal_view').html(htmlBtn)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat Antigen').attr({
+						htmlBtn = $(htmlBtnShow).attr({
 							href: data.get.file_internship.antigen,
 							"data-type": 'pdf'
 						})
-						modal.find('#antigen_view').append(htmlBtn)
+						modal.find('#antigen_view').html(htmlBtn)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat Izin Ortu').attr('href', data.get.file_internship.izin_ortu)
+						htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.izin_ortu)
 						check = data.get.file_internship.izin_ortu.split('.')[1];
 						if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
 
-						modal.find('#izinortu_view').append(htmlBtn)
+						modal.find('#izinortu_view').html(htmlBtn)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat Transkrip').attr({
-							href: data.get.file_internship.transkrip,
+						htmlBtn = $(htmlBtnShow).attr({
+							href: data.get.file_internship.jadwal,
 							"data-type": 'pdf'
 						})
-						modal.find('#transkrip_view').append(htmlBtn)
+						modal.find('#jadwal_view').html(htmlBtn)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat Panduan Praktek').attr({
+						htmlBtn = $(htmlBtnShow).attr({
 							href: data.get.file_internship.panduan_praktek,
 							"data-type": 'pdf'
 						})
-						modal.find('#panduanpraktek_view').append(htmlBtn)
+						modal.find('#panduanpraktek_view').html(htmlBtn)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat Izin Magang').attr({
+						htmlBtn = $(htmlBtnShow).attr({
 							href: data.get.file_internship.izin_pkl,
 							"data-type": 'pdf'
 						})
-						modal.find('#izinpkl_view').append(htmlBtn)
-
-						htmlBtn = $(htmlBtnShow).html('Lihat Akreditasi').attr({
-							href: data.get.file_internship.akreditasi,
-							"data-type": 'pdf'
-						})
-						modal.find('#akreditasi_view').append(htmlBtn)
+						modal.find('#izinpkl_view').html(htmlBtn)
 
 						if(data.get.file_internship.mou){
-							htmlBtn = $(htmlBtnShow).html('Lihat Mou').attr({
+							htmlBtn = $(htmlBtnShow).attr({
 								href: data.get.file_internship.mou,
 								"data-type": 'pdf'
 							})
-							modal.find('#mou_view').append(htmlBtn)
+							modal.find('#mou_view').html(htmlBtn)
 						} else {
 							modal.find('#mou_view').html("<h5>Tidak ada berkas</h5>")
 						}
 
 						if(data.get.file_internship.bukti_pkl){
-							htmlBtn = $(htmlBtnShow).html('Lihat Bukti Magang').attr({
+							htmlBtn = $(htmlBtnShow).attr({
 								href: data.get.file_internship.bukti_pkl,
 								"data-type": 'pdf'
 							})
-							modal.find('#buktipkl_view').append(htmlBtn)
+							modal.find('#buktipkl_view').html(htmlBtn)
 						} else {
 							modal.find('#buktipkl_view').html("<h5>Tidak ada berkas</h5>")
 						}
 
 						if(data.get.file_internship.eviden_paid){
-							htmlBtn = $(htmlBtnShow).html('Lihat Bukti Pembayaran').attr('href', data.get.file_internship.eviden_paid)
+							htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.eviden_paid)
 							check = data.get.file_internship.eviden_paid.split('.')[1];
 							if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
 
-							modal.find('#evidenpaid_view').append(htmlBtn)
+							modal.find('#evidenpaid_view').html(htmlBtn)
 						} else {
-							modal.find('#evidenpaid_view').append(btnEviden)
+							modal.find('#evidenpaid_view').html(btnEviden)
 						}
 
 						$.when(

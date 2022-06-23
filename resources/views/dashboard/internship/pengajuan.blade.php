@@ -1,6 +1,6 @@
 @extends('dashboard.layouts.app')
 
-@section('title', "Pengajuan Magang")
+@section('title', "Pengajuan PKL")
 
 @section('style')
 	<link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}">
@@ -56,13 +56,13 @@
 										</div>
 									</div>
 									<div class="table-responsive">
-										<table id="data_reviews" class="display dt-responsive">
+										<table id="data_reviews" class="display" style="width: 100%">
 											<thead>
 												<tr>
 													<th>#</th>
 													<th>Nama</th>
 													<th>Jurusan</th>
-													<th>Mulai Magang</th>
+													<th>Mulai</th>
 													<th>Status</th>
 													<th>Action</th>
 												</tr>
@@ -86,13 +86,13 @@
 										</button>
 									</div>
 									<div class="table-responsive">
-										<table id="data_payments" class="display dt-responsive">
+										<table id="data_payments" class="display" style="width: 100%">
 											<thead>
 												<tr>
 													<th>#</th>
 													<th>Nama</th>
 													<th>Jurusan</th>
-													<th>Mulai Magang</th>
+													<th>Mulai</th>
 													<th>Status</th>
 													<th>Action</th>
 												</tr>
@@ -116,14 +116,14 @@
 										</button>
 									</div>
 									<div class="table-responsive">
-										<table id="data_accepts" class="display dt-responsive">
+										<table id="data_accepts" class="display" style="width: 100%">
 											<thead>
 												<tr>
 													<th>#</th>
 													<th>Nama</th>
 													<th>Jurusan</th>
-													<th>Selesai Magang</th>
-													<th>Tipe Magang</th>
+													<th>Selesai</th>
+													<th>Tipe</th>
 													<th>Action</th>
 												</tr>
 											</thead>
@@ -146,14 +146,14 @@
 										</button>
 									</div>
 									<div class="table-responsive">
-										<table id="data_dones" class="display dt-responsive">
+										<table id="data_dones" class="display" style="width: 100%">
 											<thead>
 												<tr>
 													<th>#</th>
 													<th>Nama</th>
 													<th>Jurusan</th>
 													<th>Institusi</th>
-													<th>Tipe Magang</th>
+													<th>Tipe</th>
 													<th>Action</th>
 												</tr>
 											</thead>
@@ -189,7 +189,6 @@
 
     <script>
         $(document).ready(function(){
-
             $('.datepicker-default').pickadate({
                 format: 'd mmmm yyyy',
                 formatSubmit: 'yyyy-mm-dd'
@@ -447,7 +446,7 @@
 														<button class="dropdown-item" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.id}">
 															<i class="fas fa-file me-1"></i> Upload Pembayaran
 														</button>
-                                                        <button class="dropdown-item delete_magang" data-id="${ data.id }" data-name="${data.title}" data-from="#data_payments">
+                                                        <button class="dropdown-item delete_magang" data-id="${ data.id }" data-name="${data.name}" data-from="#data_payments">
                                                             <i class="fas fa-trash me-1"></i> Hapus
                                                         </button>
                                                     </div>
@@ -743,7 +742,8 @@
 				const modal = $(this).closest('.modal')
 					  minDate = new Date($(this).val());
 
-				minDate.setMonth(minDate.getMonth()+1);
+				minDate.setDate(minDate.getDate() + 7); // set 1 Week
+
 				modal.find('input[name="end_date"]').val('')
 				modal.find('input[name="end_date"]').pickadate('picker').set({
 					disable: false,
@@ -770,7 +770,7 @@
 			$('#modal_addmagang, #modal_editmagang').on('show.bs.modal', function (e) {
                 const modal = $(this),
 					  data_id = $(e.relatedTarget).data('id');
-				let institutions, province;
+				let institutions, province, settings = {};
 
                 $.when(
 					$.ajax({
@@ -800,6 +800,26 @@
 					}).fail(function(data){
 						console.log(data)
 						console.log("error");
+					}),
+					$.ajax({
+						url: '{{ route("get_settings") }}',
+						type: 'POST',
+						data: {name: ['tipe_internship', 'fee', 'jenjang_pendidikan']},
+						dataType: 'json',
+						cache: false
+					}).done(function (data) {
+						if(data.success){
+							console.log(data.get);
+							data.get.forEach(val => {
+								settings[val.name] = val.value;
+							})
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
 					})
 				).then(function(){
 					let html_ = [];
@@ -811,6 +831,23 @@
 						modal.find('#id_bukti').val(data_id)
 					}
 
+					modal.find("input[name='mou']").attr({
+						'data-have' : settings.fee.internship.mou,
+						'data-no'	: settings.fee.internship.no_mou,
+					});
+
+					$.each(settings.tipe_internship, function(i, val) {
+						html_.push({id: val.name, text: val.name, fee: val.fee});
+					})
+					modal.find("select[name='type']").html('').select2({data: html_});
+
+					html_ = [];
+					$.each(settings.jenjang_pendidikan, function(i, val) {
+						html_.push({id: val.name, text: val.name, fee: val.fee});
+					})
+					modal.find("select[name='jenjang']").html('').select2({data: html_});
+
+					html_ = [];
 					$.each(institutions, function(i, val) {
 						html_.push({id: val.id, text: val.name});
 					})
@@ -825,6 +862,19 @@
 					if(modal.prop('id') == 'modal_addmagang'){
 						modal.find("select[name='province']").attr('data-city', '3209');
 						modal.find("select[name='province']").val(32).change();
+
+						const set_fee = parseInt(settings.tipe_internship[0].fee) 
+							+ parseInt(settings.fee.internship.no_mou) + parseInt(settings.jenjang_pendidikan[0].fee);
+
+						modal.find('#pay_daftar').html(`Rp ${currency.format(set_fee)}`)
+
+						modal.find('.price_havemou').html(`Rp ${currency.format(settings.fee.internship.no_mou)}`)
+						modal.find('.tipe_pkl').html(`${settings.tipe_internship[0].name}`)
+						modal.find('.price_tipepkl').html(`Rp ${currency.format(settings.tipe_internship[0].fee)}`)
+						modal.find('.jenjang').html(`${settings.jenjang_pendidikan[0].name}`)
+						modal.find('.price_jenjang').html(`Rp ${currency.format(settings.jenjang_pendidikan[0].fee)}`)
+
+						modal.find('.price_total').html(`Rp ${currency.format(set_fee)}`)
 					}
 				})
 
@@ -837,7 +887,7 @@
 						cache: false
 					}).done(function (data) {
 						if(data.success){
-							const htmlBtnShow = `<button class="btn btn-secondary btn-xs ms-2" data-fancybox></button>`;
+							const htmlBtnShow = `<button class="btn btn-secondary btn-xs ms-2" data-fancybox>Buka</button>`;
 							let htmlBtn, check;
 
 							modal.find('input[name="name"]').val(data.get.name)
@@ -846,6 +896,7 @@
 							modal.find('select[name="institusi"]').val(data.get.institution_id).change()
 							modal.find('input[name="semester"]').val(data.get.semester)
 							modal.find('select[name="type"]').val(data.get.type).change()
+							modal.find('select[name="jenjang"]').val(data.get.jenjang).change()
 							modal.find('input[name="phone"]').val(data.get.phone)
 							modal.find("select[name='province']").attr('data-city', data.get.city);
 							modal.find("select[name='province']").val(data.get.province).change();
@@ -861,76 +912,70 @@
 
 							modal.find('#pay_edit').html(`Rp ${currency.format(data.get.total_paid)}`)
 
-							htmlBtn = $(htmlBtnShow).html('Lihat KTM').attr('href', data.get.file_internship.ktm)
-							check = data.get.file_internship.ktm.split('.')[1];
+							htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.ktm_ktp)
+							check = data.get.file_internship.ktm_ktp.split('.')[1];
 							if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
 
-							modal.find('#btnedit_ktm').append(htmlBtn)
+							modal.find('#btnedit_ktm').html(htmlBtn)
 
-							htmlBtn = $(htmlBtnShow).html('Lihat Proposal').attr({
+							htmlBtn = $(htmlBtnShow).attr({
 								href: data.get.file_internship.proposal,
 								"data-type": 'pdf'
 							})
-							modal.find('#btnedit_proposal').append(htmlBtn)
+							modal.find('#btnedit_proposal').html(htmlBtn)
 
-							htmlBtn = $(htmlBtnShow).html('Lihat Antigen').attr({
+							htmlBtn = $(htmlBtnShow).attr({
 								href: data.get.file_internship.antigen,
 								"data-type": 'pdf'
 							})
-							modal.find('#btnedit_antigen').append(htmlBtn)
+							modal.find('#btnedit_antigen').html(htmlBtn)
 
-							htmlBtn = $(htmlBtnShow).html('Lihat Izin Ortu').attr('href', data.get.file_internship.izin_ortu)
+							htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.izin_ortu)
 							check = data.get.file_internship.izin_ortu.split('.')[1];
 							if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
 
-							modal.find('#btnedit_izinortu').append(htmlBtn)
+							modal.find('#btnedit_izinortu').html(htmlBtn)
 
-							htmlBtn = $(htmlBtnShow).html('Lihat Transkrip').attr({
-								href: data.get.file_internship.transkrip,
+							htmlBtn = $(htmlBtnShow).attr({
+								href: data.get.file_internship.jadwal,
 								"data-type": 'pdf'
 							})
-							modal.find('#btnedit_transkrip').append(htmlBtn)
+							modal.find('#btnedit_jadwal').html(htmlBtn)
 
-							htmlBtn = $(htmlBtnShow).html('Lihat Panduan Praktek').attr({
+							htmlBtn = $(htmlBtnShow).attr({
 								href: data.get.file_internship.panduan_praktek,
 								"data-type": 'pdf'
 							})
-							modal.find('#btnedit_panduanpraktek').append(htmlBtn)
+							modal.find('#btnedit_panduanpraktek').html(htmlBtn)
 
-							htmlBtn = $(htmlBtnShow).html('Lihat Izin Magang').attr({
+							htmlBtn = $(htmlBtnShow).attr({
 								href: data.get.file_internship.izin_pkl,
 								"data-type": 'pdf'
 							})
-							modal.find('#btnedit_izinmagang').append(htmlBtn)
-
-							htmlBtn = $(htmlBtnShow).html('Lihat Akreditasi').attr({
-								href: data.get.file_internship.akreditasi,
-								"data-type": 'pdf'
-							})
-							modal.find('#btnedit_akreditasi').append(htmlBtn)
+							modal.find('#btnedit_izinmagang').html(htmlBtn)
 
 							if(data.get.file_internship.mou){
-								htmlBtn = $(htmlBtnShow).html('Lihat Mou').attr({
+								htmlBtn = $(htmlBtnShow).attr({
 									href: data.get.file_internship.mou,
 									"data-type": 'pdf'
 								})
-								modal.find('#btnedit_mou').append(htmlBtn)
+								modal.find('#btnedit_mou').html(htmlBtn)
 							}
 
 							if(data.get.file_internship.bukti_pkl){
-								htmlBtn = $(htmlBtnShow).html('Lihat Bukti Magang').attr({
+								htmlBtn = $(htmlBtnShow).attr({
 									href: data.get.file_internship.bukti_pkl,
 									"data-type": 'pdf'
 								})
-								modal.find('#btnedit_bukti').append(htmlBtn)
+								modal.find('#btnedit_bukti').html(htmlBtn)
 							}
 
 							if(data.get.file_internship.eviden_paid){
-								htmlBtn = $(htmlBtnShow).html('Lihat Bukti Pembayaran').attr('href', data.get.file_internship.eviden_paid)
+								htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.eviden_paid)
 								check = data.get.file_internship.eviden_paid.split('.')[1];
 								if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
 
-								modal.find('#btnedit_evidenpaid').append(htmlBtn)
+								modal.find('#btnedit_evidenpaid').html(htmlBtn)
 							}
 						} else {
 							alertError("Terjadi Kesalahan", data.msg)
@@ -967,9 +1012,21 @@
 
 						if(data.get.file_internship.mou){
 							modal.find('#docmou_view').html("Punya");
+							modal.find('.have_mou').html(`Punya`)
 						} else {
 							modal.find('#docmou_view').html("Tidak Punya");
+							modal.find('.have_mou').html(`Tidak Punya`)
 						}
+
+						modal.find('.price_havemou').html(`Rp ${currency.format(data.get.mou_price)}`)
+
+						modal.find('.tipe_pkl').html(`${data.get.type}`)
+						modal.find('.price_tipepkl').html(`Rp ${currency.format(data.get.type_price)}`)
+
+						modal.find('.jenjang').html(`${data.get.jenjang}`)
+						modal.find('.price_jenjang').html(`Rp ${currency.format(data.get.jenjang_price)}`)
+
+						modal.find('.price_total').html(`Rp ${currency.format(data.get.total_paid)}`)
 						modal.find('#pay_view').html("Rp " + currency.format(data.get.total_paid));
 
 						if(data.get.file_internship.eviden_paid){
@@ -1016,7 +1073,7 @@
 							<button class="btn btn-dark" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.get.id}">
 								Upload Bukti Pembayaran
 							</button>`, 
-							htmlBtnShow = `<button class="btn btn-secondary btn-xs" data-fancybox></button>`,
+							htmlBtnShow = `<button class="btn btn-secondary btn-xs" data-fancybox>Buka</button>`,
 							province, city, htmlBtn, check;
 
 						modal.find('#name_view').html(data.get.name);
@@ -1024,7 +1081,8 @@
 						modal.find('#institusi_view').html(data.get.institution.name);
 						modal.find('#semester_view').html(`Semester ${data.get.semester}`);
 						modal.find('#jurusan_view').html(data.get.jurusan);
-						modal.find('#type_view').html(setBadgeType(data.get.type));
+						modal.find('#type_view').html(data.get.type);
+						modal.find('#jenjang_view').html(data.get.jenjang);
 						modal.find('#start_view').html(data.get.start_date);
 						modal.find('#end_view').html(data.get.end_date);
 						modal.find('#address_view').html(data.get.address);
@@ -1033,9 +1091,21 @@
 
 						if(data.get.file_internship.mou){
 							modal.find('#docmou_view').html('Punya')
+							modal.find('.have_mou').html('Punya')
 						} else {
 							modal.find('#docmou_view').html('Tidak Punya')
+							modal.find('.have_mou').html('Tidak Punya')
 						}
+
+						modal.find('.price_havemou').html(`Rp ${currency.format(data.get.mou_price)}`)
+
+						modal.find('.tipe_pkl').html(`${data.get.type}`)
+						modal.find('.price_tipepkl').html(`Rp ${currency.format(data.get.type_price)}`)
+
+						modal.find('.jenjang').html(`${data.get.jenjang}`)
+						modal.find('.price_jenjang').html(`Rp ${currency.format(data.get.jenjang_price)}`)
+
+						modal.find('.price_total').html(`Rp ${currency.format(data.get.total_paid)}`)
 
 						if(data.get.rooms.length > 0){
 							let rooms_ = ``;
@@ -1051,82 +1121,76 @@
 
 						modal.find('#pay_view').html(`Rp ${currency.format(data.get.total_paid)}`)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat KTM').attr('href', data.get.file_internship.ktm)
-						check = data.get.file_internship.ktm.split('.')[1];
+						htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.ktm_ktp)
+						check = data.get.file_internship.ktm_ktp.split('.')[1];
 						if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
 
-						modal.find('#ktm_view').append(htmlBtn)
+						modal.find('#ktm_view').html(htmlBtn)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat Proposal').attr({
+						htmlBtn = $(htmlBtnShow).attr({
 							href: data.get.file_internship.proposal,
 							"data-type": 'pdf'
 						})
-						modal.find('#proposal_view').append(htmlBtn)
+						modal.find('#proposal_view').html(htmlBtn)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat Antigen').attr({
+						htmlBtn = $(htmlBtnShow).attr({
 							href: data.get.file_internship.antigen,
 							"data-type": 'pdf'
 						})
-						modal.find('#antigen_view').append(htmlBtn)
+						modal.find('#antigen_view').html(htmlBtn)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat Izin Ortu').attr('href', data.get.file_internship.izin_ortu)
+						htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.izin_ortu)
 						check = data.get.file_internship.izin_ortu.split('.')[1];
 						if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
 
-						modal.find('#izinortu_view').append(htmlBtn)
+						modal.find('#izinortu_view').html(htmlBtn)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat Transkrip').attr({
-							href: data.get.file_internship.transkrip,
+						htmlBtn = $(htmlBtnShow).attr({
+							href: data.get.file_internship.jadwal,
 							"data-type": 'pdf'
 						})
-						modal.find('#transkrip_view').append(htmlBtn)
+						modal.find('#jadwal_view').html(htmlBtn)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat Panduan Praktek').attr({
+						htmlBtn = $(htmlBtnShow).attr({
 							href: data.get.file_internship.panduan_praktek,
 							"data-type": 'pdf'
 						})
-						modal.find('#panduanpraktek_view').append(htmlBtn)
+						modal.find('#panduanpraktek_view').html(htmlBtn)
 
-						htmlBtn = $(htmlBtnShow).html('Lihat Izin Magang').attr({
+						htmlBtn = $(htmlBtnShow).attr({
 							href: data.get.file_internship.izin_pkl,
 							"data-type": 'pdf'
 						})
-						modal.find('#izinpkl_view').append(htmlBtn)
-
-						htmlBtn = $(htmlBtnShow).html('Lihat Akreditasi').attr({
-							href: data.get.file_internship.akreditasi,
-							"data-type": 'pdf'
-						})
-						modal.find('#akreditasi_view').append(htmlBtn)
+						modal.find('#izinpkl_view').html(htmlBtn)
 
 						if(data.get.file_internship.mou){
-							htmlBtn = $(htmlBtnShow).html('Lihat Mou').attr({
+							htmlBtn = $(htmlBtnShow).attr({
 								href: data.get.file_internship.mou,
 								"data-type": 'pdf'
 							})
-							modal.find('#mou_view').append(htmlBtn)
+							modal.find('#mou_view').html(htmlBtn)
 						} else {
 							modal.find('#mou_view').html("<h5>Tidak ada berkas</h5>")
 						}
 
 						if(data.get.file_internship.bukti_pkl){
-							htmlBtn = $(htmlBtnShow).html('Lihat Bukti Magang').attr({
+							htmlBtn = $(htmlBtnShow).attr({
 								href: data.get.file_internship.bukti_pkl,
 								"data-type": 'pdf'
 							})
-							modal.find('#buktipkl_view').append(htmlBtn)
+							modal.find('#buktipkl_view').html(htmlBtn)
 						} else {
 							modal.find('#buktipkl_view').html("<h5>Tidak ada berkas</h5>")
 						}
 
 						if(data.get.file_internship.eviden_paid){
-							htmlBtn = $(htmlBtnShow).html('Lihat Bukti Pembayaran').attr('href', data.get.file_internship.eviden_paid)
+							htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.eviden_paid)
 							check = data.get.file_internship.eviden_paid.split('.')[1];
 							if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
 
-							modal.find('#evidenpaid_view').append(htmlBtn)
+							modal.find('#evidenpaid_view').html(htmlBtn)
 						} else {
-							modal.find('#evidenpaid_view').append(btnEviden)
+							modal.find('#evidenpaid_view').html(btnEviden)
 						}
 
 						$.when(
@@ -1208,17 +1272,37 @@
 				})
 			});
 
-			$('#modal_addmagang').on('change', 'input[name="mou"]', function(e){
+			$('#modal_addmagang, #modal_editmagang').on('change', 'input[name="mou"], select[name="type"], select[name="jenjang"]', function(e){
 				const modal = $(this).closest('.modal'),
-					  val = $(this).val();
+					  input_mou = modal.find('input[name="mou"]'),
+					  select_type = modal.find('select[name="type"]').select2('data')[0],
+					  select_jenjang = modal.find('select[name="jenjang"]').select2('data')[0];
 
-				if(val){
-					modal.find('#docmou_daftar').html('Punya')
-					modal.find('#pay_daftar').html(`Rp ${currency.format(150000)}`)
+				let from_mou = input_mou.data('from') == 'add'? "#docmou_daftar": "#docmou_edit",
+					from_pay = input_mou.data('from') == 'add'? "#pay_daftar": "#pay_edit",
+					have_mou = input_mou.data('have'),
+					no_mou   = input_mou.data('no'), word_mou, fee_mou;
+				
+				if(input_mou.val()){
+					word_mou = "Punya", fee_mou = parseInt(have_mou);
 				} else {
-					modal.find('#docmou_daftar').html('Tidak Punya')
-					modal.find('#pay_daftar').html(`Rp ${currency.format(300000)}`)
+					word_mou = "Tidak Punya", fee_mou = parseInt(no_mou);
 				}
+
+				const fee_type = parseInt(select_type.fee), fee_jenjang = parseInt(select_jenjang.fee), 
+					  total = fee_mou + fee_type + fee_jenjang;
+
+				modal.find('.have_mou').html(word_mou)
+				modal.find('.price_havemou').html(`Rp ${currency.format(fee_mou)}`)
+				modal.find('.tipe_pkl').html(select_type.text)
+				modal.find('.price_tipepkl').html(`Rp ${currency.format(fee_type)}`)
+				modal.find('.jenjang').html(select_jenjang.text)
+				modal.find('.price_jenjang').html(`Rp ${currency.format(fee_jenjang)}`)
+
+				modal.find('.price_total').html(`Rp ${currency.format(total)}`)
+
+				modal.find(from_mou).html(word_mou)
+				modal.find(from_pay).html(`Rp ${currency.format(total)}`)
 			})
 
 			$('#modal_addmagang').on('click', '#btn_addinstitusi', function(e){
@@ -1250,6 +1334,11 @@
 				modal.find('.docmou').html('Tidak Punya')
 				modal.find('.pay').html(`Rp ${currency.format(300000)}`)
 
+				modal.find('.price_havemou').html(`Rp 0`)
+				modal.find('.price_tipepkl').html(`Rp 0`)
+				modal.find('.price_jenjang').html(`Rp 0`)
+				modal.find('.price_total').html(`Rp 0`)
+
 				if(modal.prop('id') == 'modal_editmagang'){
 					const nameId = ['ktm', 'proposal', 'antigen', 'izinortu', 'transkrip',
 						'panduanpraktek', 'izinmagang', 'akreditasi', 'mou', 'buktipkl', 'evidenpaid'];
@@ -1266,7 +1355,7 @@
 				modal.find('form')[0].reset();
 			})
 
-			$('#data_reviews').on('click', ".delete_magang", function(e){
+			$('#data_reviews, #data_payments').on('click', ".delete_magang", function(e){
 				e.preventDefault();
 				const id = $(this).data('id'),
 					  name = $(this).data('name'),
@@ -1316,19 +1405,18 @@
 					jurusan: { required: true, alphanumeric: true },
 					institusi: { required: true },
 					semester: { required: true, digits: true, min: 1 },
-					type: { required: true },
+					type: { required: true }, jenjang: { required: true },
 					start_date: { required: true, date: true }, end_date: { required: true, date: true },
 					phone: { required: true, digits: true, minlength: 11, maxlength: 14 },
 					city: { required: true }, province: { required: true },
 					address: { required: true },
-					ktm: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 1 },
+					ktm_ktp: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 1 },
 					proposal: { required: false, extension: "pdf", filesize : 2 },
 					antigen: { required: false, extension: "pdf", filesize : 1 },
 					izin_ortu: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 1 },
-					transkrip: { required: false, extension: "pdf", filesize : 1 },
+					jadwal: { required: false, extension: "pdf", filesize : 1 },
 					panduan_praktek: { required: false, extension: "pdf", filesize : 1 },
 					izin_pkl: { required: false, extension: "pdf", filesize : 1 },
-					akreditasi: { required: false, extension: "pdf", filesize : 1 },
 					mou: { required: false, extension: "pdf", filesize : 1 },
 					bukti_pkl: { required: false, extension: "pdf", filesize : 1 },
 					eviden_paid: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 1 },
@@ -1336,8 +1424,6 @@
 				submitHandler: function (form) {
 					let data_daftar = new FormData(form);
 					data_daftar.append('_method', 'PATCH');
-
-					console.log('test')
 
 					$.ajax({
 						url: "{{ route('internship.update') }}",
@@ -1384,7 +1470,7 @@
 					jurusan: { required: true, alphanumeric: true },
 					institusi: { required: true },
 					semester: { required: true, digits: true, min: 1 },
-					type: { required: true },
+					type: { required: true }, jenjang: { required: true },
 					start_date: { required: true, date: true }, end_date: { required: true, date: true },
 					phone: { required: true, digits: true, minlength: 11, maxlength: 14 },
 					city: { required: true }, province: { required: true },

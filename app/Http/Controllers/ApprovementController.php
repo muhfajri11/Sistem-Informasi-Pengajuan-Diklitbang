@@ -75,7 +75,7 @@ class ApprovementController extends Controller
         ];
 
         if(count($intern->rooms) < 1){
-            $details['title'] = 'Penempatan Ruangan Magang RSUD Gunung Jati Cirebon';
+            $details['title'] = 'Penempatan Ruangan PKL RSUD Gunung Jati Cirebon';
             $details['body'] = "Selamat anda akan kami tempatkan di ruangan berikut: <br><br><ol>";
 
             $req_rooms->each(function($data) use (&$details){
@@ -85,7 +85,7 @@ class ApprovementController extends Controller
 
             $details['body'] .= "</ol><br><br> Terima Kasih.";
         } else {    
-            $details['title'] = 'Perubahan Penempatan Ruangan Magang RSUD Gunung Jati Cirebon';
+            $details['title'] = 'Perubahan Penempatan Ruangan PKL RSUD Gunung Jati Cirebon';
             $details['body'] = "Terjadi perubahan penempatan ruangan, anda akan kami tempatkan di ruangan berikut: <br><br><ol>";
 
             $req_rooms->each(function($data) use (&$details){
@@ -113,7 +113,7 @@ class ApprovementController extends Controller
 
         return response()->json([
             'success' => true,
-            'msg'    => "Berhasil mengatur ruangan magang"
+            'msg'    => "Berhasil mengatur penempatan ruangan peserta PKL"
         ], 200);    
     }
 
@@ -218,11 +218,11 @@ class ApprovementController extends Controller
         $check_paid = $data['paid'] != $intern->paid;
 
         if($check_status && $check_paid){
-            $details['title'] = 'Perubahan Status Pengajuan & Status Pembayaran Magang';
+            $details['title'] = 'Perubahan Status Pengajuan & Status Pembayaran PKL';
 
             switch($data['status']){
                 case 'reject':
-                    $details['body'] = 'Mohon maaf, permintaan pengajuan magang anda kami tolak.<br><br>';
+                    $details['body'] = 'Mohon maaf, permintaan pengajuan PKL anda kami tolak.<br><br>';
                 break;
                 case 'review':
                     $details['body'] = 'Dokumen anda akan kami review terlebih dahulu. Untuk informasi 
@@ -233,11 +233,11 @@ class ApprovementController extends Controller
                                         selesaikan pembayaran yang sudah tertera. Terima Kasih.<br><br>';
                 break;
                 case 'accept':
-                    $details['body'] = 'Selamat anda telah diterima untuk melakukan magang ditempat
+                    $details['body'] = 'Selamat anda telah diterima untuk melakukan PKL ditempat
                                         kami. Informasi lebih lanjut segera kami beritahukan. Terima Kasih.<br><br>';
                 break;
                 case 'done':
-                    $details['body'] = 'Selamat anda telah menyelesaikan masa magang anda.<br><br>';
+                    $details['body'] = 'Selamat anda telah menyelesaikan masa PKL anda.<br><br>';
                 break;
             }
 
@@ -251,11 +251,11 @@ class ApprovementController extends Controller
             }
         } else {
             if($check_status){
-                $details['title'] = 'Perubahan Status Pengajuan Magang';
+                $details['title'] = 'Perubahan Status Pengajuan PKL';
 
                 switch($data['status']){
                     case 'reject':
-                        $details['body'] = 'Mohon maaf, permintaan pengajuan magang anda kami tolak.';
+                        $details['body'] = 'Mohon maaf, permintaan pengajuan PKL anda kami tolak.';
                     break;
                     case 'review':
                         $details['body'] = 'Dokumen anda akan kami review terlebih dahulu. Untuk informasi 
@@ -266,17 +266,17 @@ class ApprovementController extends Controller
                                             selesaikan pembayaran yang sudah tertera. Terima Kasih.';
                     break;
                     case 'accept':
-                        $details['body'] = 'Selamat anda telah diterima untuk melakukan magang ditempat
+                        $details['body'] = 'Selamat anda telah diterima untuk melakukan PKL ditempat
                                             kami. Informasi lebih lanjut segera kami beritahukan. Terima Kasih.';
                     break;
                     case 'done':
-                        $details['body'] = 'Selamat anda telah menyelesaikan masa magang anda.<br><br>';
+                        $details['body'] = 'Selamat anda telah menyelesaikan masa PKL anda.<br><br>';
                     break;
                 }
             }
 
             if($check_paid){
-                $details['title'] = 'Perubahan Status Pembayaran Magang';
+                $details['title'] = 'Perubahan Status Pembayaran PKL';
 
                 switch($data['paid']){
                     case "1":
@@ -310,6 +310,7 @@ class ApprovementController extends Controller
             'user_id'   => $data->user_id,
             'table_id'  => $data->id,
             'email'     => $data->user->email,
+            'from'      => $request->from,
             'title'     => $request->title,
             'body'      => $request->body
         ];

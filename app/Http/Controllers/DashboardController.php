@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Comparative, Institution, Internship, Message, Room, User};
+use App\{Comparative, Institution, Internship, Message, Room, Setting, User};
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -334,4 +334,23 @@ class DashboardController extends Controller
 
         return response()->json($data, 200);
     }
+
+    public function get_settings(Request $request){
+        $name = $request->name;
+
+        $settings = Setting::byName($name);
+
+        if(!$settings){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'Terjadi Kesalahan mengambil data setting'
+            ], 200);   
+        }
+
+        return response()->json([
+            'success' => true,
+            'get'    => $settings
+        ], 200);
+    }
+
 }

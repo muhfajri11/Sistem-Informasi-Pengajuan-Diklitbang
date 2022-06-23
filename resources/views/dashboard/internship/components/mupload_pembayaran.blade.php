@@ -8,6 +8,50 @@
             </div>
             <div class="modal-body">
                 <div class="row">
+                    <div class="col-12 mb-2">
+                        <div class="accordion accordion-primary" id="invoice_upload">
+                            <div class="accordion-item">
+                                <div class="accordion-header  rounded-lg" id="invoiceUploadAccordion" data-bs-toggle="collapse" data-bs-target="#invoiceUpload" aria-controls="invoiceUpload" aria-expanded="true" role="button">
+                                    <span class="accordion-header-icon"></span>
+                                    <span class="accordion-header-text">Rincian Biaya PKL</span>
+                                    <span class="accordion-header-indicator"></span>
+                                </div>
+                                <div id="invoiceUpload" class="collapse" aria-labelledby="invoiceUploadAccordion" data-bs-parent="#invoice_upload">
+                                    <div class="accordion-body-text">
+                                        <div class="row mt-1">
+                                            <div class="col-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>Memiliki MOU</th>
+                                                                <td class="have_mou">Tidak Punya</td>
+                                                                <td class="price_havemou">Rp 0</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Tipe PKL</th>
+                                                                <td class="tipe_pkl">Medis</td>
+                                                                <td class="price_tipepkl">Rp 0</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Jenjang Pend.</th>
+                                                                <td class="jenjang">D3</td>
+                                                                <td class="price_jenjang">Rp 0</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="2">Total Biaya</th>
+                                                                <th class="price_total">Rp 0</th>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-12 col-sm-6 mb-2 d-flex align-items-center">
                         <i class="fas fa-file fa-2x me-4 text-primary"></i>
                         <div>

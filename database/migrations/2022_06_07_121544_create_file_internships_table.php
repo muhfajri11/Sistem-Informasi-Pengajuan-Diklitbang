@@ -16,10 +16,9 @@ class CreateFileInternshipsTable extends Migration
         Schema::create('file_internships', function (Blueprint $table) {
             $table->id();
             $table->string('proposal');
-            $table->string('akreditasi');
             $table->string('panduan_praktek');
-            $table->string('ktm');
-            $table->string('transkrip');
+            $table->string('ktm_ktp');
+            $table->string('jadwal');
             $table->string('izin_pkl');
             $table->string('izin_ortu');
             $table->string('antigen');

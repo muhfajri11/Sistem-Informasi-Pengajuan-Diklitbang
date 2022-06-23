@@ -22,7 +22,7 @@
 					<li>
 						<a class="has-arrow " href="javascript:void()" aria-expanded="false">
 							<i class="fas fa-graduation-cap"></i>
-							<span class="nav-text">Magang</span>
+							<span class="nav-text">PKL</span>
 						</a>
 						<ul aria-expanded="false">
 							@can('pendidikan')

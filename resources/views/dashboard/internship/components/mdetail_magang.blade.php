@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title text-secondary"><i class="fas fa-atom me-2"></i> Lihat Pengajuan Magang</h3>
+                <h3 class="modal-title text-secondary"><i class="fas fa-atom me-2"></i> Lihat Pengajuan PKL</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
@@ -19,7 +19,7 @@
                     <div class="tab-content pt-4">
                         <div id="biodata_view" class="tab-pane fade active show">
                             <div class="row">
-                                <div class="col-12 col-sm-6 mb-2 d-flex align-items-center">
+                                <div class="col-12 mb-2 d-flex align-items-center">
                                     <i class="fas fa-user fa-2x me-4 text-primary"></i>
                                     <div>
                                         <p class="small text-right mb-0">Nama Lengkap</p>
@@ -57,21 +57,28 @@
                                 <div class="col-12 col-sm-6 mb-2 d-flex align-items-center">
                                     <i class="fas fa-graduation-cap fa-2x me-4 text-primary"></i>
                                     <div>
-                                        <p class="small text-right mb-0">Tipe Magang</p>
+                                        <p class="small text-right mb-0">Jenjang Pendidikan</p>
+                                        <h4 class="text-right" id="jenjang_view">Test</h4>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6 mb-2 d-flex align-items-center">
+                                    <i class="fas fa-graduation-cap fa-2x me-4 text-primary"></i>
+                                    <div>
+                                        <p class="small text-right mb-0">Tipe PKL</p>
                                         <h4 class="text-right" id="type_view">Test</h4>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 mb-2 d-flex align-items-center">
                                     <i class="fas fa-hourglass-start fa-2x me-4 text-primary"></i>
                                     <div>
-                                        <p class="small text-right mb-0">Mulai Magang</p>
+                                        <p class="small text-right mb-0">Mulai PKL</p>
                                         <h4 class="text-right" id="start_view">Test</h4>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 mb-2 d-flex align-items-center">
                                     <i class="fas fa-hourglass-end fa-2x me-4 text-primary"></i>
                                     <div>
-                                        <p class="small text-right mb-0">Selesai Magang</p>
+                                        <p class="small text-right mb-0">Selesai PKL</p>
                                         <h4 class="text-right" id="end_view">Test</h4>
                                     </div>
                                 </div>
@@ -98,6 +105,50 @@
                                     </div>
                                 </div>
                                 <div class="col-12"><hr></div>
+                                <div class="col-12 mb-2">
+                                    <div class="accordion accordion-primary" id="invoice_detail">
+                                        <div class="accordion-item">
+                                            <div class="accordion-header  rounded-lg" id="invoiceDetailAccordion" data-bs-toggle="collapse" data-bs-target="#invoiceDetail" aria-controls="invoiceDetail" aria-expanded="true" role="button">
+                                                <span class="accordion-header-icon"></span>
+                                                <span class="accordion-header-text">Rincian Biaya PKL</span>
+                                                <span class="accordion-header-indicator"></span>
+                                            </div>
+                                            <div id="invoiceDetail" class="collapse" aria-labelledby="invoiceDetailAccordion" data-bs-parent="#invoice_detail">
+                                                <div class="accordion-body-text">
+                                                    <div class="row mt-1">
+                                                        <div class="col-12">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <th>Memiliki MOU</th>
+                                                                            <td class="have_mou">Tidak Punya</td>
+                                                                            <td class="price_havemou">Rp 0</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>Tipe PKL</th>
+                                                                            <td class="tipe_pkl">Medis</td>
+                                                                            <td class="price_tipepkl">Rp 0</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th>Jenjang Pend.</th>
+                                                                            <td class="jenjang">D3</td>
+                                                                            <td class="price_jenjang">Rp 0</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th colspan="2">Total Biaya</th>
+                                                                            <th class="price_total">Rp 0</th>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-12 col-sm-6 mb-2 d-flex align-items-center">
                                     <i class="fas fa-file fa-2x me-4 text-primary"></i>
                                     <div>
@@ -140,7 +191,7 @@
                         <div id="berkas_view" class="tab-pane fade">
                             <div class="row">
                                 <div class="col-6 mb-2">
-                                    <p class="small text-right mb-0">KTM</p>
+                                    <p class="small text-right mb-0">KTM/KTP</p>
                                     <div class="text-right" id="ktm_view"></div>
                                 </div>
                                 <div class="col-6 mb-2">
@@ -156,27 +207,23 @@
                                     <div class="text-right" id="izinortu_view"></div>
                                 </div>
                                 <div class="col-6 mb-2">
-                                    <p class="small text-right mb-0">Transkrip</p>
-                                    <div class="text-right" id="transkrip_view"></div>
+                                    <p class="small text-right mb-0">Jadwal Praktek</p>
+                                    <div class="text-right" id="jadwal_view"></div>
                                 </div>
                                 <div class="col-6 mb-2">
                                     <p class="small text-right mb-0">Panduan Praktek</p>
                                     <div class="text-right" id="panduanpraktek_view"></div>
                                 </div>
                                 <div class="col-6 mb-2">
-                                    <p class="small text-right mb-0">Surat Izin Magang (dari Institusi)</p>
+                                    <p class="small text-right mb-0">Surat Izin Pengajuan PKL (dari Institusi)</p>
                                     <div class="text-right" id="izinpkl_view"></div>
-                                </div>
-                                <div class="col-6 mb-2">
-                                    <p class="small text-right mb-0">Bukti Akreditasi Institusi</p>
-                                    <div class="text-right" id="akreditasi_view"></div>
                                 </div>
                                 <div class="col-6 mb-2">
                                     <p class="small text-right mb-0">MOU (Institusi dengan RS)</p>
                                     <div class="text-right" id="mou_view"></div>
                                 </div>
                                 <div class="col-6 mb-2">
-                                    <p class="small text-right mb-0">Pengalaman Magang</p>
+                                    <p class="small text-right mb-0">Pengalaman PKL</p>
                                     <div class="text-right" id="buktipkl_view"></div>
                                 </div>
                                 <div class="col-12 mb-2">
