@@ -190,6 +190,8 @@
     @include('dashboard.internship.components.modal_message')
 
     @include('dashboard.internship.components.modal_rooms')
+
+	@include('dashboard.internship.components.modal_sertifikat')
 @endsection
 
 @section('script')
@@ -629,18 +631,22 @@
                                                     <button data-id="${ data.id }"
                                                         class="btn btn-primary shadow btn-xs px-2"
                                                         data-bs-toggle="modal" data-bs-target="#modal_detailmagang">
-                                                        <i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
+                                                        <i class="fas fa-eye me-1"></i>
                                                     </button>
+													<button class="btn btn-primary shadow btn-xs px-2" data-id="${ data.id }"
+														data-bs-toggle="modal" data-bs-target="#modal_sendmsg">
+														<i class="fas fa-paper-plane me-1"></i>
+													</button>
                                                     <div class="btn-group">
                                                         <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
                                                         <div class="dropdown-menu">
-                                                            <button class="dropdown-item" data-id="${ data.id }"
-                                                                data-bs-toggle="modal" data-bs-target="#modal_sendmsg">
-                                                                <i class="fas fa-paper-plane me-1"></i> Kirim Pesan
-                                                            </button>
                                                             <button class="dropdown-item" data-id="${ data.id }" data-status="${data.status}"
-                                                                data-table="data_payments" data-bs-toggle="modal" data-bs-target="#modal_ubahstatus">
+                                                                data-table="data_dones" data-bs-toggle="modal" data-bs-target="#modal_ubahstatus">
                                                                 <i class="fas fa-user-check me-1"></i> Ubah Status
+                                                            </button>
+															<button class="dropdown-item" data-id="${ data.id }" data-status="${data.status}"
+                                                                data-table="data_dones" data-bs-toggle="modal" data-bs-target="#modal_sertifikat">
+                                                                <i class="fas fa-file-certificate me-1"></i> Sertifikat
                                                             </button>
                                                             <button class="dropdown-item delete_magang" data-id="${ data.id }" data-name="${data.name}" data-from="#data_dones">
                                                                 <i class="fas fa-trash me-1"></i> Hapus
@@ -979,7 +985,7 @@
                 })
             })
 
-            $('#modal_ubahstatus, #modal_sendmsg').on('show.bs.modal', function (e) {
+            $('#modal_ubahstatus, #modal_sendmsg, #modal_sertifikat').on('show.bs.modal', function (e) {
                 const modal = $(this),
                       id    = $(e.relatedTarget).data('id'),
                       data_status    = $(e.relatedTarget).data('status'),
@@ -996,31 +1002,42 @@
 						const status = ['reject', 'review', 'pay', 'accept', 'done'],
                               btnShowEviden = `
                                 <button class="btn btn-secondary btn-xs" data-fancybox>
-                                    Lihat Bukti Pembayaran
                                 </button>`;
                         let check;
 
                         modal.find('input[name="id"]').val(id)
                         modal.find('form').attr('data-table', data_table)
-                        
-                        if(modal.attr('id') == 'modal_ubahstatus'){
+                    
+                        if(modal.attr('id') == 'modal_ubahstatus' || modal.attr('id') == 'modal_sertifikat'){
                             modal.find('#name_status').html(data.get.name)
                             modal.find('#jurusan_status').html(data.get.jurusan)
                             modal.find('#institusi_status').html(data.get.institution.name)
                             modal.find('#status_status').html(setBadgeStatus(data.get.status))
                             modal.find('#statuspay_status').html(setBadgePay(data.get.paid))
+
+							check = data.get.file_internship.eviden_paid? 
+									$(btnShowEviden).attr('href', data.get.file_internship.eviden_paid).html('Lihat Bukti Pembayaran') :
+									`<strong>Tidak ada bukti</strong>`;
+
+								modal.find('#eviden_status').html(check)
                             
-                            check = data.get.paid? true : false;
-                            modal.find('#switch').prop('checked', check);
+                            if(modal.attr('id') == 'modal_ubahstatus'){
+								check = data.get.paid? true : false;
+								modal.find('#switch').prop('checked', check);
 
-                            modal.find('select[name="status"]').html('').select2({data: status})
-                            modal.find('select[name="status"]').val(data_status).change();
+								modal.find('select[name="status"]').html('').select2({data: status})
+								modal.find('select[name="status"]').val(data_status).change();
+							} else {
+								
+								check = data.get.file_internship.sertifikat? 
+									$(btnShowEviden).attr({
+										href: data.get.file_internship.sertifikat,
+										'data-type': 'pdf'
+									}).html('Lihat Sertifikat') :
+									``;
 
-                            check = data.get.eviden_paid? 
-                                $(btnShowEviden).attr('href', data.get.eviden_paid) :
-                                `<strong>Tidak ada bukti</strong>`;
-
-                            modal.find('#eviden_status').html(check)
+								modal.find('#btn_sertifikatview').html(check)
+							}
                         } else {
                             modal.find('#name_msg').html(data.get.name)
                             modal.find('#jurusan_msg').html(data.get.jurusan)
@@ -1117,6 +1134,53 @@
 						beforeSend: function(){
 							$('#modal_ubahstatus').modal('hide')
 							$('#ubah_status')[0].reset();
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function (data) {						
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						
+						if(data.success){
+							alertSuccess("Berhasil", data.msg)
+                            reloadData("#" + table);
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					});   
+				}
+			})
+
+			$('#tambah_sertifikat').validate({
+				rules: {
+					sertifikat: { required: true, extension: "pdf", filesize : 1 }
+				},
+				submitHandler: function (form) {
+                    let dataForm = new FormData(form),
+						table = $(form).data('table');
+					dataForm.append('_method', 'PUT');
+                    dataForm.append('from', 'internship');
+
+					$.ajax({
+						url: "{{ route('internship.add_certificate') }}",
+						type: 'POST',
+						async: false,
+						processData: false,
+						contentType: false,
+						cache: false,
+						dataType: 'json',
+						enctype: 'multipart/form-data',
+						data: dataForm,
+						beforeSend: function(){
+							$('#modal_sertifikat').modal('hide')
+							$(form)[0].reset();
 							$('#preloader').removeClass('d-none');
 							$('#main-wrapper').removeClass('show');
 						}

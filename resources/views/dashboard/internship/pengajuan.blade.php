@@ -527,7 +527,7 @@
                                     {
                                         "mData": null,
                                         "render": function (data, row, type, meta) {
-                                            return data.nama;
+                                            return data.name;
                                         }
                                     },
                                     {
@@ -545,7 +545,7 @@
                                     {
                                         "mData": null,
                                         "render": function (data, row, type, meta) {
-                                            return setBadgeType(data.type);
+                                            return data.type;
                                         }
                                     },
                                     {
@@ -589,7 +589,7 @@
                                     {
                                         "mData": null,
                                         "render": function (data, row, type, meta) {
-                                            return data.nama;
+                                            return data.name;
                                         }
                                     },
                                     {
@@ -607,7 +607,7 @@
                                     {
                                         "mData": null,
                                         "render": function (data, row, type, meta) {
-                                            return setBadgeType(data.type);
+                                            return data.type;
                                         }
                                     },
                                     {

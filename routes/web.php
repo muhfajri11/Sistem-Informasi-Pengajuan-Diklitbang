@@ -97,6 +97,8 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::post('/store', 'InternshipController@store')->name('store');
         Route::patch('/update', 'InternshipController@update')->name('update');
 
+        Route::put('/add_certificate', 'ApprovementController@add_certificate')->name('add_certificate');
+
         Route::put('/update_eviden', 'InternshipController@update_eviden')->name('update_eviden');
         Route::delete('/delete', 'InternshipController@delete')->name('delete');
     });

@@ -83,6 +83,9 @@ class InternshipController extends Controller
         $intern->file_internship->bukti_pkl = is_null($intern->file_internship->bukti_pkl)? 
             $intern->file_internship->bukti_pkl : Storage::url('magang/buktipkl/'.$intern->file_internship->bukti_pkl);
 
+        $intern->file_internship->sertifikat = is_null($intern->file_internship->sertifikat)? 
+            $intern->file_internship->sertifikat : Storage::url('magang/sertifikat/'.$intern->file_internship->sertifikat);
+
         $intern->file_internship->eviden_paid = is_null($intern->file_internship->eviden_paid)? 
             $intern->file_internship->eviden_paid : Storage::url('magang/evidenpaid/'.$intern->file_internship->eviden_paid);
         
@@ -150,6 +153,15 @@ class InternshipController extends Controller
             return response()->json([
                 'success' => false,
                 'msg'     => "NIM sudah terdaftar silahkan cek kembali data anda!"
+            ], 200);
+        }
+
+        $isLoad = Internship::is_load();
+
+        if(!$isLoad){
+            return response()->json([
+                'success' => false,
+                'msg'     => "Kuota PKL saat ini sudah penuh"
             ], 200);
         }
 
@@ -640,6 +652,20 @@ class InternshipController extends Controller
                 return response()->json([
                     'success' => false,
                     'msg'     => 'File tidak terdeteksi Pengalaman Magang'
+                ], 500);
+            }
+        }
+
+        if($intern->file_internship->sertifikat){
+            $delete_image = $this->deleteImage([
+                'path'  => "public/magang/sertifikat/",
+                'image' => $intern->file_internship->sertifikat
+            ]);
+
+            if(!$delete_image){
+                return response()->json([
+                    'success' => false,
+                    'msg'     => 'File tidak terdeteksi Sertifikat'
                 ], 500);
             }
         }

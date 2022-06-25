@@ -44,6 +44,17 @@ class Internship extends Model
         return true;
     }
 
+    public static function is_load(){
+        $kuota = Setting::byName(['kuota']);
+        $kuota = $kuota->value->internship;
+
+        $interns = self::whereIn('status', ['review', 'pay', 'accept'])->get();
+
+        if(count($interns) == $kuota) return false; // load kuota penuh
+
+        return true;
+    }
+
     public static function deleteMessage($user_id, $id){
         $messages = DB::table('messages')->where('user_id', $user_id)->where('table_id', $id)->where('from', 'internship')->get();
         

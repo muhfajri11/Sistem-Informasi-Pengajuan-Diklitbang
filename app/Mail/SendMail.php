@@ -30,8 +30,17 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        return $this->from('noreply@simdiklit_rsgjcirebon.com')
-                    ->subject($this->details['title'])
-                    ->markdown('mail');
+        $set = $this->from('noreply@simdiklit_rsgjcirebon.com')
+                ->subject($this->details['title'])
+                ->markdown('mail');
+
+        if(isset($this->details['filepath'])){
+            $set->attach($this->details['filepath'], [
+                'as'    => $this->details['filename'],
+                'mime'  => 'application/pdf'
+            ]);
+        }
+
+        return $set;
     }
 }
