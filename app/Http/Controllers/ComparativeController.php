@@ -54,7 +54,7 @@ class ComparativeController extends Controller
             $response[$i]['members'] = $data['members']." Orang";
             $response[$i]['status'] = $data['status'];
             $response[$i]['paid'] = $data['paid'];
-            $response[$i]['attach'] = Storage::url('studibanding/lampiran/'.$data['attach']);
+            $response[$i]['permohonan'] = Storage::url('studibanding/permohonan/'.$data['permohonan']);
         });
 
         echo json_encode($response);
@@ -68,8 +68,10 @@ class ComparativeController extends Controller
         $comparative->visit = Carbon::createFromFormat('Y-m-d', $comparative->visit)->format('d F Y');
         $comparative->member = $comparative->members;
         $comparative->members = $comparative->members." Orang";
+        $comparative->names = json_decode($comparative->names);
         $comparative->questions = json_decode($comparative->questions);
-        $comparative->attach = Storage::url('studibanding/lampiran/'.$comparative->attach);
+        $comparative->docs = json_decode($comparative->docs);
+        $comparative->permohonan = Storage::url('studibanding/permohonan/'.$comparative->permohonan);
 
         $comparative->eviden_paid = is_null($comparative->eviden_paid)? 
             $comparative->eviden_paid : Storage::url('studibanding/eviden_paid/'.$comparative->eviden_paid);
@@ -133,14 +135,14 @@ class ComparativeController extends Controller
         }
 
         $delete_image = $this->deleteImage([
-            'path'  => 'public/studibanding/lampiran/',
-            'image' => $comparative->attach
+            'path'  => 'public/studibanding/permohonan/',
+            'image' => $comparative->permohonan
         ]);
 
         if(!$delete_image){
             return response()->json([
                 'success' => false,
-                'msg'     => 'File tidak terdeteksi Lampiran'
+                'msg'     => 'File tidak terdeteksi Permohonan'
             ], 500);
         }
         
@@ -177,8 +179,10 @@ class ComparativeController extends Controller
             $req['total_paid'] = $req['members'] * 240000;
         }
 
-        $req['attach'] = "-";
+        $req['permohonan'] = "-";
+        $req['names'] = json_encode($req['names']);
         $req['questions'] = json_encode($req['questions']);
+        $req['docs'] = json_encode($req['docs']);
     
         $comparative = Comparative::create($req);
         $comparative->rooms()->attach($req['rooms']);
@@ -190,14 +194,14 @@ class ComparativeController extends Controller
             ], 200);
         }
 
-        $image_attach = $this->uploadImage([
-            'path'      => 'public/studibanding/lampiran',
-            'file'      => $request->file('attach'),
+        $image_permohonan = $this->uploadImage([
+            'path'      => 'public/studibanding/permohonan',
+            'file'      => $request->file('permohonan'),
             'user'      => $user,
             'id'        => $comparative->id,
-            'prefix'    => 'comparativeattach_'
+            'prefix'    => 'comparativepermohonan_'
         ]);
-        $data['attach'] = $image_attach;
+        $data['permohonan'] = $image_permohonan;
 
         if($request->hasFile('eviden_paid')){
             $image_eviden = $this->uploadImage([
@@ -230,7 +234,7 @@ class ComparativeController extends Controller
         $user = auth()->user();
 
         $req['institution_id'] = $req['institution'];
-        unset($req['institution'], $req['attach'], $req['eviden_paid']);
+        unset($req['institution'], $req['permohonan'], $req['eviden_paid']);
 
         if($req['members'] < 10){
             $req['total_paid'] = $req['members'] * 300000;
@@ -238,20 +242,22 @@ class ComparativeController extends Controller
             $req['total_paid'] = $req['members'] * 240000;
         }
 
+        $req['names'] = json_encode($req['names']);
         $req['questions'] = json_encode($req['questions']);
+        $req['docs'] = json_encode($req['docs']);
 
         $comparative = Comparative::find($req['id']);
         $comparative->rooms()->sync($req['rooms']);
 
-        if($request->hasFile('attach')){
-            $image_attach = $this->uploadImage([
-                'path'      => 'public/studibanding/lampiran',
-                'file'      => $request->file('attach'),
+        if($request->hasFile('permohonan')){
+            $image_permohonan = $this->uploadImage([
+                'path'      => 'public/studibanding/permohonan',
+                'file'      => $request->file('permohonan'),
                 'user'      => $user,
                 'id'        => $comparative->id,
-                'prefix'    => 'comparativeattach_'
+                'prefix'    => 'comparativepermohonan_'
             ]);
-            $req['attach'] = $image_attach;
+            $req['permohonan'] = $image_permohonan;
         }
 
         if($request->hasFile('eviden_paid')){

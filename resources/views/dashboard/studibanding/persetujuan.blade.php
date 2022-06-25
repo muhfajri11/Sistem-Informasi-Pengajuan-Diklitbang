@@ -60,7 +60,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Judul</th>
+                                                    <th>Topik</th>
                                                     <th>Kunjungan</th>
                                                     <th>Pengunjung</th>
                                                     <th>Lampiran</th>
@@ -95,7 +95,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Judul</th>
+                                                    <th>Topik</th>
                                                     <th>Kunjungan</th>
                                                     <th>Pengunjung</th>
                                                     <th>Status</th>
@@ -130,7 +130,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Judul</th>
+                                                    <th>Topik</th>
                                                     <th>Kunjungan</th>
                                                     <th>Pengunjung</th>
                                                     <th>Status</th>
@@ -165,7 +165,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Judul</th>
+                                                    <th>Topik</th>
                                                     <th>Kunjungan</th>
                                                     <th>Pengunjung</th>
                                                     <th>Status</th>
@@ -321,7 +321,7 @@
 										<button 
                                             class="btn btn-secondary btn-xs ms-2" 
                                             data-fancybox 
-                                            href="${data.attach}" data-type="pdf">
+                                            href="${data.permohonan}" data-type="pdf">
                                         Lampiran </button>`
                             return btnAttach;
                         }
@@ -570,7 +570,7 @@
                             $.extend(dataReject, {
                                 "ajax": {
                                     "type": "POST",
-                                    "url": `{{ route('studi_banding.all', ['reject' => 'review', 'admin' => 1]) }}`,
+                                    "url": `{{ route('studi_banding.all', ['type' => 'reject', 'admin' => 1]) }}`,
                                     "timeout": 120000
                                 },
                                 "aoColumns": [
@@ -775,7 +775,7 @@
 							</button>`, btnShowEviden = `
 							<button class="btn btn-secondary" data-fancybox>
 								Lihat Bukti Pembayaran
-							</button>`;
+							</button>`, tableRow = `<tr></tr>`;
 
 						$.each(data.get.rooms, function(i, val){
 							rooms += val.name + ", ";
@@ -790,15 +790,29 @@
 						modal.find('#status_view').html(setBadgeStatus(data.get.status));
 						modal.find('#statuspay_view').html(setBadgePay(data.get.paid));
 						modal.find('#question_view table tbody').html('');
-						modal.find('#attach_view').html($(btnLampiran).attr('href', data.get.attach));
+						modal.find('#permohonan_view').html($(btnLampiran).attr('href', data.get.permohonan));
 						modal.find('#eviden_view').html('')
 
+						modal.find('#name_view table tbody').html('')
+						modal.find('#question_view table tbody').html('')
+						modal.find('#doc_view table tbody').html('')
+
+						$.each(data.get.names, function(i, val){
+							modal.find('#name_view table tbody').append($(tableRow).append(`<th>${val}</th>`));
+						})
 						$.each(data.get.questions, function(i, val){
-							modal.find('#question_view table tbody').append($(questionView).append(`<th>${val}</th>`));
+							modal.find('#question_view table tbody').append($(tableRow).append(`<th>${val}</th>`));
+						})
+						$.each(data.get.docs, function(i, val){
+							modal.find('#doc_view table tbody').append($(tableRow).append(`<th>${val}</th>`));
 						})
 
 						if(data.get.eviden_paid){
-							modal.find('#eviden_view').html($(btnShowEviden).attr('href', data.get.eviden_paid))
+							htmlBtn = $(btnShowEviden).attr('href', data.get.eviden_paid)
+							check = data.get.eviden_paid.split('.')[1];
+							if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
+
+							modal.find('#eviden_view').html(htmlBtn)
 						} else {
 							modal.find('#eviden_view').html('<strong>Tidak ada bukti</strong>')
 						}

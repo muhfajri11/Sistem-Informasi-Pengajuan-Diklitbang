@@ -186,10 +186,10 @@ class ApprovementController extends Controller
 
                 switch($data['paid']){
                     case "1":
-                        $details['body'] .= "Selamat Bukti Pembayaran anda kami terima.";
+                        $details['body'] = "Selamat Bukti Pembayaran anda kami terima.";
                     break;
                     case "0":
-                        $details['body'] .= "Bukti Pembayaran anda tidak valid silahkan upload kembali.";
+                        $details['body'] = "Bukti Pembayaran anda tidak valid silahkan upload kembali.";
                     break;
                 }
             }

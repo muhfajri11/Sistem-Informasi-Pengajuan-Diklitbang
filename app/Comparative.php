@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Comparative extends Model
 {
     protected $fillable = ['user_id', 'institution_id', 
-        'title', 'questions', 'members', 'visit', 'status', 'total_paid', 'paid', 
-        'eviden_paid', 'attach', 'updated_at'];
+        'title', 'members', 'visit', 'status', 'names', 'questions', 'docs', 'total_paid',
+        'paid', 'eviden_paid', 'permohonan', 'updated_at'];
 
     public function rooms(){
         return $this->belongsToMany(Room::class);

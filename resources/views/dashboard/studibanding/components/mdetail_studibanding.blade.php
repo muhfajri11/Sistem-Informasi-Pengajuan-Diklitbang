@@ -11,7 +11,7 @@
                     <div class="col-12 d-flex align-items-center">
                         <i class="fas fa-users-class fa-2x me-4 text-primary"></i>
                         <div>
-                            <p class="small text-right mb-0">Tema Pertemuan</p>
+                            <p class="small text-right mb-0">Topik Pertemuan</p>
                             <h4 class="text-right" id="title_view">Lorem ipsum dolor sit amet lorem ipsum dolor sit amet</h4>
                         </div>
                     </div>
@@ -68,7 +68,41 @@
                             <div class="text-right" id="statuspay_view"></div>
                         </div>
                     </div>
+                    <div class="col-12 col-sm-6 mt-4 d-flex align-items-center">
+                        <i class="fas fa-file-alt fa-2x me-4 text-primary"></i>
+                        <div>
+                            <p class="small text-right mb-0">Surat Permohonan</p>
+                            <div class="text-right" id="permohonan_view"></div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 mt-4 mt-md-0 d-flex align-items-center">
+                        <i class="fas fa-receipt fa-2x me-4 text-primary"></i>
+                        <div>
+                            <p class="small text-right mb-0">Bukti Pembayaran</p>
+                            <div class="text-right" id="eviden_view"></div>
+                            <div id="eviden_img">
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-12 mt-4">
+                        <div class="accordion accordion-primary" id="name_viewacc">
+                            <div class="accordion-item">
+                                <div class="accordion-header  rounded-lg" id="nameDaftarAccordion" data-bs-toggle="collapse" data-bs-target="#nameView" aria-controls="nameView"   aria-expanded="true" role="button">
+                                    <span class="accordion-header-icon"></span>
+                                    <span class="accordion-header-text">Daftar Nama Peserta</span>
+                                    <span class="accordion-header-indicator"></span>
+                                </div>
+                                <div id="nameView" class="collapse show" aria-labelledby="nameDaftarAccordion" data-bs-parent="#name_viewacc">
+                                    <div class="accordion-body-text" id="name_view">
+                                        <table class="table table-bordered table-hover rounded">
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mt-2">
                         <div class="accordion accordion-primary" id="question_viewacc">
                             <div class="accordion-item">
                                 <div class="accordion-header  rounded-lg" id="questionDaftarAccordion" data-bs-toggle="collapse" data-bs-target="#questionView" aria-controls="questionView"   aria-expanded="true" role="button">
@@ -86,19 +120,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 d-flex align-items-center">
-                        <i class="fas fa-file-alt fa-2x me-4 text-primary"></i>
-                        <div>
-                            <p class="small text-right mb-0">Lampiran</p>
-                            <div class="text-right" id="attach_view"></div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-6 mt-4 mt-md-0 d-flex align-items-center">
-                        <i class="fas fa-receipt fa-2x me-4 text-primary"></i>
-                        <div>
-                            <p class="small text-right mb-0">Bukti Pembayaran</p>
-                            <div class="text-right" id="eviden_view"></div>
-                            <div id="eviden_img">
+                    <div class="col-12 mt-2">
+                        <div class="accordion accordion-primary" id="doc_viewacc">
+                            <div class="accordion-item">
+                                <div class="accordion-header  rounded-lg" id="docDaftarAccordion" data-bs-toggle="collapse" data-bs-target="#docView" aria-controls="docView"   aria-expanded="true" role="button">
+                                    <span class="accordion-header-icon"></span>
+                                    <span class="accordion-header-text">Daftar Dokumen yang dibutuhkan</span>
+                                    <span class="accordion-header-indicator"></span>
+                                </div>
+                                <div id="docView" class="collapse show" aria-labelledby="docDaftarAccordion" data-bs-parent="#doc_viewacc">
+                                    <div class="accordion-body-text" id="doc_view">
+                                        <table class="table table-bordered table-hover rounded">
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -19,15 +19,18 @@ class CreateComparativesTable extends Migration
             $table->foreignId('institution_id');
 
             $table->string('title');
-            $table->text('questions');
             $table->integer('members');
             $table->date('visit');
             $table->enum('status', ['reject', 'review', 'pay', 'accept'])->default('review');
+
+            $table->text('names');
+            $table->text('questions');
+            $table->text('docs');
             
             $table->string('total_paid');
             $table->tinyInteger('paid')->default(0);
             $table->string('eviden_paid')->nullable();
-            $table->string('attach');
+            $table->string('permohonan');
 
             $table->timestamps();
         });

@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-12 mb-4">
                         <div class="form-group">
-                            <label for="judul_edit">Judul</label>
+                            <label for="judul_edit">Topik Pertemuan</label>
                             <input type="text" name="title" class="form-control mb-2" id="judul_edit" required>
                             <span class="small text-light">*Apa yang akan dibahas dalam kunjungan</span>
                         </div>
@@ -54,6 +54,43 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-12 mb-4">
+                        <div class="form-group">
+                            <label for="lampiran_edit">Surat Permohonan <span id="btnedit_attachview"></span></label>
+                            <div class="input-group">
+                                <div class="form-file">
+                                    <input type="file" class="form-file-input form-daftar form-control" name="permohonan" id="lampiran_edit">
+                                </div>
+                                <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
+                            </div>
+                            <span class="small text-light">*Kosongkan jika tidak ada perubahan, File berbentuk .pdf</span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="accordion accordion-primary" id="name_edit">
+                            <div class="accordion-item">
+                                <div class="accordion-header  rounded-lg" id="nameEditAccordion" data-bs-toggle="collapse" data-bs-target="#nameEdit" aria-controls="nameEdit" aria-expanded="true" role="button">
+                                    <span class="accordion-header-icon"></span>
+                                    <span class="accordion-header-text">Daftar Nama Peserta</span>
+                                    <span class="accordion-header-indicator"></span>
+                                </div>
+                                <div id="nameEdit" class="collapse show" aria-labelledby="nameEditAccordion" data-bs-parent="#name_edit">
+                                    <div class="accordion-body-text">
+                                        <div class="row mt-1">
+                                            <div class="col-12 mb-2 list_name">
+                                                <div class="form-group form_name mb-2">
+                                                    <div class="input-group">
+                                                        <button class="btn btn-dark btn-disabled" type="button" disabled>1</button>
+                                                        <input type="text" name="names[]" class="form-control" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-12">
                         <div class="accordion accordion-primary" id="question_edit">
                             <div class="accordion-item">
@@ -65,7 +102,7 @@
                                 <div id="questionEdit" class="collapse show" aria-labelledby="questionEditAccordion" data-bs-parent="#question_edit">
                                     <div class="accordion-body-text">
                                         <div class="row mt-1">
-                                            <div class="col-12 mb-2" id="list_questionEdit">
+                                            <div class="col-12 mb-2 list_question">
                                                 <div class="form-group form_question mb-2">
                                                     <div class="input-group">
                                                         <input type="text" name="questions[]" class="form-control" required>
@@ -73,23 +110,37 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button class="btn col-6 mx-auto btn-dark btn-sm" id="add_questionEdit" type="button">Tambah Pertanyaan</button>
+                                            <button class="btn col-6 mx-auto btn-dark btn-sm add_question" type="button">Tambah Pertanyaan</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 mb-4">
-                        <div class="form-group">
-                            <label for="lampiran_edit">Lampiran <span id="btnedit_attachview"></span></label>
-                            <div class="input-group">
-                                <div class="form-file">
-                                    <input type="file" class="form-file-input form-daftar form-control" name="attach" id="lampiran_edit">
+                    <div class="col-12">
+                        <div class="accordion accordion-primary" id="doc_edit">
+                            <div class="accordion-item">
+                                <div class="accordion-header  rounded-lg" id="docEditAccordion" data-bs-toggle="collapse" data-bs-target="#docEdit" aria-controls="docEdit" aria-expanded="true" role="button">
+                                    <span class="accordion-header-icon"></span>
+                                    <span class="accordion-header-text">Daftar Dokumen yang dibutuhkan</span>
+                                    <span class="accordion-header-indicator"></span>
                                 </div>
-                                <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
+                                <div id="docEdit" class="collapse show" aria-labelledby="docEditAccordion" data-bs-parent="#doc_edit">
+                                    <div class="accordion-body-text">
+                                        <div class="row mt-1">
+                                            <div class="col-12 mb-2 list_doc">
+                                                <div class="form-group form_doc mb-2">
+                                                    <div class="input-group">
+                                                        <input type="text" name="docs[]" class="form-control" required>
+                                                        <button class="btn btn-danger delete_doc" disabled type="button">-</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="btn col-6 mx-auto btn-dark btn-sm add_doc" type="button">Tambah Pertanyaan</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <span class="small text-light">*Kosongkan jika tidak ada perubahan, File berbentuk .pdf</span>
                         </div>
                     </div>
                     <div class="col-12">

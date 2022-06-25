@@ -59,7 +59,7 @@
 												<thead>
 													<tr>
 														<th>#</th>
-														<th>Judul</th>
+														<th>Topik</th>
 														<th>Kunjungan</th>
 														<th>Pengunjung</th>
 														<th>Status</th>
@@ -89,7 +89,7 @@
 												<thead>
 													<tr>
 														<th>#</th>
-														<th>Judul</th>
+														<th>Topik</th>
 														<th>Kunjungan</th>
 														<th>Pengunjung</th>
 														<th>Status</th>
@@ -119,7 +119,7 @@
 												<thead>
 													<tr>
 														<th>#</th>
-														<th>Judul</th>
+														<th>Topik</th>
 														<th>Kunjungan</th>
 														<th>Pengunjung</th>
 														<th>Status</th>
@@ -504,7 +504,7 @@
                       biaya = members.parent().parent().parent().parent().find('#biaya');
 
                 if(membersNow > 1){
-                    members.val(membersNow - 1)
+                    members.val(membersNow - 1).change()
                     totalMembers.html(members.val() + " Orang");
                     
                     if(parseInt(members.val()) < 10){
@@ -525,7 +525,7 @@
                       biaya = members.parent().parent().parent().parent().find('#biaya');
 
                 if(membersNow > 0){
-                    members.val(membersNow + 1)
+                    members.val(membersNow + 1).change()
                     totalMembers.html(members.val() + " Orang");
                     
                     if(parseInt(members.val()) < 10){
@@ -538,9 +538,38 @@
                 }
             })
 
-            $('#add_questionDaftar').click(function(e){
-                e.preventDefault();
-                const listQuestion = $('#list_questionDaftar'),
+			$('#modal_addstudibanding, #modal_editstudibanding').on('change', 'input[name="members"]', function(e){
+                const modal = $(this).closest('.modal'),
+					  formNames = modal.find("input[name='names[]']"),
+					  htmlForm 	= `
+					  	<div class="form-group form_name mb-2">
+							<div class="input-group">
+								<button class="btn btn-dark btn-disabled" type="button" disabled>1</button>
+								<input type="text" name="names[]" class="form-control" required>
+							</div>
+						</div>`,
+					  val = $(this).val(),
+					  listName = modal.find('.list_name');
+
+				if(val > 1){
+					let storeElm;
+					listName.find('.form-group:not(:first)').remove();
+
+					for (let i = 2; i <= val; i++) {
+						storeElm = $(htmlForm);
+						storeElm.find('button').html(i);
+						listName.append(storeElm);
+					}
+				} else {
+					listName.find('.form-group:not(:first)').remove();
+				}
+            })
+
+			$('#modal_addstudibanding, #modal_editstudibanding').on('click', '.add_question', function(e){
+				const modal = $(this).closest('.modal');
+
+				e.preventDefault();
+                const listQuestion = modal.find('.list_question'),
                       formQuestion = `
                         <div class="form-group form_question mb-2">
                             <div class="input-group">
@@ -550,23 +579,26 @@
                         </div>`;
                 
                 listQuestion.append($(formQuestion));
-            })
+			})
 
-			$('#add_questionEdit').click(function(e){
-                e.preventDefault();
-                const listQuestion = $('#list_questionEdit'),
+			$('#modal_addstudibanding, #modal_editstudibanding').on('click', '.add_doc', function(e){
+				const modal = $(this).closest('.modal');
+
+				e.preventDefault();
+                const listQuestion = modal.find('.list_doc'),
                       formQuestion = `
-                        <div class="form-group form_question mb-2">
+                        <div class="form-group form_doc mb-2">
                             <div class="input-group">
-                                <input type="text" name="questions[]" class="form-control" required>
-                                <button class="btn btn-danger delete_question" type="button">-</button>
+                                <input type="text" name="docs[]" class="form-control" required>
+                                <button class="btn btn-danger delete_doc" type="button">-</button>
                             </div>
                         </div>`;
                 
                 listQuestion.append($(formQuestion));
-            })
+			})
 
-            $('#list_questionDaftar, #list_questionEdit').on('click', '.delete_question', function(e){
+            $('#modal_addstudibanding, #modal_editstudibanding')
+				.on('click', '.delete_question, .delete_doc', function(e){
                 e.preventDefault();
                 
                 $(this).parent().parent().remove();
@@ -585,8 +617,10 @@
 					date: { required: true, date: true },
 					members: { required: true, digits: true, min: 1 },
 					rooms: { required: true },
+					names: { required: true, alphanumeric: true },
 					questions: { required: true, alphanumeric: true },
-					attach: { required: true, extension: "pdf", filesize : 1 },
+					docs: { required: true, alphanumeric: true },
+					permohonan: { required: true, extension: "pdf", filesize : 1 },
 					eviden_paid: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 2 }
 				},
 				submitHandler: function (form) {
@@ -838,21 +872,35 @@
 							}
 						}).done(function(data){
 							if(data.success){
+								console.log(data.get)
 								let rooms = ``, rooms_id = [];
-								const listQuestion = $('#list_questionEdit'),
-									btnLampiran = `
+								const btnLampiran = `
 										<button class="btn btn-secondary btn-xs ms-2" data-fancybox data-type="pdf">
-											Lihat Lampiran
+											Lihat Permohonan
 										</button>`, 
 									btnShowEviden = `
 										<button class="btn btn-secondary btn-xs ms-2" data-fancybox>
 											Lihat Bukti Pembayaran
-										</button>`
+										</button>`,
+									formName = `
+										<div class="form-group form_name mb-2">
+											<div class="input-group">
+												<button class="btn btn-dark btn-disabled" type="button" disabled>1</button>
+												<input type="text" name="names[]" class="form-control" required>
+											</div>
+										</div>`,
 									formQuestion = `
 										<div class="form-group form_question mb-2">
 											<div class="input-group">
 												<input type="text" name="questions[]" class="form-control" required>
 												<button class="btn btn-danger delete_question" type="button">-</button>
+											</div>
+										</div>`,
+									formDoc = `
+										<div class="form-group form_doc mb-2">
+											<div class="input-group">
+												<input type="text" name="docs[]" class="form-control" required>
+												<button class="btn btn-danger delete_doc" type="button">-</button>
 											</div>
 										</div>`;
 
@@ -865,14 +913,32 @@
 								modal.find('#kunjungan_edit').pickadate('picker').set('select', `${data.get.visited}`, { format: 'yyyy-mm-dd' });
 								modal.find('#pengunjung_edit').val(data.get.member);
 								modal.find('#rooms_edit').val(rooms_id).change()
-								
+
+								modal.find('.list_name').html('')
+								$.each(data.get.names, function(i, val){
+									const names_input = $(formName);
+									names_input.find('input[name="names[]"]').val(val);
+									names_input.find('button').html(i + 1);
+									modal.find('.list_name').append(names_input);
+								})
+
 								$.each(data.get.questions, function(i, val){
 									if(i == 0){
 										modal.find('input[name="questions[]"]').val(val);
 									} else {
 										const question_input = $(formQuestion);
 										question_input.find('input[name="questions[]"]').val(val);
-										listQuestion.append(question_input);
+										modal.find('.list_question').append(question_input);
+									}
+								})
+								
+								$.each(data.get.docs, function(i, val){
+									if(i == 0){
+										modal.find('input[name="docs[]"]').val(val);
+									} else {
+										const doc_input = $(formDoc);
+										doc_input.find('input[name="docs[]"]').val(val);
+										modal.find('.list_doc').append(doc_input);
 									}
 								})
 
@@ -886,9 +952,13 @@
 									modal.find('#biaya').html(`Rp ${currency.format(cost)}`);
 								}
 
-								modal.find('#btnedit_attachview').append($(btnLampiran).attr('href', data.get.attach))
+								modal.find('#btnedit_attachview').append($(btnLampiran).attr('href', data.get.permohonan))
 								if(data.get.eviden_paid){
-									modal.find('#btnedit_evidenview').append($(btnShowEviden).attr('href', data.get.eviden_paid))
+									htmlBtn = $(btnShowEviden).attr('href', data.get.eviden_paid)
+									check = data.get.eviden_paid.split('.')[1];
+									if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
+
+									modal.find('#btnedit_evidenview').html(htmlBtn)
 								}
 							} else {
 								alertError("Berhasil", data.msg)
@@ -925,16 +995,15 @@
 					}
 				}).done(function(data){
 					if(data.success){
-						let rooms = ``, questionView = `
-							<tr></tr>`, btnEviden = `
-							<button class="btn btn-dark" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.get.id}">
+						let rooms = ``, tableRow = `<tr></tr>`, btnEviden = `
+							<button class="btn btn-dark btn-sm" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.get.id}">
 								Upload Bukti Pembayaran
-							</button>`, btnLampiran = `
-							<button class="btn btn-secondary" data-fancybox data-type="pdf">
-								Lihat Lampiran
+							</button>`, btnPermohonan = `
+							<button class="btn btn-secondary btn-sm" data-fancybox data-type="pdf">
+								Buka
 							</button>`, btnShowEviden = `
-							<button class="btn btn-secondary" data-fancybox>
-								Lihat Bukti Pembayaran
+							<button class="btn btn-secondary btn-sm" data-fancybox>
+								Buka
 							</button>`;
 
 						$.each(data.get.rooms, function(i, val){
@@ -950,17 +1019,31 @@
 						modal.find('#status_view').html(setBadgeStatus(data.get.status));
 						modal.find('#statuspay_view').html(setBadgePay(data.get.paid));
 						modal.find('#question_view table tbody').html('');
-						modal.find('#attach_view').html($(btnLampiran).attr('href', data.get.attach));
+						modal.find('#permohonan_view').html($(btnPermohonan).attr('href', data.get.permohonan));
 						modal.find('#eviden_view').html('')
 
+						modal.find('#name_view table tbody').html('')
+						modal.find('#question_view table tbody').html('')
+						modal.find('#doc_view table tbody').html('')
+
+						$.each(data.get.names, function(i, val){
+							modal.find('#name_view table tbody').append($(tableRow).append(`<th>${val}</th>`));
+						})
 						$.each(data.get.questions, function(i, val){
-							modal.find('#question_view table tbody').append($(questionView).append(`<th>${val}</th>`));
+							modal.find('#question_view table tbody').append($(tableRow).append(`<th>${val}</th>`));
+						})
+						$.each(data.get.docs, function(i, val){
+							modal.find('#doc_view table tbody').append($(tableRow).append(`<th>${val}</th>`));
 						})
 
 						if(data.get.eviden_paid){
-							modal.find('#eviden_view').append($(btnShowEviden).attr('href', data.get.eviden_paid))
+							htmlBtn = $(btnShowEviden).attr('href', data.get.eviden_paid)
+							check = data.get.eviden_paid.split('.')[1];
+							if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
+
+							modal.find('#eviden_view').html(htmlBtn)
 						} else {
-							modal.find('#eviden_view').append(btnEviden)
+							modal.find('#eviden_view').html(btnEviden)
 						}
 
 					} else {

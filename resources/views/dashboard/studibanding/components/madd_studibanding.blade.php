@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-12 mb-4">
                         <div class="form-group">
-                            <label for="judul_daftar">Judul</label>
+                            <label for="judul_daftar">Topik Pertemuan</label>
                             <input type="text" name="title" class="form-control mb-2" id="judul_daftar" required>
                             <span class="small text-light">*Apa yang akan dibahas dalam kunjungan</span>
                         </div>
@@ -38,7 +38,7 @@
                     </div>
                     <div class="col-12 col-md-6 mb-4">
                         <div class="form-group">
-                            <label for="pengunjung_daftar">Pengunjung <span class="small text-light">/orang</span></label>
+                            <label for="pengunjung_daftar">Peserta <span class="small text-light">/orang</span></label>
                             <div class="input-group">
                                 <button class="btn btn-primary min_members" type="button">-</button>
                                 <input type="number" name="members" class="form-control text-center" id="pengunjung_daftar" value="1" readonly required>
@@ -53,6 +53,43 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-12 mb-4">
+                        <div class="form-group">
+                            <label for="lampiran_daftar">Surat Permohonan Studi Banding</label>
+                            <div class="input-group">
+                                <div class="form-file">
+                                    <input type="file" class="form-file-input form-daftar form-control" name="permohonan" required>
+                                </div>
+                                <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
+                            </div>
+                            <span class="small text-light">*File berbentuk .pdf</span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="accordion accordion-primary" id="name_daftar">
+                            <div class="accordion-item">
+                                <div class="accordion-header  rounded-lg" id="nameDaftarAccordion" data-bs-toggle="collapse" data-bs-target="#nameDaftar" aria-controls="nameDaftar"   aria-expanded="true" role="button">
+                                    <span class="accordion-header-icon"></span>
+                                    <span class="accordion-header-text">Daftar Nama Peserta</span>
+                                    <span class="accordion-header-indicator"></span>
+                                </div>
+                                <div id="nameDaftar" class="collapse show" aria-labelledby="nameDaftarAccordion" data-bs-parent="#name_daftar">
+                                    <div class="accordion-body-text">
+                                        <div class="row mt-1">
+                                            <div class="col-12 mb-2 list_name">
+                                                <div class="form-group form_name mb-2">
+                                                    <div class="input-group">
+                                                        <button class="btn btn-dark btn-disabled" type="button" disabled>1</button>
+                                                        <input type="text" name="names[]" class="form-control" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-12">
                         <div class="accordion accordion-primary" id="question_daftar">
                             <div class="accordion-item">
@@ -64,7 +101,7 @@
                                 <div id="questionDaftar" class="collapse show" aria-labelledby="questionDaftarAccordion" data-bs-parent="#question_daftar">
                                     <div class="accordion-body-text">
                                         <div class="row mt-1">
-                                            <div class="col-12 mb-2" id="list_questionDaftar">
+                                            <div class="col-12 mb-2 list_question">
                                                 <div class="form-group form_question mb-2">
                                                     <div class="input-group">
                                                         <input type="text" name="questions[]" class="form-control" required>
@@ -72,23 +109,37 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button class="btn col-6 mx-auto btn-dark btn-sm" id="add_questionDaftar" type="button">Tambah Pertanyaan</button>
+                                            <button class="btn col-6 mx-auto btn-dark btn-sm add_question" type="button">Tambah Pertanyaan</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 mb-4">
-                        <div class="form-group">
-                            <label for="lampiran_daftar">Lampiran</label>
-                            <div class="input-group">
-                                <div class="form-file">
-                                    <input type="file" class="form-file-input form-daftar form-control" name="attach" required>
+                    <div class="col-12">
+                        <div class="accordion accordion-primary" id="doc_daftar">
+                            <div class="accordion-item">
+                                <div class="accordion-header  rounded-lg" id="docDaftarAccordion" data-bs-toggle="collapse" data-bs-target="#docDaftar" aria-controls="docDaftar"   aria-expanded="true" role="button">
+                                    <span class="accordion-header-icon"></span>
+                                    <span class="accordion-header-text">Daftar Dokumen yang dibutuhkan</span>
+                                    <span class="accordion-header-indicator"></span>
                                 </div>
-                                <button class="btn btn-dark" type="button" data-fancybox disabled>Preview</button>
+                                <div id="docDaftar" class="collapse show" aria-labelledby="docDaftarAccordion" data-bs-parent="#doc_daftar">
+                                    <div class="accordion-body-text">
+                                        <div class="row mt-1">
+                                            <div class="col-12 mb-2 list_doc">
+                                                <div class="form-group form_doc mb-2">
+                                                    <div class="input-group">
+                                                        <input type="text" name="docs[]" class="form-control" required>
+                                                        <button class="btn btn-danger delete_doc" disabled type="button">-</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="btn col-10 col-md-8 col-lg-6 mx-auto btn-dark btn-sm add_doc" type="button">Tambah Dokumen yang diperlukan</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <span class="small text-light">*File berbentuk .pdf</span>
                         </div>
                     </div>
                     <div class="col-12">
