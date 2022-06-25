@@ -39,7 +39,7 @@
                     </div>
                     <div class="col-12 col-md-6 mb-4">
                         <div class="form-group">
-                            <label for="pengunjung_edit">Pengunjung <span class="small text-light">/orang</span></label>
+                            <label for="pengunjung_edit">Peserta <span class="small text-light">/orang</span></label>
                             <div class="input-group">
                                 <button class="btn btn-primary min_members" type="button">-</button>
                                 <input type="number" name="members" class="form-control text-center" id="pengunjung_edit" value="1" readonly required>

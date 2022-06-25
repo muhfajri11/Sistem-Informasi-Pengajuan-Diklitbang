@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Comparative, Room, Institution};
+use App\{Comparative, Room, Institution, Setting};
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -173,10 +173,12 @@ class ComparativeController extends Controller
 
         unset($req['institution'], $req['eviden_paid']);
 
+        $fee = Setting::byName(['fee']);
+
         if($req['members'] < 10){
-            $req['total_paid'] = $req['members'] * 300000;
+            $req['total_paid'] = $req['members'] * $fee->value->comparative->kurang_dari;
         } else {
-            $req['total_paid'] = $req['members'] * 240000;
+            $req['total_paid'] = $req['members'] * $fee->value->comparative->lebih_dari;
         }
 
         $req['permohonan'] = "-";

@@ -750,6 +750,14 @@ jQuery(window).on('load',function () {
 	setTimeout(function(){
 			Travl .handleMenuPosition();
 	}, 1000);
+
+	const msg = jQuery('#content_listmsg').find('.dlab-chat-user');
+
+	if(msg.length < 1){
+		jQuery('.delete-all-msg').hide();
+	} else {
+		jQuery('.delete-all-msg').show();
+	}
 	
 	jQuery.ajax({
 		url: window.location.origin +"/dashboard/messages",
@@ -767,11 +775,15 @@ jQuery(window).on('load',function () {
 				if(countRead > 0){
 					jQuery('.pop_msg').show()
 					jQuery('.pop_msg').html(countRead)
+
+					jQuery('.delete-all-msg').show();
 				} else {
+					jQuery('.delete-all-msg').hide();
 					jQuery('.pop_msg').hide()
 				}
 			} else {
 				jQuery('.pop_msg').hide()
+				jQuery('.delete-all-msg').hide();
 			}
 		} else {
 			console.log(data.msg)

@@ -40,20 +40,6 @@
 						</div>
 					</div>
 					<ul class="contacts" id="content_listmsg">
-						<li class="dlab-chat-user bg-primary text-white">
-							<p class="title_msg font-w700 mb-1 text-truncate">Perubahan Status Pengajuan Studi Banding</p>
-							<p class="body_msg mb-1 text-truncate small">Selamat anda telah diterima untuk studi banding</p>
-							<p class="mb-0 small">
-								<font class="date_msg">20 Aug 2022</font> &centerdot; <font class="from_msg">Studi Banding</font>
-							</p>
-						</li>
-						<li class="dlab-chat-user">
-							<p class="title_msg font-w700 mb-1 text-truncate">Perubahan Status Pengajuan Studi Banding</p>
-							<p class="body_msg mb-1 text-truncate small">Selamat anda telah diterima untuk studi banding</p>
-							<p class="mb-0 small">
-								<font class="date_msg">20 Aug 2022</font> &centerdot; <font class="from_msg">Studi Banding</font>
-							</p>
-						</li>
 						<li class="text-center font-w700">Tidak ada pemberitahuan</li>
 					</ul>
 				</div>

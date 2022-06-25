@@ -522,17 +522,21 @@
                 const members = $(this).parent().find('input'),
                       membersNow = parseInt(members.val()),
                       totalMembers = members.parent().parent().parent().parent().find('#totalmember'),
-                      biaya = members.parent().parent().parent().parent().find('#biaya');
+                      biaya = members.parent().parent().parent().parent().find('#biaya'),
+					  modal = $(this).closest('.modal');
+
+				const fee_less = modal.find('.fee_less').data('fee'),
+					  fee_over = modal.find('.fee_over').data('fee');
 
                 if(membersNow > 0){
                     members.val(membersNow + 1).change()
                     totalMembers.html(members.val() + " Orang");
                     
                     if(parseInt(members.val()) < 10){
-                        const cost = 300000 * parseInt(members.val());
+                        const cost = parseInt(fee_less) * parseInt(members.val());
                         biaya.html(`Rp ${currency.format(cost)}`);
                     } else {
-                        const cost = 240000 * parseInt(members.val());
+                        const cost = parseInt(fee_over) * parseInt(members.val());
                         biaya.html(`Rp ${currency.format(cost)}`);
                     }
                 }
@@ -809,32 +813,59 @@
 
             $('#modal_addstudibanding').on('show.bs.modal', function (e) {
                 const modal = $(this);
+				let institution, room, fee;
 
-                $.ajax({
-                    url: '{{ route('get_institutionroom') }}',
-                    type: 'POST',
-                    dataType: 'json'
-                }).done(function (data) {
-                    if(data.success){
-						let html_ = [];
+                $.when(
+					$.ajax({
+						url: '{{ route('get_institutionroom') }}',
+						type: 'POST',
+						dataType: 'json'
+					}).done(function (data) {
+						if(data.success){
+							institution = data.get.institutions,
+							room = data.get.rooms;
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					}),
+					$.ajax({
+						url: '{{ route("get_settings") }}',
+						type: 'POST',
+						data: {name: ['fee']},
+						dataType: 'json',
+						cache: false
+					}).done(function (data) {
+						if(data.success){
+							fee = data.get.value.comparative
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					})
+				).then(function(){
+					let html_ = [];
 
-						$.each(data.get.institutions, function(i, val) {
-							html_.push({id: val.id, text: val.name});
-						})
-						$("#institusi_daftar").html('').select2({data: html_});
-						html_ = [];
-						$.each(data.get.rooms, function(i, val) {
-							html_.push({id: val.id, text: val.name});
-						})
-						$("#rooms_daftar").html('').select2({data: html_});
-					} else {
-						alertError("Terjadi Kesalahan", data.msg)
-					}
-                }).fail(function(data){
-                    resp = JSON.parse(data.responseText)
-                    alertError("Terjadi Kesalahan", resp.message)
-                    console.log("error");
-                }); 
+					$.each(institution, function(i, val) {
+						html_.push({id: val.id, text: val.name});
+					})
+					$("#institusi_daftar").html('').select2({data: html_});
+					html_ = [];
+					$.each(room, function(i, val) {
+						html_.push({id: val.id, text: val.name});
+					})
+					$("#rooms_daftar").html('').select2({data: html_});
+
+					modal.find('.fee_less').attr('data-fee', fee.kurang_dari).html(`Rp ${currency.format(fee.kurang_dari)}`)
+					modal.find('.fee_over').attr('data-fee', fee.lebih_dari).html(`Rp ${currency.format(fee.lebih_dari)}`)
+				})
+
             })
 
 			$('#modal_editstudibanding').on('show.bs.modal', function (e) {
