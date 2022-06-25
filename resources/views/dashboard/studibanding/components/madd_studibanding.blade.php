@@ -153,6 +153,11 @@
                                 <div id="payDaftar" class="collapse show" aria-labelledby="payDaftarAccordion" data-bs-parent="#pay_daftar">
                                     <div class="accordion-body-text">
                                         <div class="row mt-1">
+                                            <div class="col-xl-12">
+                                                <div>
+                                                    <div class="rekening-slider owl-carousel owl-loaded owl-drag"></div>
+                                                </div>
+                                            </div>
                                             <div class="col-12 col-md-6 d-flex align-items-center">
                                                 <i class="fas fa-users fa-3x me-2"></i>
                                                 <div>

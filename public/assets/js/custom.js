@@ -730,6 +730,32 @@
 	
 }();
 
+var copyClipboard = function(text, el) {
+	var copyTest = document.queryCommandSupported('copy');
+
+	if (copyTest === true) {
+		var copyTextArea = document.createElement("textarea");
+		copyTextArea.value = text;
+		document.body.appendChild(copyTextArea);
+		copyTextArea.select();
+		try {
+			var successful = document.execCommand('copy');
+			var msg = successful ? 'Berhasil Copy Text' : 'Terjadi Kesalahan Copy Text';
+			if(successful){
+				alertSuccess(msg, text)
+			} else {
+				alertError(msg, text)
+			}
+		} catch (err) {
+			console.log('Oops, unable to copy');
+		}
+		document.body.removeChild(copyTextArea);
+	} else {
+		// Fallback if browser doesn't support .execCommand('copy')
+		window.prompt("Copy to clipboard: Ctrl+C or Command+C, Enter", text);
+	}
+}
+
 /* Document.ready Start */	
 jQuery(document).ready(function() {
 	$('[data-bs-toggle="popover"]').popover();
@@ -739,6 +765,14 @@ jQuery(document).ready(function() {
 	// $('.btn-delete-msg').on('click', function(e){
 	// 	e.stopPropagation();
 	// })
+
+	// copy function
+	jQuery(document).on('click', '.clipboard-text', function() {
+		var text = $(this).html();
+		var el = $(this);
+
+		copyClipboard(text, el);
+	});
 
 });
 /* Document.ready END */

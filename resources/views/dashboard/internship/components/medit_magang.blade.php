@@ -8,13 +8,13 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" name="id" id="id_bukti" required>
-                <div class="col-12">
+                {{-- <div class="col-12">
                     <div class="alert alert-secondary alert-alt fade show">
                         <h5>Aturan Biaya PKL (Pendaftaran)</h5>
                         <p class="mb-1">Memiliki dokumen MOU dikenakan biaya <span class="badge badge-pill badge-secondary">Rp 150.000</span></p>
                         <p class="mb-1">Tidak memiliki dokumen MOU dikenakan biaya <span class="badge badge-pill badge-secondary">Rp 300.000</span></p>
                     </div>
-                </div>
+                </div> --}}
                 <div class="custom-tab-1">
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
@@ -285,6 +285,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-12">
+                                    <div>
+                                        <div class="rekening-slider owl-carousel owl-loaded owl-drag"></div>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6 mb-2 d-flex align-items-center">

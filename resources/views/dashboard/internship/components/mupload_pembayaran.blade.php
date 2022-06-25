@@ -52,6 +52,11 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-xl-12">
+                        <div>
+                            <div class="rekening-slider owl-carousel owl-loaded owl-drag"></div>
+                        </div>
+                    </div>
                     <div class="col-12 col-sm-6 mb-2 d-flex align-items-center">
                         <i class="fas fa-file fa-2x me-4 text-primary"></i>
                         <div>

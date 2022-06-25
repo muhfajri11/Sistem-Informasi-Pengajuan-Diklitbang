@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/pickadate/themes/default.date.css') }}">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset('assets/vendor/fancyapps/fancy.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/vendor/owl-carousel/owl.carousel.css') }}"></link>
 @endsection
 
 @section('content')
@@ -186,13 +187,57 @@
     <script src="{{ asset('assets/vendor/pickadate/picker.date.js') }}"></script>
 
 	<script src="{{ asset('assets/vendor/fancyapps/fancybox.umd.js') }}"></script>
+	<script src="{{ asset('assets/vendor/owl-carousel/owl.carousel.js') }}"></script>
 
     <script>
+
+		let carousel; //a variable thats hold owlCarousel object
+		const setCarousel = {
+			loop:true,
+			margin:15,
+			nav:true,
+			autoplaySpeed: 3000,
+			navSpeed: 3000,
+			paginationSpeed: 3000,
+			slideSpeed: 3000,
+			smartSpeed: 3000,
+			autoplay: true,
+			animateOut: 'fadeOut',
+			dots:false,
+			navigation:false,
+			navText: ['', ''],
+			responsive:{
+				0:{
+					items:1
+				},
+				
+				768:{
+					items:2
+				},			
+				
+				1400:{
+					items:2
+				},
+				1600:{
+					items:3
+				},
+				1750:{
+					items:3
+				}
+			}
+		}
+		
+		function myCarouselStart() {
+			carousel = $('.rekening-slider').owlCarousel(setCarousel);
+		}
+
         $(document).ready(function(){
             $('.datepicker-default').pickadate({
                 format: 'd mmmm yyyy',
                 formatSubmit: 'yyyy-mm-dd'
             })
+
+			myCarouselStart()
 
 			$('#start_date').pickadate('picker').set("min", "{{ date('Y-m-d') }}")
 			$('#end_date').pickadate('picker').set("disable", true)
@@ -769,7 +814,20 @@
 
 			$('#modal_addmagang, #modal_editmagang').on('show.bs.modal', function (e) {
                 const modal = $(this),
-					  data_id = $(e.relatedTarget).data('id');
+					  data_id = $(e.relatedTarget).data('id'),
+					  htmlBank = `<div class="items">
+										<div class="customers review-slider">
+											<div class="d-flex justify-content-between align-items-center mt-2">
+												<div class="customer-profile d-flex ">
+													<img src="{{ asset('image/assets/no-img.png') }}" alt="" style="width: auto;height: 30px;">
+													<div class="ms-3">
+														<h5 class="mb-0"><a href="javascript:void(0);" class="id-bank text-primary clipboard-text">123-21211-221</a></h5>
+														<span class="font-w700 name-bank">Bank BRI</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>`;
 				let institutions, province, settings = {};
 
                 $.when(
@@ -804,7 +862,7 @@
 					$.ajax({
 						url: '{{ route("get_settings") }}',
 						type: 'POST',
-						data: {name: ['tipe_internship', 'fee', 'jenjang_pendidikan']},
+						data: {name: ['tipe_internship', 'fee', 'jenjang_pendidikan', 'rekening']},
 						dataType: 'json',
 						cache: false
 					}).done(function (data) {
@@ -857,6 +915,19 @@
 					$.each(province, function(i, val) {
 						html_.push({id: val.id, text: val.nama});
 					})
+
+					carousel.trigger("destroy.owl.carousel");
+					modal.find('.rekening-slider').html('')
+					$.each(settings.rekening, function(i, val){
+						let item = $(htmlBank);
+						
+						if(val.image) item.find('img').attr('src', val.image);
+						item.find('.id-bank').html(val.number);
+						item.find('.name-bank').html(val.name);
+
+						modal.find('.rekening-slider').append(item)
+					})
+					myCarouselStart();
 
 					modal.find("select[name='province']").html('').select2({data: html_});
 					if(modal.prop('id') == 'modal_addmagang'){
@@ -990,67 +1061,113 @@
 
 			$('#modal_uploadpembayaran').on('show.bs.modal', function (e) {
 				const modal = $(this),
-					  id = $(e.relatedTarget).data('id');
+					  id = $(e.relatedTarget).data('id'),
+					  htmlBank = `<div class="items">
+										<div class="customers review-slider">
+											<div class="d-flex justify-content-between align-items-center mt-2">
+												<div class="customer-profile d-flex ">
+													<img src="{{ asset('image/assets/no-img.png') }}" alt="" style="width: auto;height: 30px;">
+													<div class="ms-3">
+														<h5 class="mb-0"><a href="javascript:void(0);" class="id-bank text-primary clipboard-text">123-21211-221</a></h5>
+														<span class="font-w700 name-bank">Bank BRI</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>`;
 
 				$('#modal_detailmagang').modal('hide');
 				modal.find('#id_bukti').val(id)
 
-				$.ajax({
-					url: "{{ route('internship.get') }}",
-					data: {id: id},
-					type: 'POST',
-					async:false,
-					dataType: 'json',
-					beforeSend: function(){
-						$('#preloader').removeClass('d-none');
-						$('#main-wrapper').removeClass('show');
-					}
-				}).done(function(data){
-					if(data.success){
-						const btnShowEviden = `
-							<button class="btn btn-secondary btn-xs" data-fancybox></button>`;
-
-						if(data.get.file_internship.mou){
-							modal.find('#docmou_view').html("Punya");
-							modal.find('.have_mou').html(`Punya`)
+				let detail, rekening;
+				$.when(
+					$.ajax({
+						url: "{{ route('internship.get') }}",
+						data: {id: id},
+						type: 'POST',
+						async:false,
+						dataType: 'json',
+						beforeSend: function(){
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function(data){
+						if(data.success){
+							detail = data.get
 						} else {
-							modal.find('#docmou_view').html("Tidak Punya");
-							modal.find('.have_mou').html(`Tidak Punya`)
+							alertError("Berhasil", data.msg)
 						}
 
-						modal.find('.price_havemou').html(`Rp ${currency.format(data.get.mou_price)}`)
-
-						modal.find('.tipe_pkl').html(`${data.get.type}`)
-						modal.find('.price_tipepkl').html(`Rp ${currency.format(data.get.type_price)}`)
-
-						modal.find('.jenjang').html(`${data.get.jenjang}`)
-						modal.find('.price_jenjang').html(`Rp ${currency.format(data.get.jenjang_price)}`)
-
-						modal.find('.price_total').html(`Rp ${currency.format(data.get.total_paid)}`)
-						modal.find('#pay_view').html("Rp " + currency.format(data.get.total_paid));
-
-						if(data.get.file_internship.eviden_paid){
-							const htmlBtn = $(btnShowEviden).html('Lihat Bukti Pembayaran').attr('href', data.get.file_internship.eviden_paid)
-							const check = data.get.file_internship.eviden_paid.split('.')[1];
-							if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
-
-							modal.find('#btn_evidenview').append(htmlBtn)
-						}
-
-						if(data.get.eviden_paid){
-							modal.find('#btn_evidenview').append($(btnShowEviden).attr('href', data.get.eviden_paid))
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+					}).fail(function(data){
+						console.log(data.responseText)
+					}),
+					$.ajax({
+						url: '{{ route("get_settings") }}',
+						type: 'POST',
+						data: {name: ['rekening']},
+						dataType: 'json',
+						cache: false
+					}).done(function (data) {
+						if(data.success){
+							rekening = data.get.value
 						} else {
-							modal.find('#btn_evidenview').html('')
+							alertError("Terjadi Kesalahan", data.msg)
 						}
+					}).fail(function(data){
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					})
+				).then(function(){
+					const btnShowEviden = `
+						<button class="btn btn-secondary btn-xs" data-fancybox></button>`;
+
+					if(detail.file_internship.mou){
+						modal.find('#docmou_view').html("Punya");
+						modal.find('.have_mou').html(`Punya`)
 					} else {
-						alertError("Berhasil", data.msg)
+						modal.find('#docmou_view').html("Tidak Punya");
+						modal.find('.have_mou').html(`Tidak Punya`)
 					}
 
-					$('#preloader').addClass('d-none');
-					$('#main-wrapper').addClass('show');
-				}).fail(function(data){
-					console.log(data.responseText)
-				});
+					carousel.trigger("destroy.owl.carousel");
+					modal.find('.rekening-slider').html('')
+					$.each(rekening, function(i, val){
+						let item = $(htmlBank);
+						
+						if(val.image) item.find('img').attr('src', val.image);
+						item.find('.id-bank').html(val.number);
+						item.find('.name-bank').html(val.name);
+
+						modal.find('.rekening-slider').append(item)
+					})
+					myCarouselStart();
+
+					modal.find('.price_havemou').html(`Rp ${currency.format(detail.mou_price)}`)
+
+					modal.find('.tipe_pkl').html(`${detail.type}`)
+					modal.find('.price_tipepkl').html(`Rp ${currency.format(detail.type_price)}`)
+
+					modal.find('.jenjang').html(`${detail.jenjang}`)
+					modal.find('.price_jenjang').html(`Rp ${currency.format(detail.jenjang_price)}`)
+
+					modal.find('.price_total').html(`Rp ${currency.format(detail.total_paid)}`)
+					modal.find('#pay_view').html("Rp " + currency.format(detail.total_paid));
+
+					if(detail.file_internship.eviden_paid){
+						const htmlBtn = $(btnShowEviden).html('Lihat Bukti Pembayaran').attr('href', detail.file_internship.eviden_paid)
+						const check = detail.file_internship.eviden_paid.split('.')[1];
+						if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
+
+						modal.find('#btn_evidenview').html(htmlBtn)
+					} else {
+						modal.find('#btn_evidenview').html('')
+					}
+				})
+
+				
 			})
 
 			$('#modal_detailmagang').on('show.bs.modal', function (e) {

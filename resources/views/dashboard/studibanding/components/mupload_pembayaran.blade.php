@@ -15,14 +15,14 @@
                             <h4 class="text-right" id="title_view">Lorem ipsum dolor sit amet lorem ipsum dolor sit amet</h4>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 d-flex align-items-center">
+                    <div class="col-12 col-sm-6 mb-2 d-flex align-items-center">
                         <i class="fas fa-users fa-2x me-4 text-primary"></i>
                         <div>
                             <p class="small text-right mb-0">Banyak Pengunjung</p>
                             <h4 class="text-right" id="members_view">1 Orang</h4>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 mt-4 mt-md-0 d-flex align-items-center">
+                    <div class="col-12 col-sm-6 mb-2 mt-md-0 d-flex align-items-center">
                         <i class="fas fa-wallet fa-2x me-4 text-primary"></i>
                         <div>
                             <p class="small text-right mb-0">Biaya Pendaftaran</p>
@@ -30,7 +30,12 @@
                         </div>
                     </div>
                     <input type="hidden" name="id" id="id_bukti" required>
-                    <div class="col-12 mt-2">
+                    <div class="col-xl-12">
+                        <div>
+                            <div class="rekening-slider owl-carousel owl-loaded owl-drag"></div>
+                        </div>
+                    </div>
+                    <div class="col-12">
                         <div class="form-group">
                             <label for="eviden_daftar">Bukti Pembayaran Biaya Studi Banding <span id="btn_evidenview"></span></label>
                             <div class="input-group">

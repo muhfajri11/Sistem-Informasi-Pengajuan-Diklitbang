@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/pickadate/themes/default.date.css') }}">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset('assets/vendor/fancyapps/fancy.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/vendor/owl-carousel/owl.carousel.css') }}"></link>
 	
 @endsection
 
@@ -156,8 +157,49 @@
     <script src="{{ asset('assets/vendor/pickadate/picker.date.js') }}"></script>
 
 	<script src="{{ asset('assets/vendor/fancyapps/fancybox.umd.js') }}"></script>
+	<script src="{{ asset('assets/vendor/owl-carousel/owl.carousel.js') }}"></script>
 
     <script>
+		let carousel; //a variable thats hold owlCarousel object
+		const setCarousel = {
+				loop:true,
+				margin:15,
+				nav:true,
+				autoplaySpeed: 3000,
+				navSpeed: 3000,
+				paginationSpeed: 3000,
+				slideSpeed: 3000,
+				smartSpeed: 3000,
+				autoplay: true,
+				animateOut: 'fadeOut',
+				dots:false,
+				navigation:false,
+				navText: ['', ''],
+				responsive:{
+					0:{
+						items:1
+					},
+					
+					768:{
+						items:2
+					},			
+					
+					1400:{
+						items:2
+					},
+					1600:{
+						items:3
+					},
+					1750:{
+						items:3
+					}
+				}
+			};
+		
+		function myCarouselStart() {
+			carousel = $('.rekening-slider').owlCarousel(setCarousel);
+		}
+
         $(document).ready(function(){
 
             $('.datepicker-default').pickadate({
@@ -166,7 +208,9 @@
                 formatSubmit: 'yyyy-mm-dd',
                 hiddenName: true
             });
-			
+
+			myCarouselStart()
+
 			const setBadgeStatus = status => {
 				switch(status){
 					case "reject":
@@ -813,7 +857,7 @@
 
             $('#modal_addstudibanding').on('show.bs.modal', function (e) {
                 const modal = $(this);
-				let institution, room, fee;
+				let institution, room, settings = {};
 
                 $.when(
 					$.ajax({
@@ -835,12 +879,15 @@
 					$.ajax({
 						url: '{{ route("get_settings") }}',
 						type: 'POST',
-						data: {name: ['fee']},
+						data: {name: ['fee', 'rekening']},
 						dataType: 'json',
 						cache: false
 					}).done(function (data) {
 						if(data.success){
-							fee = data.get.value.comparative
+							data.get.forEach(val => {
+								settings[val.name] = val.value;
+							})
+							console.log(settings)
 						} else {
 							alertError("Terjadi Kesalahan", data.msg)
 						}
@@ -850,7 +897,20 @@
 						console.log("error");
 					})
 				).then(function(){
-					let html_ = [];
+					let html_ = [],
+						htmlBank = `<div class="items">
+										<div class="customers review-slider">
+											<div class="d-flex justify-content-between align-items-center mt-2">
+												<div class="customer-profile d-flex ">
+													<img src="{{ asset('image/assets/no-img.png') }}" alt="" style="width: auto;height: 30px;">
+													<div class="ms-3">
+														<h5 class="mb-0"><a href="javascript:void(0);" class="id-bank text-primary clipboard-text">123-21211-221</a></h5>
+														<span class="font-w700 name-bank">Bank BRI</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>`;
 
 					$.each(institution, function(i, val) {
 						html_.push({id: val.id, text: val.name});
@@ -862,152 +922,226 @@
 					})
 					$("#rooms_daftar").html('').select2({data: html_});
 
-					modal.find('.fee_less').attr('data-fee', fee.kurang_dari).html(`Rp ${currency.format(fee.kurang_dari)}`)
-					modal.find('.fee_over').attr('data-fee', fee.lebih_dari).html(`Rp ${currency.format(fee.lebih_dari)}`)
+					modal.find('.fee_less').attr('data-fee', settings.fee.comparative.kurang_dari).html(`Rp ${currency.format(settings.fee.comparative.kurang_dari)}`)
+					modal.find('.fee_over').attr('data-fee', settings.fee.comparative.lebih_dari).html(`Rp ${currency.format(settings.fee.comparative.lebih_dari)}`)
+
+					carousel.trigger("destroy.owl.carousel");
+					modal.find('.rekening-slider').html('')
+					$.each(settings.rekening, function(i, val){
+						let item = $(htmlBank);
+						
+						if(val.image) item.find('img').attr('src', val.image);
+						item.find('.id-bank').html(val.number);
+						item.find('.name-bank').html(val.name);
+
+						modal.find('.rekening-slider').append(item)
+					})
+					myCarouselStart()
 				})
 
             })
 
 			$('#modal_editstudibanding').on('show.bs.modal', function (e) {
                 const modal = $(this),
-					  data_id = $(e.relatedTarget).data('id');
-
-                $.ajax({
-                    url: '{{ route('get_institutionroom') }}',
-                    type: 'POST',
-                    dataType: 'json'
-                }).done(function (from) {
-                    if(from.success){
-						let html_ = [];
-
-						$.each(from.get.institutions, function(i, val) {
-							html_.push({id: val.id, text: val.name});
-						})
-						$("#institusi_edit").html('').select2({data: html_});
-						html_ = [];
-						$.each(from.get.rooms, function(i, val) {
-							html_.push({id: val.id, text: val.name});
-						})
-						$("#rooms_edit").html('').select2({data: html_});
-						$("#id_bukti").val(data_id);
-
-						$.ajax({
-							url: "{{ route('studi_banding.get') }}",
-							data: {id: data_id},
-							type: 'POST',
-							async:false,
-							dataType: 'json',
-							beforeSend: function(){
-								$('#preloader').removeClass('d-none');
-								$('#main-wrapper').removeClass('show');
-							}
-						}).done(function(data){
-							if(data.success){
-								console.log(data.get)
-								let rooms = ``, rooms_id = [];
-								const btnLampiran = `
-										<button class="btn btn-secondary btn-xs ms-2" data-fancybox data-type="pdf">
-											Lihat Permohonan
-										</button>`, 
-									btnShowEviden = `
-										<button class="btn btn-secondary btn-xs ms-2" data-fancybox>
-											Lihat Bukti Pembayaran
-										</button>`,
-									formName = `
-										<div class="form-group form_name mb-2">
-											<div class="input-group">
-												<button class="btn btn-dark btn-disabled" type="button" disabled>1</button>
-												<input type="text" name="names[]" class="form-control" required>
+					  data_id = $(e.relatedTarget).data('id'),
+					  htmlBank = `<div class="items">
+										<div class="customers review-slider">
+											<div class="d-flex justify-content-between align-items-center mt-2">
+												<div class="customer-profile d-flex ">
+													<img src="{{ asset('image/assets/no-img.png') }}" alt="" style="width: auto;height: 30px;">
+													<div class="ms-3">
+														<h5 class="mb-0"><a href="javascript:void(0);" class="id-bank text-primary clipboard-text">123-21211-221</a></h5>
+														<span class="font-w700 name-bank">Bank BRI</span>
+													</div>
+												</div>
 											</div>
-										</div>`,
-									formQuestion = `
-										<div class="form-group form_question mb-2">
-											<div class="input-group">
-												<input type="text" name="questions[]" class="form-control" required>
-												<button class="btn btn-danger delete_question" type="button">-</button>
-											</div>
-										</div>`,
-									formDoc = `
-										<div class="form-group form_doc mb-2">
-											<div class="input-group">
-												<input type="text" name="docs[]" class="form-control" required>
-												<button class="btn btn-danger delete_doc" type="button">-</button>
-											</div>
-										</div>`;
+										</div>
+									</div>`;
+				
+				let institution, room, detail, settings = {};
 
-								$.each(data.get.rooms, function(i, val){
-									rooms_id.push(val.id);
-								})
-								
-								modal.find('#judul_edit').val(data.get.title);
-								modal.find('#institusi_edit').val(data.get.institution.id).change();
-								modal.find('#kunjungan_edit').pickadate('picker').set('select', `${data.get.visited}`, { format: 'yyyy-mm-dd' });
-								modal.find('#pengunjung_edit').val(data.get.member);
-								modal.find('#rooms_edit').val(rooms_id).change()
+				$.when(
+					$.ajax({
+						url: '{{ route('get_institutionroom') }}',
+						type: 'POST',
+						dataType: 'json'
+					}).done(function (from) {
+						if(from.success){
+							institution = from.get.institutions,
+							room = from.get.rooms							
+						} else {
+							alertError("Terjadi Kesalahan", from.msg)
+						}
+					}).fail(function(data){
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					}),
+					$.ajax({
+						url: "{{ route('studi_banding.get') }}",
+						data: {id: data_id},
+						type: 'POST',
+						async:false,
+						dataType: 'json',
+						beforeSend: function(){
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function(data){
+						if(data.success){
+							detail = data.get
+						} else {
+							alertError("Berhasil", data.msg)
+						}
 
-								modal.find('.list_name').html('')
-								$.each(data.get.names, function(i, val){
-									const names_input = $(formName);
-									names_input.find('input[name="names[]"]').val(val);
-									names_input.find('button').html(i + 1);
-									modal.find('.list_name').append(names_input);
-								})
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+					}).fail(function(data){
+						console.log(data.responseText)
+					}),
+					$.ajax({
+						url: '{{ route("get_settings") }}',
+						type: 'POST',
+						data: {name: ['fee', 'rekening']},
+						dataType: 'json',
+						cache: false
+					}).done(function (data) {
+						if(data.success){
+							data.get.forEach(val => {
+								settings[val.name] = val.value;
+							})
+							console.log(settings)
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					})
+				)
+				.then(function(){
+					let html_ = [];
 
-								$.each(data.get.questions, function(i, val){
-									if(i == 0){
-										modal.find('input[name="questions[]"]').val(val);
-									} else {
-										const question_input = $(formQuestion);
-										question_input.find('input[name="questions[]"]').val(val);
-										modal.find('.list_question').append(question_input);
-									}
-								})
-								
-								$.each(data.get.docs, function(i, val){
-									if(i == 0){
-										modal.find('input[name="docs[]"]').val(val);
-									} else {
-										const doc_input = $(formDoc);
-										doc_input.find('input[name="docs[]"]').val(val);
-										modal.find('.list_doc').append(doc_input);
-									}
-								})
+					$.each(institution, function(i, val) {
+						html_.push({id: val.id, text: val.name});
+					})
+					$("#institusi_edit").html('').select2({data: html_});
+					html_ = [];
+					$.each(room, function(i, val) {
+						html_.push({id: val.id, text: val.name});
+					})
+					$("#rooms_edit").html('').select2({data: html_});
 
-								modal.find('#totalmember').html(data.get.member + " Orang");
-                    
-								if(parseInt(data.get.member) < 10){
-									const cost = 300000 * parseInt(data.get.member);
-									modal.find('#biaya').html(`Rp ${currency.format(cost)}`);
-								} else {
-									const cost = 240000 * parseInt(data.get.member);
-									modal.find('#biaya').html(`Rp ${currency.format(cost)}`);
-								}
+					modal.find('.fee_less').attr('data-fee', settings.fee.comparative.kurang_dari).html(`Rp ${currency.format(settings.fee.comparative.kurang_dari)}`)
+					modal.find('.fee_over').attr('data-fee', settings.fee.comparative.lebih_dari).html(`Rp ${currency.format(settings.fee.comparative.lebih_dari)}`)
 
-								modal.find('#btnedit_attachview').append($(btnLampiran).attr('href', data.get.permohonan))
-								if(data.get.eviden_paid){
-									htmlBtn = $(btnShowEviden).attr('href', data.get.eviden_paid)
-									check = data.get.eviden_paid.split('.')[1];
-									if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
+					carousel.trigger("destroy.owl.carousel");
+					modal.find('.rekening-slider').html('')
+					$.each(settings.rekening, function(i, val){
+						let item = $(htmlBank);
+						
+						if(val.image) item.find('img').attr('src', val.image);
+						item.find('.id-bank').html(val.number);
+						item.find('.name-bank').html(val.name);
 
-									modal.find('#btnedit_evidenview').html(htmlBtn)
-								}
-							} else {
-								alertError("Berhasil", data.msg)
-							}
+						modal.find('.rekening-slider').append(item)
+					})
+					myCarouselStart();
 
-							$('#preloader').addClass('d-none');
-							$('#main-wrapper').addClass('show');
-						}).fail(function(data){
-							console.log(data.responseText)
-						});
+					let rooms = ``, rooms_id = [];
+					const btnLampiran = `
+							<button class="btn btn-secondary btn-xs ms-2" data-fancybox data-type="pdf">
+								Lihat Permohonan
+							</button>`, 
+						btnShowEviden = `
+							<button class="btn btn-secondary btn-xs ms-2" data-fancybox>
+								Lihat Bukti Pembayaran
+							</button>`,
+						formName = `
+							<div class="form-group form_name mb-2">
+								<div class="input-group">
+									<button class="btn btn-dark btn-disabled" type="button" disabled>1</button>
+									<input type="text" name="names[]" class="form-control" required>
+								</div>
+							</div>`,
+						formQuestion = `
+							<div class="form-group form_question mb-2">
+								<div class="input-group">
+									<input type="text" name="questions[]" class="form-control" required>
+									<button class="btn btn-danger delete_question" type="button">-</button>
+								</div>
+							</div>`,
+						formDoc = `
+							<div class="form-group form_doc mb-2">
+								<div class="input-group">
+									<input type="text" name="docs[]" class="form-control" required>
+									<button class="btn btn-danger delete_doc" type="button">-</button>
+								</div>
+							</div>`;
+
+					$("#id_bukti").val(data_id);
+
+					$.each(detail.rooms, function(i, val){
+						rooms_id.push(val.id);
+					})
+					
+					modal.find('#judul_edit').val(detail.title);
+					modal.find('#institusi_edit').val(detail.institution.id).change();
+					modal.find('#kunjungan_edit').pickadate('picker').set('select', `${detail.visited}`, { format: 'yyyy-mm-dd' });
+					modal.find('#pengunjung_edit').val(detail.member);
+					modal.find('#rooms_edit').val(rooms_id).change()
+
+					modal.find('.list_name').html('')
+					$.each(detail.names, function(i, val){
+						const names_input = $(formName);
+						names_input.find('input[name="names[]"]').val(val);
+						names_input.find('button').html(i + 1);
+						modal.find('.list_name').append(names_input);
+					})
+
+					$.each(detail.questions, function(i, val){
+						if(i == 0){
+							modal.find('input[name="questions[]"]').val(val);
+						} else {
+							const question_input = $(formQuestion);
+							question_input.find('input[name="questions[]"]').val(val);
+							modal.find('.list_question').append(question_input);
+						}
+					})
+					
+					$.each(detail.docs, function(i, val){
+						if(i == 0){
+							modal.find('input[name="docs[]"]').val(val);
+						} else {
+							const doc_input = $(formDoc);
+							doc_input.find('input[name="docs[]"]').val(val);
+							modal.find('.list_doc').append(doc_input);
+						}
+					})
+
+					modal.find('#totalmember').html(detail.member + " Orang");
+
+					const less = modal.find('.fee_less').data('fee'),
+						  over = modal.find('.fee_over').data('fee');
+		
+					if(parseInt(detail.member) < 10){
+						const cost = parseInt(less) * parseInt(detail.member);
+						modal.find('#biaya').html(`Rp ${currency.format(cost)}`);
 					} else {
-						alertError("Terjadi Kesalahan", from.msg)
+						const cost = parseInt(over) * parseInt(detail.member);
+						modal.find('#biaya').html(`Rp ${currency.format(cost)}`);
 					}
-                }).fail(function(data){
-                    resp = JSON.parse(data.responseText)
-                    alertError("Terjadi Kesalahan", resp.message)
-                    console.log("error");
-                }); 
+
+					modal.find('#btnedit_attachview').append($(btnLampiran).attr('href', detail.permohonan))
+					if(detail.eviden_paid){
+						htmlBtn = $(btnShowEviden).attr('href', detail.eviden_paid)
+						check = detail.eviden_paid.split('.')[1];
+						if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
+
+						modal.find('#btnedit_evidenview').html(htmlBtn)
+					}
+				})
             })
 
 			$('#modal_detailstudibanding').on('show.bs.modal', function (e) {
@@ -1090,45 +1224,92 @@
 
 			$('#modal_uploadpembayaran').on('show.bs.modal', function (e) {
 				const modal = $(this),
-					  id = $(e.relatedTarget).data('id');
+					  id = $(e.relatedTarget).data('id'),
+					  htmlBank = `<div class="items">
+										<div class="customers review-slider">
+											<div class="d-flex justify-content-between align-items-center mt-2">
+												<div class="customer-profile d-flex ">
+													<img src="{{ asset('image/assets/no-img.png') }}" alt="" style="width: auto;height: 30px;">
+													<div class="ms-3">
+														<h5 class="mb-0"><a href="javascript:void(0);" class="id-bank text-primary clipboard-text">123-21211-221</a></h5>
+														<span class="font-w700 name-bank">Bank BRI</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>`;
 
 				$('#modal_detailstudibanding').modal('hide');
 				modal.find('#id_bukti').val(id)
 
-				$.ajax({
-					url: "{{ route('studi_banding.get') }}",
-					data: {id: id},
-					type: 'POST',
-					async:false,
-					dataType: 'json',
-					beforeSend: function(){
-						$('#preloader').removeClass('d-none');
-						$('#main-wrapper').removeClass('show');
-					}
-				}).done(function(data){
-					if(data.success){
-						const btnShowEviden = `
-							<button class="btn btn-secondary btn-xs" data-fancybox>
-								Lihat Bukti Pembayaran
-							</button>`;
+				let rekening, detail;
 
-						modal.find('#title_view').html(data.get.title);
-						modal.find('#members_view').html(data.get.members);
-						modal.find('#pay_view').html("Rp " + currency.format(data.get.total_paid));
-						if(data.get.eviden_paid){
-							modal.find('#btn_evidenview').append($(btnShowEviden).attr('href', data.get.eviden_paid))
+				$.when(
+					$.ajax({
+						url: "{{ route('studi_banding.get') }}",
+						data: {id: id},
+						type: 'POST',
+						async:false,
+						dataType: 'json'
+					}).done(function(data){
+						if(data.success){
+							detail = data.get;
 						} else {
-							modal.find('#btn_evidenview').html('')
+							alertError("Berhasil", data.msg)
 						}
+					}).fail(function(data){
+						console.log(data.responseText)
+					}),
+					$.ajax({
+						url: '{{ route("get_settings") }}',
+						type: 'POST',
+						data: {name: ['rekening']},
+						dataType: 'json',
+						cache: false
+					}).done(function (data) {
+						if(data.success){
+							rekening = data.get.value
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					})
+				)
+				.then(function(){
+					const btnShowEviden = `
+						<button class="btn btn-secondary btn-xs" data-fancybox>
+							Lihat Bukti Pembayaran
+						</button>`;
+
+					modal.find('#title_view').html(detail.title);
+					modal.find('#members_view').html(detail.members);
+					modal.find('#pay_view').html("Rp " + currency.format(detail.total_paid));
+					if(detail.eviden_paid){
+						htmlBtn = $(btnShowEviden).attr('href', detail.eviden_paid)
+						check = detail.eviden_paid.split('.')[1];
+						if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
+
+						modal.find('#eviden_view').html(htmlBtn)
 					} else {
-						alertError("Berhasil", data.msg)
+						modal.find('#btn_evidenview').html('')
 					}
 
-					$('#preloader').addClass('d-none');
-					$('#main-wrapper').addClass('show');
-				}).fail(function(data){
-					console.log(data.responseText)
-				});
+					carousel.trigger("destroy.owl.carousel");
+					modal.find('.rekening-slider').html('')
+					$.each(rekening, function(i, val){
+						let item = $(htmlBank);
+						
+						if(val.image) item.find('img').attr('src', val.image);
+						item.find('.id-bank').html(val.number);
+						item.find('.name-bank').html(val.name);
+
+						modal.find('.rekening-slider').append(item)
+					})
+					myCarouselStart();
+				})
 			})
 
 			$('#data_reviews, #data_payments').on('click', ".delete_studibanding", function(e){

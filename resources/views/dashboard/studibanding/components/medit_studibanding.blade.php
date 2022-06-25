@@ -12,8 +12,8 @@
                     <div class="col-12">
                         <div class="alert alert-secondary alert-alt fade show">
                             <h5>Aturan Biaya Studi Banding</h5>
-                            <p class="mb-1">Untuk pengunjung yang <span class="badge badge-pill badge-dark">< 10</span> dikenakan biaya <span class="badge badge-pill badge-secondary">Rp 300.000</span></p>
-                            <p class="mb-0">Untuk pengunjung yang <span class="badge badge-pill badge-dark">> 10</span> dikenakan biaya <span class="badge badge-pill badge-secondary">Rp 240.000</span></p>
+                            <p class="mb-1">Untuk pengunjung yang <span class="badge badge-pill badge-dark">< 10</span> dikenakan biaya <span class="badge badge-pill badge-secondary fee_less">Rp 300.000</span></p>
+                            <p class="mb-0">Untuk pengunjung yang <span class="badge badge-pill badge-dark">> 10</span> dikenakan biaya <span class="badge badge-pill badge-secondary fee_over">Rp 240.000</span></p>
                         </div>
                     </div>
                     <div class="col-12 mb-4">
@@ -154,6 +154,11 @@
                                 <div id="payEdit" class="collapse show" aria-labelledby="payEditAccordion" data-bs-parent="#pay_edit">
                                     <div class="accordion-body-text">
                                         <div class="row mt-1">
+                                            <div class="col-xl-12">
+                                                <div>
+                                                    <div class="rekening-slider owl-carousel owl-loaded owl-drag"></div>
+                                                </div>
+                                            </div>
                                             <div class="col-12 col-md-6 d-flex align-items-center">
                                                 <i class="fas fa-users fa-3x me-2"></i>
                                                 <div>
