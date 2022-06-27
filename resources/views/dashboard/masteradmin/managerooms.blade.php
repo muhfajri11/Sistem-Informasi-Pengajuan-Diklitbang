@@ -31,7 +31,7 @@
                     </button>
                 </div>
                 <div class="table-responsive">
-                    <table id="data_rooms" class="display dt-responsive">
+                    <table id="data_rooms" class="display" style="width: 100%">
                         <thead>
                             <tr>
                                 <th>Ruangan</th>
@@ -299,9 +299,10 @@
 					$('#main-wrapper').addClass('show');
 					
 					if(data.success){
+						console.log(data)
 						modal.find('#id_edit').val(data_id);
-						modal.find('#nama_edit').val(data.name);
-						modal.find('#rate_edit').val(data.rate).change()
+						modal.find('#nama_edit').val(data.get.name);
+						modal.find('#rate_edit').val(data.get.rate).change()
 					} else {
 						alertError('Terjadi Kesalahan', data.msg)
 					}

@@ -47,7 +47,7 @@
 											</div>
 										</div>
 										<div class="table-responsive">
-											<table id="data_users" class="display dt-responsive">
+											<table id="data_users" class="display" style="width: 100%">
 												<thead>
 													<tr>
 														<th>#</th>
@@ -77,7 +77,7 @@
 											</button>
 										</div>
 										<div class="table-responsive">
-											<table id="data_roles" class="display dt-responsive">
+											<table id="data_roles" class="display" style="width: 100%">
 												<thead>
 													<tr>
 														<th>Nama</th>

@@ -29,8 +29,17 @@ class RoomController extends Controller
         $req = $request->all();
         $rooms = Room::find($req['id']);
 
-        echo json_encode($rooms);
-        exit;
+        if(!$rooms){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'Terjadi Kesalahan'
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'get'     => $rooms
+        ], 200);
     }
 
     public function check(Request $request){

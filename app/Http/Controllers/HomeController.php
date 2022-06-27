@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\{User, Comparative, Internship};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,8 +14,16 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
-        return view('index');
+    {   
+        $intern = Internship::all();
+        $comparative = Comparative::all();
+
+        $data = [
+            'internship' => $intern,
+            'comparative' => $comparative,
+        ];
+
+        return view('index', compact('data'));
     }
 
     public function verifyemail(Request $request){

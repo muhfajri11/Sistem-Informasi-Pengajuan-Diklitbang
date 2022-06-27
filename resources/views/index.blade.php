@@ -50,22 +50,36 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12 col-md-6 col-lg-4 section-1-box wow fadeInDown">
+                <div class="col-12 col-md-6 section-1-box wow fadeInDown">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex align-items-center">
-                                <div class="card p-4 bg-danger" style="box-shadow: none;">
-                                    <i class="fas fa-arrow-left fa-2x text-white" style="opacity: 1;"></i>
+                                <div class="card p-4 bg-main" style="box-shadow: none;">
+                                    <i class="far fa-users-class fa-2x text-white" style="opacity: .85;"></i>
                                 </div>
                                 <div class="ml-3 text-left">
-                                    <h4 class="my-0 font-weight-bold">1234123412341234</h4>
-                                    <p class="mb-0">Card title</p>
+                                    <h3 class="my-0 font-weight-bold">{{ count($data['comparative']) }} Pengaju</h3>
+                                    <p class="my-0">Total Pengaju Studi Banding</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+                <div class="col-12 col-md-6 section-1-box wow fadeInDown">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="card p-4 bg-main" style="box-shadow: none;">
+                                    <i class="far fa-graduation-cap fa-2x text-white" style="opacity: .85;"></i>
+                                </div>
+                                <div class="ml-3 text-left">
+                                    <h3 class="my-0 font-weight-bold">{{ count($data['internship']) }} Pengaju</h3>
+                                    <p class="my-0">Total Pengaju PKL</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -84,11 +98,11 @@
             </div>
             <div class="row">
                 <div class="col section-bottom-button wow fadeInUp">
-                    <a class="btn btn-primary btn-customized-2 scroll-link" href="#section-6" role="button">
-                        <i class="fas fa-envelope"></i> Contact Us
+                    <a class="btn btn-primary btn-customized-2 scroll-link" href="mailto:rsgj_cirebon@gmail.com" role="button">
+                        <i class="fas fa-envelope"></i> Email
                     </a>
-                    <a class="btn btn-primary btn-customized-2 scroll-link" href="#section-6" role="button">
-                        <i class="fas fa-envelope"></i> Contact Us
+                    <a class="btn btn-primary btn-customized-2 scroll-link" href="https://wa.me/6289603022112" role="button" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Whatsapp
                     </a>
                 </div>
             </div>
