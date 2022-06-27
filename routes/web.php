@@ -45,6 +45,7 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
     Route::post('/messages/{admin?}', 'DashboardController@get_messages')->name('messages');
     Route::post('/messages/read_msg/{get?}', 'DashboardController@read_message')->name('messages.read');
     Route::delete('/messages/delete/{msg_id?}', 'DashboardController@delete_message')->name('messages.delete');
+    Route::delete('/messages/delete_all', 'DashboardController@delete_msgall')->name('messages.delete_all');
     
     Route::name('manage_role.')->prefix('manajemenrole')->group(function() {
         Route::post('/users', 'DashboardController@get_users')->name('users');

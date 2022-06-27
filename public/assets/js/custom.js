@@ -322,6 +322,7 @@
 				console.log("error");
 			})
 		});
+
 		jQuery('.chatbox-close').on('click',function(){
 			jQuery('.chatbox').removeClass('active');
 			jQuery('#contentload_listmsg').addClass('d-none').fadeIn('slow')
@@ -377,8 +378,9 @@
 				}
 			}).done(function (data) {
 				if(data.success){
+					console.log(data.get)
 					const container = jQuery('#content_msg .col-12'),
-						  dateCreate = new Date(data.get.updated_at);
+						  dateCreate = new Date(data.get.created_at);
 
 					const ucwords = function(str) {
 						return (str + '').replace(/^([a-z])|\s+([a-z])/g, function ($1) {
@@ -399,10 +401,10 @@
 					if(data.get.comparative){
 						container.find('.additional_contentmsg').html(`
 							<dt>Tema Pertemuan</dt>
-							<dd>${data.get.internship.title}</dd>
+							<dd>${data.get.comparative.title}</dd>
 
 							<dt>Insitusi</dt>
-							<dd>${data.get.internship.insitution.name}</dd>
+							<dd>${data.get.comparative.institution.name}</dd>
 						`);
 					}
 					container.closest('.dlab-chat-history-box').find('.from_contentmsg').html(ucwords(data.get.from))

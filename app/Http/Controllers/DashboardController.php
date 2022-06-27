@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\{Comparative, Institution, Internship, Message, Room, Setting, User};
-
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -18,7 +18,49 @@ class DashboardController extends Controller
     }
 
     public function index(){
-        return view('dashboard.index');
+        $intern = [
+            'all'       => count(Internship::all()),
+            'accept'    => count(Internship::where('status', 'accept')->get()),
+        ];
+
+        $comparative = [
+            'all'       => count(Comparative::all()),
+            'accept'    => count(Comparative::where('status', 'accept')->get()),
+        ];
+
+        $institutions = Institution::all();
+        $rooms = Room::all();
+
+        $intern['presentase'] = ($intern['accept']/$intern['all']) * 100;
+        $comparative['presentase'] = ($comparative['accept']/$comparative['all']) * 100;
+
+        $data = [
+            'internship'    => $intern,
+            'comparative'   => $comparative,
+            'institutions'   => count($institutions),
+            'rooms'          => count($rooms)
+        ];
+
+        if(!auth()->user()->hasRole('user')){
+            $msg = Message::with('user')->get();
+
+            $msg->each(function($data){
+                switch($data['from']){
+                    case "internship":
+                        $data->table = Internship::find($data['table_id']);
+                        $data->from = "Praktek Kerja Lapangan";
+                    break;
+                    case "comparative":
+                        $data->table = Comparative::find($data['table_id']);
+                        $data->from = "Studi Banding";
+                    break;
+                }
+            });
+
+            $data['message'] = $msg;
+        }
+
+        return view('dashboard.index', compact('data'));
     }
 
     public function manage_role(){
@@ -302,10 +344,10 @@ class DashboardController extends Controller
             $msg = Message::with('user')->find($request->id);
             switch($msg->from){
                 case "internship":
-                    $msg->internship = Internship::find($msg->table_id);
+                    $msg->internship = Internship::with('institution')->find($msg->table_id);
                 break;
                 case "comparative":
-                    $msg->comparative = Comparative::find($msg->table_id);
+                    $msg->comparative = Comparative::with('institution')->find($msg->table_id);
                 break;
             }
             $data = ['success' => true, 'msg' => "Berhasil membaca pesan", 'get' => $msg];
@@ -333,6 +375,22 @@ class DashboardController extends Controller
         }
 
         return response()->json($data, 200);
+    }
+
+    public function delete_msgall(){
+        $delete = Message::truncate();
+
+        if(!$delete){
+            return response()->json([
+                'success' => false,
+                'msg'     => "Terjadi Kesalahan"
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg'     => "Berhasil menghapus semua pesan"
+        ], 200);
     }
 
     public function get_settings(Request $request){
