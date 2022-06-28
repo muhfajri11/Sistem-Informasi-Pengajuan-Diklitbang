@@ -20,6 +20,46 @@
         </div>
     </div>
 
+	<div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+		<div class="widget-stat card bg-secondary">
+			<div class="card-body  p-4">
+				<div class="media">
+					<span class="me-3">
+						<i class="far fa-graduation-cap"></i>
+					</span>
+					<div class="media-body text-white">
+						<p class="mb-0">PKL (Diterima)</p>
+						<h3 class="text-white mb-2 mt-1">{{ count($data['internship']['accept']) }}</h3>
+						<div class="progress mb-2 bg-secondary">
+							<div class="progress-bar progress-animated bg-white" style="width: {{ $data['internship']['presentase_accept'] }}%"></div>
+						</div>
+						<small>{{ count($data['internship']['accept']) }}/{{ count($data['internship']['all']) }} Pengaju (Kuota Diterima: {{ $data['kuota_pkl'] }})</small>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+		<div class="widget-stat card bg-dark">
+			<div class="card-body  p-4">
+				<div class="media">
+					<span class="me-3">
+						<i class="far fa-graduation-cap"></i>
+					</span>
+					<div class="media-body text-white">
+						<p class="mb-0">PKL (Waiting)</p>
+						<h3 class="text-white mb-2 mt-1">{{ count($data['internship']['waiting']) }}</h3>
+						<div class="progress mb-2 bg-secondary">
+							<div class="progress-bar progress-animated bg-white" style="width: {{ $data['internship']['presentase_waiting'] }}%"></div>
+						</div>
+						<small>{{ count($data['internship']['waiting']) }}/{{ count($data['internship']['all']) }} Pengaju</small>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
     <div class="col-12">
         <div class="card">
             <div class="card-body">

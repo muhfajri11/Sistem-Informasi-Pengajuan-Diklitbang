@@ -34,11 +34,15 @@ class DashboardController extends Controller
         $intern['presentase'] = ($intern['accept']/$intern['all']) * 100;
         $comparative['presentase'] = ($comparative['accept']/$comparative['all']) * 100;
 
+        $max_intern = Setting::byName(['kuota']);
+        $max_intern = $max_intern->value->internship;
+
         $data = [
             'internship'    => $intern,
             'comparative'   => $comparative,
             'institutions'   => count($institutions),
-            'rooms'          => count($rooms)
+            'rooms'          => count($rooms),
+            'kuota_pkl'     => $max_intern
         ];
 
         if(!auth()->user()->hasRole('user')){

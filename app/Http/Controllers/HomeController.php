@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{User, Comparative, Internship};
+use App\{User, Comparative, Internship, Setting};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,10 +17,13 @@ class HomeController extends Controller
     {   
         $intern = Internship::all();
         $comparative = Comparative::all();
+        $max_intern = Setting::byName(['kuota']);
+        $max_intern = $max_intern->value->internship;
 
         $data = [
             'internship' => $intern,
             'comparative' => $comparative,
+            'kuota_pkl'   => $max_intern
         ];
 
         return view('index', compact('data'));

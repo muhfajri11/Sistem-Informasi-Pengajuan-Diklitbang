@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\{Internship, FileInternship, Comparative, Message, Room};
+use App\{Internship, FileInternship, Comparative, Message, Room, Setting};
 use App\Mail\SendMail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\{Mail, Storage};
 
 class ApprovementController extends Controller
 {
@@ -16,7 +15,25 @@ class ApprovementController extends Controller
     }
 
     public function internship_approve(){
-        return view('dashboard.internship.persetujuan');
+        $intern = Internship::all();
+        $accept = Internship::where('status', 'accept')->get();
+        $waiting = Internship::whereIn('status', ['review', 'pay'])->get();
+
+        $max_intern = Setting::byName(['kuota']);
+        $max_intern = $max_intern->value->internship;
+        
+        $data = [
+            'internship'    => [
+                'all'           => $intern,
+                'accept'        => $accept,
+                'waiting'        => $waiting,
+                'presentase_accept'    => (count($accept)/count($intern)) * 100,
+                'presentase_waiting'    => (count($waiting)/count($intern)) * 100
+            ],
+            'kuota_pkl'     => $max_intern
+        ];
+
+        return view('dashboard.internship.persetujuan', compact('data'));
     }
 
     public function comparative_approve(){

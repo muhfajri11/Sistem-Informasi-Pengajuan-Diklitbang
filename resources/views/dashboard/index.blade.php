@@ -37,7 +37,7 @@
                             <div class="progress mb-2 bg-secondary">
                                 <div class="progress-bar progress-animated bg-white" style="width: {{ $data['internship']['presentase'] }}%"></div>
                             </div>
-                            <small>{{ $data['internship']['accept'] }}/{{ $data['internship']['all'] }} Pengaju</small>
+                            <small>{{ $data['internship']['accept'] }}/{{ $data['internship']['all'] }} Pengaju (Kuota Diterima: {{ $data['kuota_pkl'] }})</small>
                         </div>
                     </div>
                 </div>
