@@ -2,9 +2,11 @@
     <div class="card border-0 pb-0">
         <div class="card-header border-0 pb-0 d-flex justify-content-between">
             <h4 class="card-title text-secondary"><i class="fas fa-envelope me-2"></i> Pesan Semua Akun</h4>
-            <button type="button" class="btn btn-danger btn-sm light sharp" id="delete-all">
-                <i class="fas fa-trash"></i> Delete All
-            </button>
+            @if (count($data['message']) > 0)
+                <button type="button" class="btn btn-danger btn-sm light sharp" id="delete-all">
+                    <i class="fas fa-trash"></i> Delete All
+                </button>
+            @endif
         </div>
         <div class="card-body px-0"> 
             <div id="DZ_W_Todo3" class="widget-media overflow-auto px-4" style="max-height: 23.5em">

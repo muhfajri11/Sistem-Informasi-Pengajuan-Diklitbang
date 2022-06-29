@@ -104,6 +104,16 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::delete('/delete', 'InternshipController@delete')->name('delete');
     });
 
+    Route::name('setting.')->prefix('setting')->group(function() {
+        Route::post('/tipepkl_all', 'SettingController@tipepkl_all')->name('tipepkl_all');
+        Route::post('/jenjang_all', 'SettingController@jenjang_all')->name('jenjang_all');
+
+        Route::post('/getdata', 'SettingController@get_data')->name('get_data');
+        Route::patch('/updatedata', 'SettingController@update_data')->name('update_data');
+
+        Route::post('/delete_spesific', 'SettingController@delete_spesific')->name('delete_spesific');
+    });
+
     Route::post('/get_institusi', 'InstitutionController@get')->name('get_institution');
     Route::post('/verify_institusi', 'InstitutionController@check')->name('verify_institution');
     Route::post('/store_institusi', 'InstitutionController@store')->name('store_institution');

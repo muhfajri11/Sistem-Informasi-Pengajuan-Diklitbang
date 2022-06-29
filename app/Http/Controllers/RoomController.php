@@ -89,7 +89,10 @@ class RoomController extends Controller
     public function delete_room(){
         $req = request()->all();
 
-        $room = Room::find($req['id'])->delete();
+        $room = Room::find($req['id']);
+        
+        $room->comparatives()->detach();
+        $room->delete();
 
         if(!$room){
             return response()->json([

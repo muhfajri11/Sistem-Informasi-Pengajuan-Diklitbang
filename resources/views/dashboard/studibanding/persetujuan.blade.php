@@ -697,7 +697,7 @@
                         
                         if(modal.attr('id') == 'modal_ubahstatus'){
                             modal.find('#title_status').html(data.get.title)
-                            modal.find('#institusi_status').html(data.get.institution.name)
+                            modal.find('#institusi_status').html(data.get.institution? data.get.institution.name : "Tidak ada")
                             modal.find('#status_status').html(setBadgeStatus(data.get.status))
                             modal.find('#statuspay_status').html(setBadgePay(data.get.paid))
                             
@@ -714,7 +714,7 @@
                             modal.find('#eviden_status').html(check)
                         } else {
                             modal.find('#title_msg').html(data.get.title)
-                            modal.find('#institusi_msg').html(data.get.institution.name)
+                            modal.find('#institusi_msg').html(data.get.institution ? data.get.institution.name : "Tidak ada")
                             modal.find('#mail_msg').html(data.get.user.email)
                         }
 					} else {
@@ -782,8 +782,8 @@
 						})
 
 						modal.find('#title_view').html(data.get.title);
-						modal.find('#rooms_view').html(rooms);
-						modal.find('#institution_view').html(data.get.institution.name);
+						modal.find('#rooms_view').html(rooms? rooms : "Belum memilih");
+						modal.find('#institution_view').html(data.get.institution? data.get.institution.name : "Tidak ada");
 						modal.find('#visit_view').html(data.get.visit);
 						modal.find('#members_view').html(data.get.members);
 						modal.find('#pay_view').html("Rp " + currency.format(data.get.total_paid));

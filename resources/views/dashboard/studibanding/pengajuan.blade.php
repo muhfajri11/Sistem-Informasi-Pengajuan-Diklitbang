@@ -1087,7 +1087,7 @@
 					})
 					
 					modal.find('#judul_edit').val(detail.title);
-					modal.find('#institusi_edit').val(detail.institution.id).change();
+					modal.find('#institusi_edit').val(detail.institution? detail.institution.id : "").change();
 					modal.find('#kunjungan_edit').pickadate('picker').set('select', `${detail.visited}`, { format: 'yyyy-mm-dd' });
 					modal.find('#pengunjung_edit').val(detail.member);
 					modal.find('#rooms_edit').val(rooms_id).change()
@@ -1176,8 +1176,8 @@
 						})
 
 						modal.find('#title_view').html(data.get.title);
-						modal.find('#rooms_view').html(rooms);
-						modal.find('#institution_view').html(data.get.institution.name);
+						modal.find('#rooms_view').html(rooms? rooms : "Belum memilih");
+						modal.find('#institution_view').html(data.get.institution ? data.get.institution.name : "Tidak ada");
 						modal.find('#visit_view').html(data.get.visit);
 						modal.find('#members_view').html(data.get.members);
 						modal.find('#pay_view').html("Rp " + currency.format(data.get.total_paid));

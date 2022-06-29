@@ -60,6 +60,120 @@
 		</div>
 	</div>
 
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body pb-0 pt-1">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item d-flex px-0 justify-content-between">
+						<strong>Biaya MOU (Punya)</strong>
+						<span class="mb-0">{{ "Rp " . number_format($data['fee']->internship->mou,2,',','.') }}</span>
+					</li>
+					<li class="list-group-item d-flex px-0 justify-content-between">
+						<strong>Biaya MOU (Tidak Punya)</strong>
+						<span class="mb-0">{{ "Rp " . number_format($data['fee']->internship->no_mou,2,',','.') }}</span>
+					</li>
+					<li class="list-group-item d-flex px-0 justify-content-between">
+						<strong>Kuota Penerimaan PKL</strong>
+						<span class="mb-0">{{ $data['kuota_pkl'] }}</span>
+					</li>
+				</ul>
+			</div>
+			<div class="card-footer pt-0 pb-0 text-center">
+				<div class="row">
+					<div class="col-4 pt-3 pb-3 border-end">
+						<h3 class="mb-1 text-primary">{{ count($data['internship']['waiting']) }}</h3>
+						<span>Waiting</span>
+					</div>
+					<div class="col-4 pt-3 pb-3 border-end">
+						<h3 class="mb-1 text-primary">{{ count($data['internship']['accept']) }}</h3>
+						<span>Diterima</span>
+					</div>
+					<div class="col-4 pt-3 pb-3">
+						<h3 class="mb-1 text-primary">{{ count($data['internship']['done']) }}</h3>
+						<span>Selesai</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="custom-tab-1">
+					<ul class="nav nav-tabs">
+						<li class="nav-item">
+							<a href="#tipepkl" data-bs-toggle="tab" class="nav-table nav-link active show">Tipe PKL</a>
+						</li>
+						<li class="nav-item">
+							<a href="#jenjangpend" data-bs-toggle="tab" class="nav-table nav-link">Jenjang Pend.</a>
+						</li>
+					</ul>
+					<div class="tab-content pt-4">
+						<div id="tipepkl" class="tab-pane fade active show">
+							<div class="row">
+								<div class="col-12">
+									<div class="d-flex justify-content-between mb-4">
+										<h3 class="font-weight-bold">
+                                            Tipe PKL
+                                        </h3>
+										<button type="button" data-table="#data_tipepkl" class="btn btn-rounded btn-primary btn_refresh">
+											<span class="btn-icon-start text-primary">
+												<i class="fas fa-sync-alt"></i>
+											</span> Refresh Data
+										</button>
+									</div>
+									<div class="table-responsive">
+										<table id="data_tipepkl" class="display" style="width: 100%">
+											<thead>
+												<tr>
+													<th>Nama</th>
+													<th>Biaya</th>
+													<th>Action</th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="jenjangpend" class="tab-pane fade">
+							<div class="row">
+								<div class="col-12">
+									<div class="d-flex justify-content-between mb-4">
+										<h3 class="font-weight-bold">
+                                            Jenjang Pendidikan
+                                        </h3>
+										<button type="button" data-table="#data_jenjangpend" class="btn btn-rounded btn-primary btn_refresh">
+											<span class="btn-icon-start text-primary">
+												<i class="fas fa-sync-alt"></i>
+											</span> Refresh Data
+										</button>
+									</div>
+									<div class="table-responsive">
+										<table id="data_jenjangpend" class="display" style="width: 100%">
+											<thead>
+												<tr>
+													<th>Nama</th>
+													<th>Biaya</th>
+													<th>Action</th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+            </div>
+        </div>
+    </div>
+
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -232,6 +346,9 @@
     @include('dashboard.internship.components.modal_rooms')
 
 	@include('dashboard.internship.components.modal_sertifikat')
+	
+	@include('dashboard.internship.components.medit_tipepkl')
+	@include('dashboard.internship.components.medit_jenjang')
 @endsection
 
 @section('script')
@@ -341,7 +458,9 @@
 			const dataReviews = setDatatables,
                   dataPayments = setDatatables,
                   dataAccept = setDatatables,
-				  dataDone = setDatatables;
+				  dataDone = setDatatables,
+				  dataTipe = setDatatables,
+				  dataJenjang = setDatatables;
 
             $.extend(dataReviews, {
                 "ajax": {
@@ -416,7 +535,53 @@
                 ]
             })
 
-            let reviews_datatable = $('#data_reviews').DataTable(dataReviews);
+			let reviews_datatable = $('#data_reviews').DataTable(dataReviews);
+
+			$.extend(dataTipe, {
+                "ajax": {
+                    "type": "POST",
+                    "url": `{{ route('setting.tipepkl_all') }}`,
+                    "timeout": 120000
+                },
+                "aoColumns": [
+                    {
+                        "mData": null,
+                        "render": function (data, row, type, meta) {
+                            return data.name;
+                        }
+                    },
+                    {
+                        "mData": null,
+                        "render": function (data, row, type, meta) {
+                            return data.fee;
+                        }
+                    },
+                    {
+                        "mData": null,
+                        "sortable": false,
+                        "render": function (data, row, type, meta) {
+                            
+                            let btn = `
+								<div class="btn-group">
+									<button data-list="${ data.name }" data-name="tipe_internship"
+										class="btn btn-warning shadow btn-xs px-2"
+										data-bs-toggle="modal" data-bs-target="#modal_edittipepkl" data-from="#data_tipepkl">
+										<i class="fas fa-cog me-1"></i>
+									</button>
+									<button class="btn btn-danger shadow btn-xs px-2 delete_setting"
+										data-list="${ data.name }" data-name="tipe_internship" data-from="#data_tipepkl">
+										<i class="fas fa-trash me-1"></i>
+									</button>
+								</div>`;
+
+                            return btn;
+                        }
+                    }
+                ]
+            })
+
+			let tipepkl_datatable = $('#data_tipepkl').DataTable(dataTipe);
+			// $.fn.DataTable.isDataTable('#data_tipepkl')
 
 			const reloadData = idTag => {
 				let text = '';
@@ -425,6 +590,8 @@
 					case '#data_payments': text = "Reload Data Payments"; break;
 					case '#data_accepts': text = "Reload Data Accepts"; break;
 					case '#data_dones': text = "Reload Data Lulus"; break;
+					case '#data_tipepkl': text = "Reload Data Tipe PKL"; break;
+					case '#data_jenjangpend': text = "Reload Data Jenjang Pendidikan"; break;
 				}
 
 				$(idTag).DataTable().ajax.reload(function(){
@@ -706,6 +873,63 @@
 							reloadData('#data_dones')
 						}
 					break;
+					case 'tipepkl':
+						if(!$.fn.DataTable.isDataTable('#data_tipepkl')){
+							$('#data_tipepkl').DataTable(dataTipe);
+						} else {
+							reloadData('#data_tipepkl')
+						}
+					break;
+					case 'jenjangpend':
+					if(!$.fn.DataTable.isDataTable('#data_jenjangpend')){
+							$.extend(dataDone, {
+                                "ajax": {
+                                    "type": "POST",
+                                    "url": `{{ route('setting.jenjang_all') }}`,
+                                    "timeout": 120000
+                                },
+                                "aoColumns": [
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.name;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "render": function (data, row, type, meta) {
+                                            return data.fee;
+                                        }
+                                    },
+                                    {
+                                        "mData": null,
+                                        "sortable": false,
+                                        "render": function (data, row, type, meta) {
+                                            
+                                            let btn = `
+                                                <div class="btn-group">
+                                                    <button data-list="${ data.name }" data-name="jenjang_pendidikan"
+                                                        class="btn btn-warning shadow btn-xs px-2"
+                                                        data-bs-toggle="modal" data-bs-target="#modal_editjenjang" data-from="#data_jenjangpend">
+														<i class="fas fa-cog me-1"></i>
+                                                    </button>
+													<button class="btn btn-danger shadow btn-xs px-2 delete_setting"
+														data-list="${ data.name }" data-name="jenjang_pendidikan" data-from="#data_jenjangpend">
+														<i class="fas fa-trash me-1"></i>
+													</button>
+                                                </div>`;
+
+                                            return btn;
+                                        }
+                                    }
+                                ]
+                            })
+
+							$('#data_jenjangpend').DataTable(dataJenjang);
+						} else {
+							reloadData('#data_jenjangpend')
+						}
+					break;
 				}
 			}
 
@@ -791,7 +1015,7 @@
 
 						modal.find('#name_view').html(data.get.name);
 						modal.find('#nim_view').html(data.get.nim);
-						modal.find('#institusi_view').html(data.get.institution.name);
+						modal.find('#institusi_view').html((data.get.institution? data.get.institution.name: "Tidak ada"));
 						modal.find('#semester_view').html(`Semester ${data.get.semester}`);
 						modal.find('#jurusan_view').html(data.get.jurusan);
 						modal.find('#type_view').html(data.get.type);
@@ -906,6 +1130,19 @@
 							modal.find('#evidenpaid_view').html(btnEviden)
 						}
 
+						if(data.get.file_internship.sertifikat){
+							htmlBtn = $(htmlBtnShow).attr({
+								href: data.get.file_internship.sertifikat,
+								"data-type": 'pdf'
+							})
+
+							modal.find('.is_sertifikat').removeClass('d-none')
+							modal.find('#sertifikat_view').html(htmlBtn)
+						} else {
+							modal.find('.is_sertifikat').addClass('d-none')
+							modal.find('#sertifikat_view').html('')
+						}
+
 						$.when(
 							$.ajax({
 								url: 'https://dev.farizdotid.com/api/daerahindonesia/provinsi/' + data.get.province,
@@ -1015,7 +1252,7 @@
                     
                     modal.find('#name_room').html(intern.name)
                     modal.find('#jurusan_room').html(intern.jurusan)
-                    modal.find('#institusi_room').html(intern.institution.name)
+                    modal.find('#institusi_room').html(intern.institution?intern.institution.name:"Tidak ada")
                     check = intern.file_internship.bukti_pkl? 
                         $(btnShowEviden).attr('href', intern.file_internship.bukti_pkl) :
                         `<strong>Tidak ada pengalaman</strong>`;
@@ -1024,6 +1261,88 @@
                     
                 })
             })
+
+			$('#modal_edittipepkl, #modal_editjenjang').on('show.bs.modal', function (e) {
+                const modal = $(this),
+                      name    = $(e.relatedTarget).data('name'),
+					  list    = $(e.relatedTarget).data('list'),
+					  from = $(e.relatedTarget).data('from');
+
+                $.ajax({
+					url: "{{ route('setting.get_data') }}",
+					data: {name: name, list: list},
+					type: 'POST',
+					async:false,
+					dataType: 'json',
+					beforeSend: function(){
+						$('#preloader').removeClass('d-none');
+						$('#main-wrapper').removeClass('show');
+					}
+				}).done(function(data){
+					if(data.success){
+						modal.find('#id_bukti').val(data.get.name)
+						modal.find('#tipe_bukti').val(name)
+
+						modal.find('input[name="name"]').val(data.get.name)
+						modal.find('input[name="fee"]').val(data.get.fee)
+
+						modal.find('form').attr('data-table', from)
+					} else {
+						alertError("Error", data.msg)
+					}
+
+					$('#preloader').addClass('d-none');
+					$('#main-wrapper').addClass('show');
+				}).fail(function(data){
+					$('#preloader').addClass('d-none');
+					$('#main-wrapper').addClass('show');
+					console.log(data.responseText)
+				});
+            })
+
+			$('#data_tipepkl, #data_jenjangpend')
+			.on('click', ".delete_setting", function(e){
+				e.preventDefault();
+				const list = $(this).data('list'),
+					  name = $(this).data('name'),
+					  id_elm = $(this).data('from');
+
+				Swal.fire({
+					title: `Apakah kamu yakin ingin menghapus ${list}?`,
+					showDenyButton: true,
+					showConfirmButton: false,
+					showCancelButton: true,
+					denyButtonText: `Hapus`
+				}).then((result) => {
+					if (result.isDenied) {
+						$.ajax({
+							url: "{{ route('setting.delete_spesific') }}",
+							data: {list: list, name: name},
+							type: 'POST',
+							async:false,
+							dataType: 'json',
+							beforeSend: function(){
+								$('#preloader').removeClass('d-none');
+								$('#main-wrapper').removeClass('show');
+							}
+						}).done(function(data){
+							if(data.success){
+								alertWarning("Berhasil Data", data.msg)
+								reloadData(id_elm)
+							} else {
+								alertError("Terjadi Kesalahan", data.msg)
+							}
+
+							$('#preloader').addClass('d-none');
+							$('#main-wrapper').addClass('show');
+						}).fail(function(data){
+							$('#preloader').addClass('d-none');
+							$('#main-wrapper').addClass('show');
+							console.log(data.responseText)
+						});
+					}
+				})
+			})
 
             $('#modal_ubahstatus, #modal_sendmsg, #modal_sertifikat').on('show.bs.modal', function (e) {
                 const modal = $(this),
@@ -1051,7 +1370,7 @@
                         if(modal.attr('id') == 'modal_ubahstatus' || modal.attr('id') == 'modal_sertifikat'){
                             modal.find('#name_status').html(data.get.name)
                             modal.find('#jurusan_status').html(data.get.jurusan)
-                            modal.find('#institusi_status').html(data.get.institution.name)
+                            modal.find('#institusi_status').html(data.get.institution?data.get.institution.name: "Tidak ada")
                             modal.find('#status_status').html(setBadgeStatus(data.get.status))
                             modal.find('#statuspay_status').html(setBadgePay(data.get.paid))
 
@@ -1081,7 +1400,7 @@
                         } else {
                             modal.find('#name_msg').html(data.get.name)
                             modal.find('#jurusan_msg').html(data.get.jurusan)
-                            modal.find('#institusi_msg').html(data.get.institution.name)
+                            modal.find('#institusi_msg').html(data.get.institution? data.get.institution.name : "Tidak ada")
                             modal.find('#mail_msg').html(data.get.user.email)
                         }
 					} else {
@@ -1319,6 +1638,94 @@
 						
 						if(data.success){
 							alertSuccess("Berhasil", data.msg)
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					});   
+				}
+			})
+
+			$('#edit_tipepkl').validate({
+				rules:{
+					name: { required: true, alphanumeric: true },
+					fee: { required: true, number: true, min: 0 },
+				},
+				submitHandler: function (form) {
+                    const dataForm = $(form).serializeObject(),
+                          table = $(form).data('table');
+						dataForm._method = "_PATCH";
+						
+					$.ajax({
+						url: "{{ route('setting.update_data') }}",
+						type: 'PATCH',
+						data: dataForm,
+						beforeSend: function(){
+							const modal = $(form).closest('.modal');
+
+							modal.modal('hide')
+							$(form)[0].reset();
+
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function (data) {						
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						
+						if(data.success){
+							alertSuccess("Berhasil", data.msg)
+							reloadData(table)
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					});   
+				}
+			})
+
+			$('#edit_jenjang').validate({
+				rules:{
+					name: { required: true, alphanumeric: true },
+					fee: { required: true, number: true, min: 0 },
+				},
+				submitHandler: function (form) {
+                    const dataForm = $(form).serializeObject(),
+                          table = $(form).data('table');
+						dataForm._method = "_PATCH";
+						
+					$.ajax({
+						url: "{{ route('setting.update_data') }}",
+						type: 'PATCH',
+						data: dataForm,
+						beforeSend: function(){
+							const modal = $(form).closest('.modal');
+
+							modal.modal('hide')
+							$(form)[0].reset();
+
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function (data) {						
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						
+						if(data.success){
+							alertSuccess("Berhasil", data.msg)
+							reloadData(table)
 						} else {
 							alertError("Terjadi Kesalahan", data.msg)
 						}

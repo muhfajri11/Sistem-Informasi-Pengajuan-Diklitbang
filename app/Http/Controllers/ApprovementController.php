@@ -18,19 +18,23 @@ class ApprovementController extends Controller
         $intern = Internship::all();
         $accept = Internship::where('status', 'accept')->get();
         $waiting = Internship::whereIn('status', ['review', 'pay'])->get();
+        $done = Internship::whereIn('status', ['reject', 'done'])->get();
 
         $max_intern = Setting::byName(['kuota']);
         $max_intern = $max_intern->value->internship;
+        $fee = Setting::byName(['fee'])->value;
         
         $data = [
             'internship'    => [
                 'all'           => $intern,
                 'accept'        => $accept,
                 'waiting'        => $waiting,
+                'done'        => $done,
                 'presentase_accept'    => (count($accept)/count($intern)) * 100,
                 'presentase_waiting'    => (count($waiting)/count($intern)) * 100
             ],
-            'kuota_pkl'     => $max_intern
+            'kuota_pkl'     => $max_intern,
+            'fee'           => $fee
         ];
 
         return view('dashboard.internship.persetujuan', compact('data'));

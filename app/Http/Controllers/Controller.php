@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use PDO;
 
 class Controller extends BaseController
 {
@@ -38,6 +39,11 @@ class Controller extends BaseController
         $result = \Storage::delete($name_file);
 
         return $result;
+    }
+
+    public function rupiah($angka){
+        $hasil_rupiah = "Rp " . number_format($angka,2,',','.');
+	    return $hasil_rupiah;
     }
 
 }

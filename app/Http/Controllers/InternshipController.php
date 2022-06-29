@@ -49,7 +49,7 @@ class InternshipController extends Controller
             $response[$i]['id'] = $data['id'];
             $response[$i]['file_internship_id'] = $data['file_internship_id'];
             $response[$i]['name'] = $data['name'];
-            $response[$i]['institution'] = $data['institution']->name;
+            $response[$i]['institution'] = $data['institution']? $data['institution']->name : null;
             $response[$i]['jurusan'] = ucwords($data['jurusan']);
             $response[$i]['start_date'] = Carbon::createFromFormat('Y-m-d', $data['start_date'])->format('d F Y');
             $response[$i]['end_date'] = Carbon::createFromFormat('Y-m-d', $data['end_date'])->format('d F Y');

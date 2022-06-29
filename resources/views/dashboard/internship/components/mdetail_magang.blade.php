@@ -226,9 +226,13 @@
                                     <p class="small text-right mb-0">Pengalaman PKL</p>
                                     <div class="text-right" id="buktipkl_view"></div>
                                 </div>
-                                <div class="col-12 mb-2">
+                                <div class="col-6 mb-2">
                                     <p class="small text-right mb-0">Bukti Pembayaran</p>
                                     <div class="text-right" id="evidenpaid_view"></div>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <p class="small text-right mb-0 is_sertifikat d-none">Sertifikat Kelulusan</p>
+                                    <div class="text-right" id="sertifikat_view"></div>
                                 </div>
                             </div>
                         </div>

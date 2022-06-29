@@ -964,7 +964,7 @@
 							modal.find('input[name="name"]').val(data.get.name)
 							modal.find('input[name="nim"]').val(data.get.nim)
 							modal.find('input[name="jurusan"]').val(data.get.jurusan)
-							modal.find('select[name="institusi"]').val(data.get.institution_id).change()
+							modal.find('select[name="institusi"]').val(data.get.institutions? data.get.institution_id: "").change()
 							modal.find('input[name="semester"]').val(data.get.semester)
 							modal.find('select[name="type"]').val(data.get.type).change()
 							modal.find('select[name="jenjang"]').val(data.get.jenjang).change()
@@ -1195,7 +1195,7 @@
 
 						modal.find('#name_view').html(data.get.name);
 						modal.find('#nim_view').html(data.get.nim);
-						modal.find('#institusi_view').html(data.get.institution.name);
+						modal.find('#institusi_view').html(data.get.institution ? data.get.institution.name : "Tidak ada");
 						modal.find('#semester_view').html(`Semester ${data.get.semester}`);
 						modal.find('#jurusan_view').html(data.get.jurusan);
 						modal.find('#type_view').html(data.get.type);
@@ -1308,6 +1308,19 @@
 							modal.find('#evidenpaid_view').html(htmlBtn)
 						} else {
 							modal.find('#evidenpaid_view').html(btnEviden)
+						}
+
+						if(data.get.file_internship.sertifikat){
+							htmlBtn = $(htmlBtnShow).attr({
+								href: data.get.file_internship.sertifikat,
+								"data-type": 'pdf'
+							})
+
+							modal.find('.is_sertifikat').removeClass('d-none')
+							modal.find('#sertifikat_view').html(htmlBtn)
+						} else {
+							modal.find('.is_sertifikat').addClass('d-none')
+							modal.find('#sertifikat_view').html('')
 						}
 
 						$.when(

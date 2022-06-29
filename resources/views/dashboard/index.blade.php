@@ -203,6 +203,13 @@
                             if(data.success){
                                 alertWarning("Berhasil", data.msg)
                                 elm.parent().parent().remove();
+
+                                const timeline = $('.timeline');
+
+                                if(timeline.find('li').length == 0){
+                                    timeline.html('<li class="text-center font-w700">Tidak pesan yang tersimpan</li>')
+                                    $('#delete-all').remove();
+                                }
                             } else {
                                 alertError("Terjadi Kesalahan", data.msg)
                             }
@@ -245,6 +252,7 @@
                                 const html = `<li class="text-center font-w700">Tidak pesan yang tersimpan</li>`;
 
                                 $('.timeline').html($(html))
+                                $('#delete-all').remove();
                             } else {
                                 alertError("Terjadi Kesalahan", data.msg)
                             }

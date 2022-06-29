@@ -50,7 +50,7 @@ class Internship extends Model
 
         $interns = self::whereIn('status', ['review', 'pay', 'accept'])->get();
 
-        if(count($interns) == $kuota) return false; // load kuota penuh
+        if(count($interns) >= $kuota) return false; // load kuota penuh
 
         return true;
     }

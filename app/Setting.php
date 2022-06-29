@@ -56,4 +56,30 @@ class Setting extends Model
 
         return false;
     }
+
+    public static function deleteValueSpecific($data){
+        /**
+         * 'name' => 'parent data',
+         * 'list' => 'name in list'
+         */
+
+        $setting = self::getValueSpecific($data); //check is have value
+        $result = [];
+
+        if($setting){
+            $setting = self::where('name', $data['name'])->get()->first();
+
+            $setting->value = json_decode($setting->value);
+
+            foreach($setting->value as $value){
+                if($value->name != $data['list']){
+                    $result[] = $value;
+                }
+            }
+
+            return $result;
+        }
+
+        return false;
+    }
 }
