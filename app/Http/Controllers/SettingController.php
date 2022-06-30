@@ -7,6 +7,24 @@ use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
+    public function get_settings(Request $request){
+        $name = $request->name;
+
+        $settings = Setting::byName($name);
+
+        if(!$settings){
+            return response()->json([
+                'success' => false,
+                'msg'     => 'Terjadi Kesalahan mengambil data setting'
+            ], 200);   
+        }
+
+        return response()->json([
+            'success' => true,
+            'get'    => $settings
+        ], 200);
+    }
+
     public function tipepkl_all(){
         $tipepkl = Setting::byName(['tipe_internship']);
         $result = $tipepkl->value;

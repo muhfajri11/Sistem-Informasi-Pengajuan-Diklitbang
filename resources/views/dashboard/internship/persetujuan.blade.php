@@ -64,17 +64,17 @@
 		<div class="card">
 			<div class="card-body pb-0 pt-1">
 				<ul class="list-group list-group-flush">
-					<li class="list-group-item d-flex px-0 justify-content-between">
+					<li class="list-group-item d-flex px-0 justify-content-between list-button" data-bs-toggle="modal" data-bs-target="#modal_settingpkl">
 						<strong>Biaya MOU (Punya)</strong>
-						<span class="mb-0">{{ "Rp " . number_format($data['fee']->internship->mou,2,',','.') }}</span>
+						<span class="mb-0 fee_mou">{{ "Rp " . number_format($data['fee']->internship->mou,2,',','.') }}</span>
 					</li>
-					<li class="list-group-item d-flex px-0 justify-content-between">
+					<li class="list-group-item d-flex px-0 justify-content-between list-button" data-bs-toggle="modal" data-bs-target="#modal_settingpkl">
 						<strong>Biaya MOU (Tidak Punya)</strong>
-						<span class="mb-0">{{ "Rp " . number_format($data['fee']->internship->no_mou,2,',','.') }}</span>
+						<span class="mb-0 fee_nomou">{{ "Rp " . number_format($data['fee']->internship->no_mou,2,',','.') }}</span>
 					</li>
-					<li class="list-group-item d-flex px-0 justify-content-between">
+					<li class="list-group-item d-flex px-0 justify-content-between list-button" data-bs-toggle="modal" data-bs-target="#modal_settingpkl">
 						<strong>Kuota Penerimaan PKL</strong>
-						<span class="mb-0">{{ $data['kuota_pkl'] }}</span>
+						<span class="mb-0 kuota_pkl">{{ $data['kuota_pkl'] }}</span>
 					</li>
 				</ul>
 			</div>
@@ -349,6 +349,7 @@
 	
 	@include('dashboard.internship.components.medit_tipepkl')
 	@include('dashboard.internship.components.medit_jenjang')
+	@include('dashboard.internship.components.modal_settingpkl')
 @endsection
 
 @section('script')
@@ -955,6 +956,22 @@
 				reloadData(id_elm);
 			})
 
+			$('#modal_settingpkl').on('click', '.min_members', function(e){
+                e.preventDefault();
+                const members = $(this).parent().find('input'),
+                      membersNow = parseInt(members.val())
+
+                if(membersNow > 1) members.val(membersNow - 1)
+            })
+
+            $('#modal_settingpkl').on('click', '.add_members', function(e){
+                e.preventDefault();
+                const members = $(this).parent().find('input'),
+                      membersNow = parseInt(members.val())
+
+                if(membersNow > 0) members.val(membersNow + 1)
+            })
+
             $('.nav-daftar').on('shown.bs.tab', function (event) {
 				const active = event.target, // newly activated tab
 					previousActive = event.relatedTarget,	// previous active tab
@@ -1183,6 +1200,36 @@
 					console.log(data.responseText)
 				});
 			})
+
+			$('#modal_settingpkl').on('show.bs.modal', function (e) {
+                const modal = $(this);
+
+				$.ajax({
+					url: "{{ route('get_settings') }}",
+					data: {name: ['fee', 'kuota']},
+					type: 'POST',
+					async:false,
+					dataType: 'json'
+				}).done(function (data) {
+					if(data.success){
+						const settings = {};
+
+						data.get.forEach(val => {
+							settings[val.name] = val.value;
+						})
+						
+						modal.find('input[name="mou"]').val(settings.fee.internship.mou)
+						modal.find('input[name="no_mou"]').val(settings.fee.internship.no_mou)
+						modal.find('input[name="kuota"]').val(settings.kuota.internship)
+					} else {
+						alertError("Terjadi Kesalahan", data.msg)
+					}
+				}).fail(function(data){
+					resp = JSON.parse(data.responseText)
+					alertError("Terjadi Kesalahan", resp.message)
+					console.log("error");
+				})
+            })
 
             $('#modal_setruangan').on('show.bs.modal', function (e) {
                 const modal = $(this),
@@ -1726,6 +1773,54 @@
 						if(data.success){
 							alertSuccess("Berhasil", data.msg)
 							reloadData(table)
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					});   
+				}
+			})
+
+			$('#setting_pkl').validate({
+				rules:{
+					mou: { required: true, number: true, min: 0 },
+					no_mou: { required: true, number: true, min: 0 },
+					kuota: { required: true, digits: true, min: 1 },
+				},
+				submitHandler: function (form) {
+                    const dataForm = $(form).serializeObject();
+					
+					dataForm._method = "_PATCH";
+						
+					$.ajax({
+						url: "{{ route('setting.set_pkl') }}",
+						type: 'PATCH',
+						data: dataForm,
+						beforeSend: function(){
+							const modal = $(form).closest('.modal');
+
+							modal.modal('hide')
+							$(form)[0].reset();
+
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function (data) {						
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						
+						if(data.success){
+							alertSuccess("Berhasil", data.msg)
+
+							$('.fee_mou').html(`Rp ${currency.format(dataForm.mou)}`)
+							$('.fee_nomou').html(`Rp ${currency.format(dataForm.no_mou)}`)
+							$('.kuota_pkl').html(dataForm.kuota)
 						} else {
 							alertError("Terjadi Kesalahan", data.msg)
 						}

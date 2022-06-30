@@ -41,7 +41,24 @@ class ApprovementController extends Controller
     }
 
     public function comparative_approve(){
-        return view('dashboard.studibanding.persetujuan');
+        $intern = Comparative::all();
+        $accept = Comparative::where('status', 'accept')->get();
+        $waiting = Comparative::whereIn('status', ['review', 'pay'])->get();
+
+        $fee = Setting::byName(['fee'])->value;
+        
+        $data = [
+            'comparative'    => [
+                'all'           => $intern,
+                'accept'        => $accept,
+                'waiting'        => $waiting,
+                'presentase_accept'    => (count($accept)/count($intern)) * 100,
+                'presentase_waiting'    => (count($waiting)/count($intern)) * 100
+            ],
+            'fee'           => $fee
+        ];
+
+        return view('dashboard.studibanding.persetujuan', compact('data'));
     }
 
     public function changestatus(Request $request){
@@ -406,6 +423,64 @@ class ApprovementController extends Controller
         return response()->json([
             'success' => true,
             'msg'    => "Berhasil mengirim pesan ke ".$details['email']
-        ], 200);    
+        ], 200);
+    }
+
+    public function setting_pkl(Request $request){
+        $store = $request->all();
+        $setting = Setting::byName(['fee', 'kuota']);
+        unset($store['_method']);
+
+        $settings = [];
+        foreach($setting as $data){
+            $settings[$data->name] = $data->value;
+        }
+
+        $settings['kuota']->internship = $request->kuota;
+        $settings['fee']->internship->mou = $request->mou;
+        $settings['fee']->internship->no_mou = $request->no_mou;        
+
+        $update = Setting::where('name', 'kuota')->update(['value' => json_encode($settings['kuota'])]);
+        if(!$update){
+            return response()->json([
+                'success' => false,
+                'msg'    => "Terjadi kesalahan menyimpan data kuota"
+            ], 200);
+        }
+
+        $update = Setting::where('name', 'fee')->update(['value' => json_encode($settings['fee'])]);
+        if(!$update){
+            return response()->json([
+                'success' => false,
+                'msg'    => "Terjadi kesalahan menyimpan data fee"
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg'    => "Berhasil mengatur data PKL"
+        ], 200);
+    }
+
+    public function setting_comparative(Request $request){
+        $store = $request->all();
+        $setting = Setting::byName(['fee']);
+        unset($store['_method']);
+
+        $setting->value->comparative->kurang_dari = $request->less;
+        $setting->value->comparative->lebih_dari = $request->over;
+
+        $update = Setting::where('name', 'fee')->update(['value' => json_encode($setting->value)]);
+        if(!$update){
+            return response()->json([
+                'success' => false,
+                'msg'    => "Terjadi kesalahan menyimpan data fee"
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg'    => "Berhasil mengatur data PKL"
+        ], 200);
     }
 }

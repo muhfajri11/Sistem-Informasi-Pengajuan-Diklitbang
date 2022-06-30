@@ -37,7 +37,6 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
 
     Route::post('/institutionroom', 'DashboardController@get_institutionroom')->name('get_institutionroom');
     Route::post('/institution', 'DashboardController@get_institutions')->name('get_institutions');
-    Route::post('/settings', 'DashboardController@get_settings')->name('get_settings');
     
     Route::post('/send_msg', 'ApprovementController@send_message')->name('send_msg');
     Route::post('/changestatus', 'ApprovementController@changestatus')->name('changestatus');
@@ -104,6 +103,7 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::delete('/delete', 'InternshipController@delete')->name('delete');
     });
 
+    Route::post('/settings', 'SettingController@get_settings')->name('get_settings');
     Route::name('setting.')->prefix('setting')->group(function() {
         Route::post('/tipepkl_all', 'SettingController@tipepkl_all')->name('tipepkl_all');
         Route::post('/jenjang_all', 'SettingController@jenjang_all')->name('jenjang_all');
@@ -112,6 +112,9 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::patch('/updatedata', 'SettingController@update_data')->name('update_data');
 
         Route::post('/delete_spesific', 'SettingController@delete_spesific')->name('delete_spesific');
+
+        Route::patch('/setting_pkl', 'ApprovementController@setting_pkl')->name('set_pkl');
+        Route::patch('/setting_comparative', 'ApprovementController@setting_comparative')->name('set_comparative');
     });
 
     Route::post('/get_institusi', 'InstitutionController@get')->name('get_institution');

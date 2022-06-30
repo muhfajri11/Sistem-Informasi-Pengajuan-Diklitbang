@@ -20,6 +20,63 @@
         </div>
     </div>
 
+    <div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+		<div class="widget-stat card bg-secondary">
+			<div class="card-body  p-4">
+				<div class="media">
+					<span class="me-3">
+						<i class="far fa-graduation-cap"></i>
+					</span>
+					<div class="media-body text-white">
+						<p class="mb-0">Studi Banding (Diterima)</p>
+						<h3 class="text-white mb-2 mt-1">{{ count($data['comparative']['accept']) }}</h3>
+						<div class="progress mb-2 bg-secondary">
+							<div class="progress-bar progress-animated bg-white" style="width: {{ $data['comparative']['presentase_accept'] }}%"></div>
+						</div>
+						<small>{{ count($data['comparative']['accept']) }}/{{ count($data['comparative']['all']) }} Pengaju</small>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-xl-3 col-xxl-6 col-lg-6 col-sm-6">
+		<div class="widget-stat card bg-dark">
+			<div class="card-body  p-4">
+				<div class="media">
+					<span class="me-3">
+						<i class="far fa-graduation-cap"></i>
+					</span>
+					<div class="media-body text-white">
+						<p class="mb-0">Studi Banding (Waiting)</p>
+						<h3 class="text-white mb-2 mt-1">{{ count($data['comparative']['waiting']) }}</h3>
+						<div class="progress mb-2 bg-secondary">
+							<div class="progress-bar progress-animated bg-white" style="width: {{ $data['comparative']['presentase_waiting'] }}%"></div>
+						</div>
+						<small>{{ count($data['comparative']['waiting']) }}/{{ count($data['comparative']['all']) }} Pengaju</small>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item d-flex px-0 justify-content-between list-button" data-bs-toggle="modal" data-bs-target="#modal_settingfee">
+						<strong>Biaya (< 10) Orang Kunjungan <span class="small">(/Orang)</span></strong>
+						<span class="mb-0 fee_less">{{ "Rp " . number_format($data['fee']->comparative->kurang_dari,2,',','.') }}</span>
+					</li>
+					<li class="list-group-item d-flex px-0 justify-content-between list-button" data-bs-toggle="modal" data-bs-target="#modal_settingfee">
+						<strong>Biaya (> 10) Orang Kunjungan <span class="small">(/Orang)</span></strong>
+						<span class="mb-0 fee_over">{{ "Rp " . number_format($data['fee']->comparative->lebih_dari,2,',','.') }}</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -190,6 +247,8 @@
     @include('dashboard.studibanding.components.modal_status')
 
     @include('dashboard.studibanding.components.modal_message')
+
+    @include('dashboard.studibanding.components.modal_settingfee')
 @endsection
 
 @section('script')
@@ -825,6 +884,31 @@
 				});
 			})
 
+            $('#modal_settingfee').on('show.bs.modal', function (e) {
+                const modal = $(this);
+
+				$.ajax({
+					url: "{{ route('get_settings') }}",
+					data: {name: ['fee']},
+					type: 'POST',
+					async:false,
+					dataType: 'json'
+				}).done(function (data) {
+					if(data.success){
+						const fee = data.get.value.comparative;
+						
+						modal.find('input[name="less"]').val(fee.kurang_dari)
+						modal.find('input[name="over"]').val(fee.lebih_dari)
+					} else {
+						alertError("Terjadi Kesalahan", data.msg)
+					}
+				}).fail(function(data){
+					resp = JSON.parse(data.responseText)
+					alertError("Terjadi Kesalahan", resp.message)
+					console.log("error");
+				})
+            })
+
             $('#ubah_status').validate({
 				submitHandler: function (form) {
                     const dataForm = $(form).serializeObject(),
@@ -895,6 +979,52 @@
 						
 						if(data.success){
 							alertSuccess("Berhasil", data.msg)
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					});   
+				}
+			})
+
+            $('#setting_fee').validate({
+				rules:{
+					less: { required: true, number: true, min: 0 },
+					over: { required: true, number: true, min: 0 }
+				},
+				submitHandler: function (form) {
+                    const dataForm = $(form).serializeObject();
+					
+					dataForm._method = "_PATCH";
+						
+					$.ajax({
+						url: "{{ route('setting.set_comparative') }}",
+						type: 'PATCH',
+						data: dataForm,
+						beforeSend: function(){
+							const modal = $(form).closest('.modal');
+
+							modal.modal('hide')
+							$(form)[0].reset();
+
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function (data) {						
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						
+						if(data.success){
+							alertSuccess("Berhasil", data.msg)
+
+							$('.fee_less').html(`Rp ${currency.format(dataForm.less)}`)
+							$('.fee_over').html(`Rp ${currency.format(dataForm.over)}`)
 						} else {
 							alertError("Terjadi Kesalahan", data.msg)
 						}
