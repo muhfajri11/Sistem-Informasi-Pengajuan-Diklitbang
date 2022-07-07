@@ -21,7 +21,7 @@
                                         <a class="mb-1 font-w700" data-bs-toggle="modal" href="#modal_pesan" data-id="{{ $msg->id }}">
                                             {{ $msg->title }}
                                         </a>
-                                        <p class="mb-1">{{ $msg->table->body }}</p>
+                                        <p class="mb-1">{{ empty($msg->table->body)? "" : $msg->table->body }}</p>
                                         <small class="text-muted" style="text-transform: capitalize">
                                             {{ $msg->created_at }} &centerdot; {{ $msg->from }} &centerdot; 
                                             @switch($msg->from)

@@ -1,6 +1,6 @@
 @extends('dashboard.layouts.app')
 
-@section('title', "Pengajuan PKL")
+@section('title', "Pengajuan Penelitian")
 
 @section('style')
 	<link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}">
@@ -14,7 +14,7 @@
 @section('content')
     <div class="d-block d-md-none col-12">
         <div class="card px-4 py-3">
-            <h3 class="text-secondary mb-0"><i class="fas fa-graduation-cap me-2"></i> @yield('title')</h3>
+            <h3 class="text-secondary mb-0"><i class="fas fa-atom me-2"></i> @yield('title')</h3>
         </div>
     </div>
 
@@ -28,9 +28,6 @@
 						</li>
 						<li class="nav-item">
 							<a href="#pembayaran" data-bs-toggle="tab" class="nav-table nav-link">Pembayaran</a>
-						</li>
-						<li class="nav-item">
-							<a href="#accept" data-bs-toggle="tab" class="nav-table nav-link">Diterima</a>
 						</li>
 						<li class="nav-item">
 							<a href="#done" data-bs-toggle="tab" class="nav-table nav-link">Selesai</a>
@@ -49,7 +46,7 @@
 											<div class="btn-group">
 												<button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
 												<div class="dropdown-menu">
-													<a class="dropdown-item" data-bs-toggle="modal" href="#modal_addmagang">
+													<a class="dropdown-item" data-bs-toggle="modal" href="#modal_addresearch">
 														<i class="fas fa-file-alt me-2"></i> Ajukan
 													</a>
 												</div>
@@ -61,10 +58,9 @@
 											<thead>
 												<tr>
 													<th>#</th>
-													<th>Nama</th>
-													<th>Jurusan</th>
+													<th>Judul</th>
+													<th>Peneliti Utama</th>
 													<th>Mulai</th>
-													<th>Status</th>
 													<th>Action</th>
 												</tr>
 											</thead>
@@ -91,40 +87,10 @@
 											<thead>
 												<tr>
 													<th>#</th>
-													<th>Nama</th>
-													<th>Jurusan</th>
+													<th>Judul</th>
+													<th>Peneliti Utama</th>
 													<th>Mulai</th>
 													<th>Status</th>
-													<th>Action</th>
-												</tr>
-											</thead>
-											<tbody>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div id="accept" class="tab-pane fade">
-							<div class="row">
-								<div class="col-12">
-									<div class="d-flex justify-content-between mb-4">
-										<h3 class="font-weight-bold">Data Pengajuan <span class="small text-light">(Diterima)</span></h3>
-										<button type="button" data-table="#data_accepts" class="btn btn-rounded btn-primary btn_refresh">
-											<span class="btn-icon-start text-primary">
-												<i class="fas fa-sync-alt"></i>
-											</span> Refresh Data
-										</button>
-									</div>
-									<div class="table-responsive">
-										<table id="data_accepts" class="display" style="width: 100%">
-											<thead>
-												<tr>
-													<th>#</th>
-													<th>Nama</th>
-													<th>Jurusan</th>
-													<th>Selesai</th>
-													<th>Tipe</th>
 													<th>Action</th>
 												</tr>
 											</thead>
@@ -139,7 +105,7 @@
 							<div class="row">
 								<div class="col-12">
 									<div class="d-flex justify-content-between mb-4">
-										<h3 class="font-weight-bold">Data Pengajuan <span class="small text-light">(Selesai)</span></h3>
+										<h3 class="font-weight-bold">Data Pengajuan <span class="small text-light">(Selesai, Ditolak)</span></h3>
 										<button type="button" data-table="#data_dones" class="btn btn-rounded btn-primary btn_refresh">
 											<span class="btn-icon-start text-primary">
 												<i class="fas fa-sync-alt"></i>
@@ -151,10 +117,10 @@
 											<thead>
 												<tr>
 													<th>#</th>
-													<th>Nama</th>
-													<th>Jurusan</th>
-													<th>Institusi</th>
-													<th>Tipe</th>
+													<th>Judul</th>
+													<th>Peneliti Utama</th>
+													<th>Uji Layak Etik</th>
+													<th>Status</th>
 													<th>Action</th>
 												</tr>
 											</thead>
@@ -171,15 +137,16 @@
         </div>
     </div>
 
-	@include('dashboard.internship.components.madd_magang')
+    @include('dashboard.research.components.madd_research')
 
-	@include('dashboard.internship.components.medit_magang')
+	@include('dashboard.research.components.medit_research')
 
-	@include('dashboard.internship.components.mdetail_magang')
+	@include('dashboard.research.components.mdetail_research')
 
 	@include('dashboard.studibanding.components.madd_institusi')
 
-	@include('dashboard.internship.components.mupload_pembayaran')
+	@include('dashboard.research.components.mupload_pembayaran')
+
 @endsection
 
 @section('script')
@@ -264,12 +231,6 @@
 						break;
 					case "accept":
 						return `
-						<span class="badge badge-pill badge-secondary">
-							${status}
-						</span>`;
-						break;
-					case "done":
-						return `
 						<span class="badge badge-pill badge-primary">
 							${status}
 						</span>`;
@@ -294,32 +255,34 @@
 				}
 			}
 
-			const setBadgeType = type_ => {
+			const setBadgeEtik = type_ => {
 				switch(type_){
-					case 'medic':
+					case 1:
+						return `
+						<span class="badge mx-auto badge-pill badge-warning">
+							Perlu
+						</span>`;
+						break;
+					case 0:
 						return `
 						<span class="badge mx-auto badge-pill badge-primary">
-							Medis
+							Tidak Perlu
 						</span>`;
 						break;
-					case 'non-medic':
-						return `
-						<span class="badge mx-auto badge-pill badge-secondary">
-							Non Medis
-						</span>`;
-						break;
+                    default: 
+                        return '';
+                        break;
 				}
 			}
 
 			const dataReviews = setDatatables,
                   dataPayments = setDatatables,
-                  dataAccept = setDatatables,
 				  dataDone = setDatatables;
 
             $.extend(dataReviews, {
                 "ajax": {
                     "type": "POST",
-                    "url": `{{ route('internship.all', 'review,reject') }}`,
+                    "url": `{{ route('research.all', 'review') }}`,
                     "timeout": 120000
                 },
                 "aoColumns": [
@@ -332,25 +295,19 @@
                     {
                         "mData": null,
                         "render": function (data, row, type, meta) {
-                            return data.name;
+                            return data.judul;
                         }
                     },
                     {
                         "mData": null,
                         "render": function (data, row, type, meta) {
-                            return data.jurusan;
+                            return data.ketua;
                         }
                     },
                     {
                         "mData": null,
                         "render": function (data, row, type, meta) {
                             return data.start_date;
-                        }
-                    },
-                    {
-                        "mData": null,
-                        "render": function (data, row, type, meta) {
-                            return setBadgeStatus(data.status);
                         }
                     },
                     {
@@ -362,20 +319,20 @@
                             <div class="btn-group">
                                 <button data-id="${ data.id }"
                                     class="btn btn-primary shadow btn-xs px-2"
-                                    data-bs-toggle="modal" data-bs-target="#modal_detailmagang">
+                                    data-bs-toggle="modal" data-bs-target="#modal_detailresearch">
                                     <i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
                                 </button>
                                 <div class="btn-group">
                                     <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
                                     <div class="dropdown-menu">
                                         <button class="dropdown-item" data-id="${ data.id }"
-                                            data-bs-toggle="modal" data-bs-target="#modal_editmagang">
+                                            data-bs-toggle="modal" data-bs-target="#modal_editresearch">
                                             <i class="fas fa-cog me-1"></i> Edit
                                         </button>
 										<button class="dropdown-item" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.id}">
 											<i class="fas fa-file me-1"></i> Upload Pembayaran
 										</button>
-                                        <button class="dropdown-item delete_magang" data-id="${ data.id }" data-name="${data.name}" data-from="#data_reviews">
+                                        <button class="dropdown-item delete_research" data-id="${ data.id }" data-name="${data.judul}" data-from="#data_reviews">
                                             <i class="fas fa-trash me-1"></i> Hapus
                                         </button>
                                     </div>
@@ -395,8 +352,7 @@
 				switch(idTag){
 					case '#data_reviews': text = "Reload Data Reviews"; break;
 					case '#data_payments': text = "Reload Data Payments"; break;
-					case '#data_accepts': text = "Reload Data Accepts"; break;
-					case '#data_dones': text = "Reload Data Lulus"; break;
+					case '#data_dones': text = "Reload Data Selesai"; break;
 				}
 
 				$(idTag).DataTable().ajax.reload(function(){
@@ -435,7 +391,7 @@
 							$.extend(dataPayments, {
                                 "ajax": {
                                     "type": "POST",
-                                    "url": `{{ route('internship.all', 'pay') }}`,
+                                    "url": `{{ route('research.all', 'pay') }}`,
                                     "timeout": 120000
                                 },
                                 "aoColumns": [
@@ -448,13 +404,13 @@
                                     {
                                         "mData": null,
                                         "render": function (data, row, type, meta) {
-                                            return data.name;
+                                            return data.judul;
                                         }
                                     },
                                     {
                                         "mData": null,
                                         "render": function (data, row, type, meta) {
-                                            return data.jurusan;
+                                            return data.ketua;
                                         }
                                     },
                                     {
@@ -478,20 +434,20 @@
                                             <div class="btn-group">
                                                 <button data-id="${ data.id }"
                                                     class="btn btn-primary shadow btn-xs px-2"
-                                                    data-bs-toggle="modal" data-bs-target="#modal_detailmagang">
+                                                    data-bs-toggle="modal" data-bs-target="#modal_detailresearch">
                                                     <i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
                                                 </button>
                                                 <div class="btn-group">
                                                     <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
                                                     <div class="dropdown-menu">
                                                         <button class="dropdown-item" data-id="${ data.id }"
-                                                            data-bs-toggle="modal" data-bs-target="#modal_editmagang">
+                                                            data-bs-toggle="modal" data-bs-target="#modal_editresearch">
                                                             <i class="fas fa-cog me-1"></i> Edit
                                                         </button>
 														<button class="dropdown-item" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.id}">
 															<i class="fas fa-file me-1"></i> Upload Pembayaran
 														</button>
-                                                        <button class="dropdown-item delete_magang" data-id="${ data.id }" data-name="${data.name}" data-from="#data_payments">
+                                                        <button class="dropdown-item delete_research" data-id="${ data.id }" data-name="${data.judul}" data-from="#data_payments">
                                                             <i class="fas fa-trash me-1"></i> Hapus
                                                         </button>
                                                     </div>
@@ -509,74 +465,12 @@
 							reloadData('#data_payments')
 						}
 					break;
-                    case 'accept':
-						if(!$.fn.DataTable.isDataTable('#data_accepts')){
-							$.extend(dataAccept, {
-                                "ajax": {
-                                    "type": "POST",
-                                    "url": `{{ route('internship.all', 'accept') }}`,
-                                    "timeout": 120000
-                                },
-                                "aoColumns": [
-                                    {
-                                        "mData": null,
-                                        "render": function (data, row, type, meta) {
-                                            return data.i;
-                                        }
-                                    },
-                                    {
-                                        "mData": null,
-                                        "render": function (data, row, type, meta) {
-                                            return data.name;
-                                        }
-                                    },
-                                    {
-                                        "mData": null,
-                                        "render": function (data, row, type, meta) {
-                                            return data.jurusan;
-                                        }
-                                    },
-                                    {
-                                        "mData": null,
-                                        "render": function (data, row, type, meta) {
-                                            return data.end_date;
-                                        }
-                                    },
-                                    {
-                                        "mData": null,
-                                        "render": function (data, row, type, meta) {
-                                            return data.type;
-                                        }
-                                    },
-                                    {
-                                        "mData": null,
-                                        "sortable": false,
-                                        "render": function (data, row, type, meta) {
-                                            
-                                            let btn = `
-                                            	<button data-id="${ data.id }"
-                                                    class="btn btn-primary shadow btn-xs px-2"
-                                                    data-bs-toggle="modal" data-bs-target="#modal_detailmagang">
-                                                    <i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
-                                                </button>`;
-
-                                            return btn;
-                                        }
-                                    }
-                                ]
-                            })
-
-							$('#data_accepts').DataTable(dataAccept);
-						} else {
-							reloadData('#data_accepts')
-						}
-					break;
 					case 'done':
 						if(!$.fn.DataTable.isDataTable('#data_dones')){
 							$.extend(dataDone, {
                                 "ajax": {
                                     "type": "POST",
-                                    "url": `{{ route('internship.all', 'done') }}`,
+                                    "url": `{{ route('research.all', 'accept,reject') }}`,
                                     "timeout": 120000
                                 },
                                 "aoColumns": [
@@ -589,25 +483,25 @@
                                     {
                                         "mData": null,
                                         "render": function (data, row, type, meta) {
-                                            return data.name;
+                                            return data.judul;
                                         }
                                     },
                                     {
                                         "mData": null,
                                         "render": function (data, row, type, meta) {
-                                            return data.jurusan;
+                                            return data.ketua;
                                         }
                                     },
                                     {
                                         "mData": null,
                                         "render": function (data, row, type, meta) {
-                                            return data.institution;
+                                            return Number.isInteger(data.is_layaketik) ? setBadgeEtik(data.is_layaketik) : "-";
                                         }
                                     },
                                     {
                                         "mData": null,
                                         "render": function (data, row, type, meta) {
-                                            return data.type;
+                                            return setBadgeStatus(data.status);
                                         }
                                     },
                                     {
@@ -618,7 +512,7 @@
                                             let btn = `
                                             	<button data-id="${ data.id }"
                                                     class="btn btn-primary shadow btn-xs px-2"
-                                                    data-bs-toggle="modal" data-bs-target="#modal_detailmagang">
+                                                    data-bs-toggle="modal" data-bs-target="#modal_detailresearch">
                                                     <i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
                                                 </button>`;
 
@@ -628,7 +522,7 @@
                                 ]
                             })
 
-							$('#data_dones').DataTable(dataAccept);
+							$('#data_dones').DataTable(dataDone);
 						} else {
 							reloadData('#data_dones')
 						}
@@ -661,7 +555,8 @@
 			$('.nav-daftar').on('shown.bs.tab', function (event) {
 				const active = event.target, // newly activated tab
 					previousActive = event.relatedTarget,	// previous active tab
-					btnSubmit = $('#btnmagang_submit');
+					modal = $(active).closest('.modal'),
+					btnSubmit = $('#btnresearch_submit');
 
 				let id_active = $(active).attr('href'),
 					id_previousActive = $(previousActive).attr('href');
@@ -669,30 +564,24 @@
 				id_active = id_active.split('#')[1],
 				id_previousActive = id_previousActive.split('#')[1]
 
-				if(id_active == 'berkas' || id_active == 'invoice'){
+				if(id_active == 'invoice'){
 					const htmlBack = `<button 
 						type="button" 
-						id="btnmagang_back" 
+						id="btnresearch_back" 
 					class="btn btn-secondary">Kembali</button>`;
 
-					$('#html_back').html('');
-					$('#html_back').append($(htmlBack));
-					if(id_active == 'berkas'){
-						$('#html_back button').attr('data-back', 'biodata');
-						btnSubmit.prop('type', 'button');
-						btnSubmit.html('Lanjut');
-						btnSubmit.attr('data-next', 'invoice');
-					} else {
-						$('#html_back button').attr('data-back', 'berkas')
-						btnSubmit.prop('type', 'submit');
-						btnSubmit.html('Simpan Data');
-						btnSubmit.removeAttr('data-next');
-					}
+					modal.find('#html_back').html('');
+					modal.find('#html_back').append($(htmlBack));
+                    
+					modal.find('#html_back button').attr('data-back', 'biodata')
+                    btnSubmit.prop('type', 'submit');
+                    btnSubmit.html('Simpan Data');
+                    btnSubmit.removeAttr('data-next');
 				} else {
-					$('#html_back').html('');
+					modal.find('#html_back').html('');
 					btnSubmit.prop('type', 'button');
 					btnSubmit.html('Lanjut');
-					btnSubmit.attr('data-next', 'berkas');
+					btnSubmit.attr('data-next', 'invoice');
 				}
 			})
 
@@ -700,7 +589,7 @@
 				const active = event.target, // newly activated tab
 					previousActive = event.relatedTarget,	// previous active tab
 					modal = $(active).closest('.modal'),
-					btnSubmit = modal.find('#btnmagang_submit');
+					btnSubmit = modal.find('#btnresearch_submit');
 
 				let id_active = $(active).attr('href'),
 					id_previousActive = $(previousActive).attr('href');
@@ -708,34 +597,61 @@
 				id_active = id_active.split('#')[1],
 				id_previousActive = id_previousActive.split('#')[1]
 
-				if(id_active == 'berkas_edit' || id_active == 'invoice_edit'){
+				if(id_active == 'invoice_edit'){
 					const htmlBack = `<button 
 						type="button" 
-						id="btnmagang_back" 
+						id="btnresearch_back" 
 					class="btn btn-secondary">Kembali</button>`;
 
 					modal.find('#html_back').html('');
 					modal.find('#html_back').append($(htmlBack));
-					if(id_active == 'berkas_edit'){
-						modal.find('#html_back button').attr('data-back', 'biodata_edit');
-						btnSubmit.prop('type', 'button');
-						btnSubmit.html('Lanjut');
-						btnSubmit.attr('data-next', 'invoice_edit');
-					} else {
-						modal.find('#html_back button').attr('data-back', 'berkas_edit')
-						btnSubmit.prop('type', 'submit');
-						btnSubmit.html('Simpan Data');
-						btnSubmit.removeAttr('data-next');
-					}
+                    
+					modal.find('#html_back button').attr('data-back', 'biodata_edit')
+                    btnSubmit.prop('type', 'submit');
+                    btnSubmit.html('Simpan Data');
+                    btnSubmit.removeAttr('data-next');
 				} else {
 					modal.find('#html_back').html('');
 					btnSubmit.prop('type', 'button');
 					btnSubmit.html('Lanjut');
-					btnSubmit.attr('data-next', 'berkas_edit');
+					btnSubmit.attr('data-next', 'invoice_edit');
 				}
 			})
 
-			$('#modal_addmagang, #modal_editmagang').on('click', '#btnmagang_submit', function(e){
+			$('.nav-view').on('shown.bs.tab', function (event) {
+				const active = event.target, // newly activated tab
+					previousActive = event.relatedTarget,	// previous active tab
+					modal = $(active).closest('.modal'),
+					btnSubmit = modal.find('#btnresearch_submit');
+
+				let id_active = $(active).attr('href'),
+					id_previousActive = $(previousActive).attr('href');
+
+				id_active = id_active.split('#')[1],
+				id_previousActive = id_previousActive.split('#')[1]
+
+				if(id_active == 'invoice_view'){
+					const htmlBack = `<button 
+						type="button" 
+						id="btnresearch_back" 
+					class="btn btn-secondary">Kembali</button>`;
+
+					modal.find('#html_back').html('');
+					modal.find('#html_back').append($(htmlBack));
+                    
+					modal.find('#html_back button').attr('data-back', 'biodata_view')
+                    btnSubmit.prop('type', 'submit');
+                    btnSubmit.html('Simpan Data');
+                    btnSubmit.removeAttr('data-next');
+				} else {
+					modal.find('#html_back').html('');
+					btnSubmit.prop('type', 'button');
+					btnSubmit.html('Lanjut');
+					btnSubmit.attr('data-next', 'invoice_view');
+				}
+			})
+
+            $('#modal_addresearch, #modal_editresearch').on('click', '#btnresearch_submit', function(e){
 				const modal = $(this).closest('.modal'),
 					  type = $(this).prop('type'),
 					  next = $(this).attr('data-next');
@@ -743,14 +659,57 @@
 				if(type == 'button') modal.find(`a[href="#${next}"]`).tab('show')
 			})
 
-			$('#modal_addmagang, #modal_editmagang').on('click', '#btnmagang_back', function(){
+			$('#modal_addresearch, #modal_editresearch').on('click', '#btnresearch_back', function(){
 				const modal = $(this).closest('.modal'),
 					  next = $(this).attr('data-back');
 
 				modal.find(`a[href="#${next}"]`).tab('show')
 			})
 
-			$('#modal_addmagang, #modal_editmagang, #modal_uploadpembayaran').on('change', '.form-daftar', function(e) {
+            $('#modal_addresearch, #modal_editresearch').on('click', '.add_member', function(e){
+				const modal = $(this).closest('.modal');
+
+				e.preventDefault();
+                const listMember = modal.find('.list_member'),
+                      formMember = `
+                        <div class="form-group form_member mb-2">
+                            <label>Nama Anggota <span class="small text-light">(Nama + Gelar)</span></label>
+                            <div class="input-group">
+                                <input type="text" name="members[]" class="form-control" required>
+                                <button class="btn btn-danger delete_member" type="button">-</button>
+                            </div>
+                        </div>`;
+
+                if(listMember.find('.empty_member').length > 0){
+                    listMember.html('');
+                    listMember.append($(formMember));
+                } else {
+                    listMember.append($(formMember));
+                }
+                
+			})
+
+            $('#modal_addresearch, #modal_editresearch').on('click', '.delete_member', function(e){
+                e.preventDefault();
+                const modal = $(this).closest('.modal'),
+                      listMember = modal.find('.list_member');
+                
+                $(this).parent().parent().remove();
+
+                if(listMember.find('.form_member').length < 1){
+                    listMember.html(`<p class="empty_member text-center">Tidak ada anggota</p>`);
+                }
+            })
+
+            $('#modal_addresearch').on('click', '#btn_addinstitusi', function(e){
+                e.preventDefault();
+				const modal = $(this).closest('.modal');
+
+                modal.modal('hide');
+                $('#modal_addinstitusi').modal('show');
+            })
+
+            $('#modal_addresearch, #modal_editresearch').on('change', '.form-daftar', function(e) {
 				const btn_preview = $(this).parent().parent(),
 					  form_file = $(this),
 					  reader = new FileReader();
@@ -783,36 +742,58 @@
 
 			});
 
-			$('#modal_addmagang, #modal_editmagang').on('change', 'input[name="start_date"]', function(e) {
+            $('#modal_addresearch, #modal_editresearch').on('change', 'input[name="start_date"]', function(e) {
 				const modal = $(this).closest('.modal')
 					  minDate = new Date($(this).val());
 
-				minDate.setDate(minDate.getDate() + 7); // set 1 Week
+				minDate.setDate(minDate.getDate() + 1); // set 1 Day
 
 				modal.find('input[name="end_date"]').val('')
 				modal.find('input[name="end_date"]').pickadate('picker').set({
 					disable: false,
-					min: minDate // +1 Month
+					min: minDate // +1 Day
 				})
 			});
 
-			$('#modal_addmagang, #modal_editmagang').on('click', '.min_members', function(e){
-                e.preventDefault();
-                const members = $(this).parent().find('input'),
-                      membersNow = parseInt(members.val())
+            $('#modal_addresearch, #modal_editresearch').on('change', 'select[name="province"]', function(e){
+				e.preventDefault();
+				const modal = $(this).closest('.modal'),
+					  id 	= $(this).val(),
+					  elm = $(this),
+					  checkattr = $(this).hasAttr('data-city');
 
-                if(membersNow > 1) members.val(membersNow - 1)
-            })
+				if(checkattr) {
+					var data_id = $(this).attr('data-city');
+				}
 
-            $('#modal_addmagang, #modal_editmagang').on('click', '.add_members', function(e){
-                e.preventDefault();
-                const members = $(this).parent().find('input'),
-                      membersNow = parseInt(members.val())
+				$.ajax({
+					url: `https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=${id}`,
+					type: 'GET',
+					dataType: 'json',
+					headers: '',
+					cache: false,
+					beforeSend: function(){
+						modal.find("select[name='city']").html('').select2({data: []});
+					}
+				}).done(function (data) {
+					let city = data.kota_kabupaten, html_ = [];
+					$.each(city, function(i, val) {
+						html_.push({id: val.id, text: val.nama});
+					})
 
-                if(membersNow > 0) members.val(membersNow + 1)
-            })
+					modal.find("select[name='city']").html('').select2({data: html_});
 
-			$('#modal_addmagang, #modal_editmagang').on('show.bs.modal', function (e) {
+					if(checkattr){
+						modal.find("select[name='city']").val(data_id).change()
+						elm.removeAttr('data-city')
+					}
+				}).fail(function(data){
+					console.log(data)
+					console.log("error");
+				})
+			});
+
+            $('#modal_addresearch, #modal_editresearch').on('show.bs.modal', function (e) {
                 const modal = $(this),
 					  data_id = $(e.relatedTarget).data('id'),
 					  htmlBank = `<div class="items">
@@ -828,7 +809,7 @@
 											</div>
 										</div>
 									</div>`;
-				let institutions, province, account, tipepkl, jenjang, fee;
+				let institutions, province, account, jenjang, fee;
 
                 $.when(
 					$.ajax({
@@ -877,22 +858,6 @@
 						console.log("error");
 					}),
 					$.ajax({
-						url: '{{ route("setting.get_tipepkl") }}',
-						type: 'POST',
-						dataType: 'json',
-						cache: false
-					}).done(function (data) {
-						if(data.success){
-							tipepkl = data.get;
-						} else {
-							alertError("Terjadi Kesalahan", data.msg)
-						}
-					}).fail(function(data){
-						resp = JSON.parse(data.responseText)
-						alertError("Terjadi Kesalahan", resp.message)
-						console.log("error");
-					}),
-					$.ajax({
 						url: '{{ route("setting.get_jenjang") }}',
 						type: 'POST',
 						dataType: 'json',
@@ -927,22 +892,12 @@
 				).then(function(){
 					let html_ = [];
 
-					if(modal.prop('id') == 'modal_addmagang'){
-						modal.find('input[name="name"]').val("{{ auth()->user()->name }}")
+					if(modal.prop('id') == 'modal_addresearch'){
+						modal.find('input[name="ketua"]').val("{{ auth()->user()->name }}")
 						modal.find('input[name="phone"]').val("{{ auth()->user()->phone }}")
 					} else {
 						modal.find('#id_bukti').val(data_id)
 					}
-
-					modal.find("input[name='mou']").attr({
-						'data-have' : fee.internship.mou,
-						'data-no'	: fee.internship.no_mou,
-					});
-
-					$.each(tipepkl, function(i, val) {
-						html_.push({id: val.id, text: val.name, fee: val.fee});
-					})
-					modal.find("select[name='type']").html('').select2({data: html_});
 
 					html_ = [];
 					$.each(jenjang, function(i, val) {
@@ -975,28 +930,16 @@
 					myCarouselStart();
 
 					modal.find("select[name='province']").html('').select2({data: html_});
-					if(modal.prop('id') == 'modal_addmagang'){
+					if(modal.prop('id') == 'modal_addresearch'){
 						modal.find("select[name='province']").attr('data-city', '3209');
 						modal.find("select[name='province']").val(32).change();
-
-						const set_fee = parseInt(tipepkl[0].fee) 
-							+ parseInt(fee.internship.no_mou) + parseInt(jenjang[0].fee);
-
-						modal.find('#pay_daftar').html(`Rp ${currency.format(set_fee)}`)
-
-						modal.find('.price_havemou').html(`Rp ${currency.format(fee.internship.no_mou)}`)
-						modal.find('.tipe_pkl').html(`${tipepkl[0].name}`)
-						modal.find('.price_tipepkl').html(`Rp ${currency.format(tipepkl[0].fee)}`)
-						modal.find('.jenjang').html(`${jenjang[0].name}`)
-						modal.find('.price_jenjang').html(`Rp ${currency.format(jenjang[0].fee)}`)
-
-						modal.find('.price_total').html(`Rp ${currency.format(set_fee)}`)
+						modal.find('#pay_daftar').html(`Rp ${currency.format(fee.research)}`)
 					}
 				})
 
-				if(modal.prop('id') == 'modal_editmagang'){
+				if(modal.prop('id') == 'modal_editresearch'){
 					$.ajax({
-						url: '{{ route('internship.get') }}',
+						url: '{{ route('research.get') }}',
 						type: 'POST',
 						data : {id: data_id},
 						dataType: 'json',
@@ -1005,90 +948,59 @@
 						if(data.success){
 							const htmlBtnShow = `<button class="btn btn-secondary btn-xs ms-2" data-fancybox>Buka</button>`;
 							let htmlBtn, check;
-
-							modal.find('input[name="name"]').val(data.get.name)
-							modal.find('input[name="nim"]').val(data.get.nim)
-							modal.find('input[name="jurusan"]').val(data.get.jurusan)
+							modal.find('input[name="judul"]').val(data.get.judul)
+							modal.find('input[name="title"]').val(data.get.title)
+							modal.find('select[name="tipe_penelitian"]').val(data.get.tipe_penelitian).change()
 							modal.find('select[name="institusi"]').val(data.get.institution? data.get.institution_id: "").change()
-							modal.find('input[name="semester"]').val(data.get.semester)
-							modal.find('select[name="type"]').val(data.get.type).change()
-							modal.find('select[name="jenjang"]').val(data.get.jenjang).change()
+							modal.find('input[name="ketua"]').val(data.get.ketua)
+							modal.find('input[name="nik"]').val(data.get.nik)
+							modal.find('select[name="jenjang"]').val(data.get.education_level_id).change()
 							modal.find('input[name="phone"]').val(data.get.phone)
 							modal.find("select[name='province']").attr('data-city', data.get.city);
 							modal.find("select[name='province']").val(data.get.province).change();
+							modal.find('textarea[name="address"]').val(data.get.address)
+
+							if(data.get.anggota.length > 0) {
+								const listMember = modal.find('.list_member'),
+									formMember = `
+										<div class="form-group form_member mb-2">
+											<label>Nama Anggota <span class="small text-light">(Nama + Gelar)</span></label>
+											<div class="input-group">
+												<input type="text" name="members[]" class="form-control" required>
+												<button class="btn btn-danger delete_member" type="button">-</button>
+											</div>
+										</div>`;
+
+								let elm;
+								listMember.html('');
+								$.each(data.get.anggota, function(i, val){
+									elm = $(formMember)
+									elm.find('input').val(val)
+									listMember.append(elm);							
+								})
+							}
+							
+							modal.find('input[name="tempat"]').val(data.get.tempat)
 							modal.find('input[name="start_date"]').pickadate('picker').set('select', data.get.start_date, { format: 'yyyy-mm-dd' })
 							modal.find('input[name="end_date"]').pickadate('picker').set('select', data.get.end_date, { format: 'yyyy-mm-dd' })
 
-							modal.find('textarea[name="address"]').val(data.get.address)
-							if(data.get.file_internship.mou){
-								modal.find('#docmou_edit').html('Punya')
-							} else {
-								modal.find('#docmou_edit').html('Tidak Punya')
-							}
-
-							modal.find('#pay_edit').html(`Rp ${currency.format(data.get.total_paid)}`)
-
-							htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.ktm_ktp)
-							check = data.get.file_internship.ktm_ktp.split('.')[1];
-							if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
-
-							modal.find('#btnedit_ktm').html(htmlBtn)
+							modal.find('#pay_daftar').html(`Rp ${currency.format(data.get.total_paid)}`)
 
 							htmlBtn = $(htmlBtnShow).attr({
-								href: data.get.file_internship.proposal,
+								href: data.get.permohonan,
 								"data-type": 'pdf'
 							})
-							modal.find('#btnedit_proposal').html(htmlBtn)
+							modal.find('#btnedit_permohonan').html(htmlBtn)
 
 							htmlBtn = $(htmlBtnShow).attr({
-								href: data.get.file_internship.antigen,
+								href: data.get.proposal,
 								"data-type": 'pdf'
 							})
-							modal.find('#btnedit_antigen').html(htmlBtn)
+							modal.find('#btnedit_proposal').html(htmlBtn)							
 
-							htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.izin_ortu)
-							check = data.get.file_internship.izin_ortu.split('.')[1];
-							if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
-
-							modal.find('#btnedit_izinortu').html(htmlBtn)
-
-							htmlBtn = $(htmlBtnShow).attr({
-								href: data.get.file_internship.jadwal,
-								"data-type": 'pdf'
-							})
-							modal.find('#btnedit_jadwal').html(htmlBtn)
-
-							htmlBtn = $(htmlBtnShow).attr({
-								href: data.get.file_internship.panduan_praktek,
-								"data-type": 'pdf'
-							})
-							modal.find('#btnedit_panduanpraktek').html(htmlBtn)
-
-							htmlBtn = $(htmlBtnShow).attr({
-								href: data.get.file_internship.izin_pkl,
-								"data-type": 'pdf'
-							})
-							modal.find('#btnedit_izinmagang').html(htmlBtn)
-
-							if(data.get.file_internship.mou){
-								htmlBtn = $(htmlBtnShow).attr({
-									href: data.get.file_internship.mou,
-									"data-type": 'pdf'
-								})
-								modal.find('#btnedit_mou').html(htmlBtn)
-							}
-
-							if(data.get.file_internship.bukti_pkl){
-								htmlBtn = $(htmlBtnShow).attr({
-									href: data.get.file_internship.bukti_pkl,
-									"data-type": 'pdf'
-								})
-								modal.find('#btnedit_bukti').html(htmlBtn)
-							}
-
-							if(data.get.file_internship.eviden_paid){
-								htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.eviden_paid)
-								check = data.get.file_internship.eviden_paid.split('.')[1];
+							if(data.get.eviden_paid){
+								htmlBtn = $(htmlBtnShow).attr('href', data.get.eviden_paid)
+								check = data.get.eviden_paid.split('.')[1];
 								if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
 
 								modal.find('#btnedit_evidenpaid').html(htmlBtn)
@@ -1104,123 +1016,12 @@
 				}
             })
 
-			$('#modal_uploadpembayaran').on('show.bs.modal', function (e) {
-				const modal = $(this),
-					  id = $(e.relatedTarget).data('id'),
-					  htmlBank = `<div class="items">
-										<div class="customers review-slider">
-											<div class="d-flex justify-content-between align-items-center mt-2">
-												<div class="customer-profile d-flex ">
-													<img src="{{ asset('image/assets/no-img.png') }}" alt="" style="width: auto;height: 30px;">
-													<div class="ms-3">
-														<h5 class="mb-0"><a href="javascript:void(0);" class="id-bank text-primary clipboard-text">123-21211-221</a></h5>
-														<span class="font-w700 name-bank">Bank BRI</span>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>`;
-
-				$('#modal_detailmagang').modal('hide');
-				modal.find('#id_bukti').val(id)
-
-				let detail, rekening;
-				$.when(
-					$.ajax({
-						url: "{{ route('internship.get') }}",
-						data: {id: id},
-						type: 'POST',
-						async:false,
-						dataType: 'json',
-						beforeSend: function(){
-							$('#preloader').removeClass('d-none');
-							$('#main-wrapper').removeClass('show');
-						}
-					}).done(function(data){
-						if(data.success){
-							detail = data.get
-						} else {
-							alertError("Berhasil", data.msg)
-						}
-
-						$('#preloader').addClass('d-none');
-						$('#main-wrapper').addClass('show');
-					}).fail(function(data){
-						console.log(data.responseText)
-					}),
-					$.ajax({
-						url: '{{ route("get_settings") }}',
-						type: 'POST',
-						data: {name: ['rekening']},
-						dataType: 'json',
-						cache: false
-					}).done(function (data) {
-						if(data.success){
-							rekening = data.get.value
-						} else {
-							alertError("Terjadi Kesalahan", data.msg)
-						}
-					}).fail(function(data){
-						resp = JSON.parse(data.responseText)
-						alertError("Terjadi Kesalahan", resp.message)
-						console.log("error");
-					})
-				).then(function(){
-					const btnShowEviden = `
-						<button class="btn btn-secondary btn-xs" data-fancybox></button>`;
-
-					if(detail.file_internship.mou){
-						modal.find('#docmou_view').html("Punya");
-						modal.find('.have_mou').html(`Punya`)
-					} else {
-						modal.find('#docmou_view').html("Tidak Punya");
-						modal.find('.have_mou').html(`Tidak Punya`)
-					}
-
-					carousel.trigger("destroy.owl.carousel");
-					modal.find('.rekening-slider').html('')
-					$.each(rekening, function(i, val){
-						let item = $(htmlBank);
-						
-						if(val.image) item.find('img').attr('src', val.image);
-						item.find('.id-bank').html(val.number);
-						item.find('.name-bank').html(val.name);
-
-						modal.find('.rekening-slider').append(item)
-					})
-					myCarouselStart();
-
-					modal.find('.price_havemou').html(`Rp ${currency.format(detail.mou_price)}`)
-
-					modal.find('.tipe_pkl').html(`${detail.type}`)
-					modal.find('.price_tipepkl').html(`Rp ${currency.format(detail.type_price)}`)
-
-					modal.find('.jenjang').html(`${detail.jenjang}`)
-					modal.find('.price_jenjang').html(`Rp ${currency.format(detail.jenjang_price)}`)
-
-					modal.find('.price_total').html(`Rp ${currency.format(detail.total_paid)}`)
-					modal.find('#pay_view').html("Rp " + currency.format(detail.total_paid));
-
-					if(detail.file_internship.eviden_paid){
-						const htmlBtn = $(btnShowEviden).html('Lihat Bukti Pembayaran').attr('href', detail.file_internship.eviden_paid)
-						const check = detail.file_internship.eviden_paid.split('.')[1];
-						if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
-
-						modal.find('#btn_evidenview').html(htmlBtn)
-					} else {
-						modal.find('#btn_evidenview').html('')
-					}
-				})
-
-				
-			})
-
-			$('#modal_detailmagang').on('show.bs.modal', function (e) {
+			$('#modal_detailresearch').on('show.bs.modal', function (e) {
 				const modal = $(this),
 					  data_id = $(e.relatedTarget).data('id');
 
 				$.ajax({
-					url: "{{ route('internship.get') }}",
+					url: "{{ route('research.get') }}",
 					data: {id: data_id},
 					type: 'POST',
 					async:false,
@@ -1232,122 +1033,65 @@
 				}).done(function(data){
 					if(data.success){
 						let btnEviden = `
-							<button class="btn btn-dark" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.get.id}">
+							<button class="btn btn-dark btn-xs" data-bs-toggle="modal" href="#modal_uploadpembayaran" data-id="${data.get.id}">
 								Upload Bukti Pembayaran
 							</button>`, 
 							htmlBtnShow = `<button class="btn btn-secondary btn-xs" data-fancybox>Buka</button>`,
 							province, city, htmlBtn, check;
 
-						modal.find('#name_view').html(data.get.name);
-						modal.find('#nim_view').html(data.get.nim);
+						modal.find('#judul_view').html(data.get.judul);
+						modal.find('#title_view').html(data.get.title);
+						modal.find('#tipe_view').html(data.get.tipe_penelitian);
 						modal.find('#institusi_view').html(data.get.institution ? data.get.institution.name : "Tidak ada");
-						modal.find('#semester_view').html(`Semester ${data.get.semester}`);
-						modal.find('#jurusan_view').html(data.get.jurusan);
-						modal.find('#type_view').html(data.get.type);
-						modal.find('#jenjang_view').html(data.get.jenjang);
-						modal.find('#start_view').html(data.get.start_date);
-						modal.find('#end_view').html(data.get.end_date);
-						modal.find('#address_view').html(data.get.address);
-						modal.find('#status_view').html(setBadgeStatus(data.get.status));
-						modal.find('#statuspay_view').html(setBadgePay(data.get.paid));
 
-						if(data.get.file_internship.mou){
-							modal.find('#docmou_view').html('Punya')
-							modal.find('.have_mou').html('Punya')
+						modal.find('#ketua_view').html(data.get.ketua);
+						modal.find('#nik_view').html(data.get.nik);
+						modal.find('#jenjang_view').html(data.get.education_level ? data.get.education_level.name : "Tidak ada");
+						modal.find('#phone_view').html(data.get.phone);
+						modal.find('#address_view').html(data.get.address);
+						if(data.get.anggota.length > 0){
+							let anggota = ``;
+							$.each(data.get.anggota, (i, val) => {
+								anggota += val + ", ";
+							})
+							modal.find('#anggota_view').html(anggota)
+							modal.find('.is_anggota').removeClass('d-none')
 						} else {
-							modal.find('#docmou_view').html('Tidak Punya')
-							modal.find('.have_mou').html('Tidak Punya')
+							modal.find('.is_anggota').addClass('d-none')
+							modal.find('#anggota_view').html('')
 						}
 
-						modal.find('.price_havemou').html(`Rp ${currency.format(data.get.mou_price)}`)
-
-						modal.find('.tipe_pkl').html(`${data.get.type}`)
-						modal.find('.price_tipepkl').html(`Rp ${currency.format(data.get.type_price)}`)
-
-						modal.find('.jenjang').html(`${data.get.jenjang}`)
-						modal.find('.price_jenjang').html(`Rp ${currency.format(data.get.jenjang_price)}`)
-
-						modal.find('.price_total').html(`Rp ${currency.format(data.get.total_paid)}`)
-
-						if(data.get.rooms.length > 0){
-							let rooms_ = ``;
-							$.each(data.get.rooms, (i, val) => {
-								rooms_ += val.name + ", ";
-							})
-							modal.find('#rooms_view').html(rooms_)
-							modal.find('.is_rooms').removeClass('d-none')
+						modal.find('#tempat_view').html(data.get.tempat);
+						modal.find('#start_view').html(data.get.start_date);
+						modal.find('#end_view').html(data.get.end_date);
+						
+						if(Number.isInteger(data.get.is_layaketik)){
+							modal.find('#layaketik_view').html(setBadgeEtik(data.get.is_layaketik))
+							modal.find('.is_layaketik').removeClass('d-none')
 						} else {
-							modal.find('.is_rooms').addClass('d-none')
-							modal.find('#rooms_view').html('')
+							modal.find('#layaketik_view').html('')
+							modal.find('.is_layaketik').addClass('d-none')
 						}
 
 						modal.find('#pay_view').html(`Rp ${currency.format(data.get.total_paid)}`)
-
-						htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.ktm_ktp)
-						check = data.get.file_internship.ktm_ktp.split('.')[1];
-						if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
-
-						modal.find('#ktm_view').html(htmlBtn)
+						modal.find('#status_view').html(setBadgeStatus(data.get.status));
+						modal.find('#statuspay_view').html(setBadgePay(data.get.paid));
 
 						htmlBtn = $(htmlBtnShow).attr({
-							href: data.get.file_internship.proposal,
+							href: data.get.permohonan,
+							"data-type": 'pdf'
+						})
+						modal.find('#permohonan_view').html(htmlBtn)
+
+						htmlBtn = $(htmlBtnShow).attr({
+							href: data.get.proposal,
 							"data-type": 'pdf'
 						})
 						modal.find('#proposal_view').html(htmlBtn)
 
-						htmlBtn = $(htmlBtnShow).attr({
-							href: data.get.file_internship.antigen,
-							"data-type": 'pdf'
-						})
-						modal.find('#antigen_view').html(htmlBtn)
-
-						htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.izin_ortu)
-						check = data.get.file_internship.izin_ortu.split('.')[1];
-						if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
-
-						modal.find('#izinortu_view').html(htmlBtn)
-
-						htmlBtn = $(htmlBtnShow).attr({
-							href: data.get.file_internship.jadwal,
-							"data-type": 'pdf'
-						})
-						modal.find('#jadwal_view').html(htmlBtn)
-
-						htmlBtn = $(htmlBtnShow).attr({
-							href: data.get.file_internship.panduan_praktek,
-							"data-type": 'pdf'
-						})
-						modal.find('#panduanpraktek_view').html(htmlBtn)
-
-						htmlBtn = $(htmlBtnShow).attr({
-							href: data.get.file_internship.izin_pkl,
-							"data-type": 'pdf'
-						})
-						modal.find('#izinpkl_view').html(htmlBtn)
-
-						if(data.get.file_internship.mou){
-							htmlBtn = $(htmlBtnShow).attr({
-								href: data.get.file_internship.mou,
-								"data-type": 'pdf'
-							})
-							modal.find('#mou_view').html(htmlBtn)
-						} else {
-							modal.find('#mou_view').html("<h5>Tidak ada berkas</h5>")
-						}
-
-						if(data.get.file_internship.bukti_pkl){
-							htmlBtn = $(htmlBtnShow).attr({
-								href: data.get.file_internship.bukti_pkl,
-								"data-type": 'pdf'
-							})
-							modal.find('#buktipkl_view').html(htmlBtn)
-						} else {
-							modal.find('#buktipkl_view').html("<h5>Tidak ada berkas</h5>")
-						}
-
-						if(data.get.file_internship.eviden_paid){
-							htmlBtn = $(htmlBtnShow).attr('href', data.get.file_internship.eviden_paid)
-							check = data.get.file_internship.eviden_paid.split('.')[1];
+						if(data.get.eviden_paid){
+							htmlBtn = $(htmlBtnShow).attr('href', data.get.eviden_paid)
+							check = data.get.eviden_paid.split('.')[1];
 							if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
 
 							modal.find('#evidenpaid_view').html(htmlBtn)
@@ -1355,17 +1099,17 @@
 							modal.find('#evidenpaid_view').html(btnEviden)
 						}
 
-						if(data.get.file_internship.sertifikat){
+						if(data.get.izin_penelitian){
 							htmlBtn = $(htmlBtnShow).attr({
-								href: data.get.file_internship.sertifikat,
+								href: data.get.izin_penelitian,
 								"data-type": 'pdf'
 							})
 
-							modal.find('.is_sertifikat').removeClass('d-none')
-							modal.find('#sertifikat_view').html(htmlBtn)
+							modal.find('.is_izin').removeClass('d-none')
+							modal.find('#izin_view').html(htmlBtn)
 						} else {
-							modal.find('.is_sertifikat').addClass('d-none')
-							modal.find('#sertifikat_view').html('')
+							modal.find('.is_izin').addClass('d-none')
+							modal.find('#izin_view').html('')
 						}
 
 						$.when(
@@ -1409,87 +1153,102 @@
 				});
 			})
 
-			$('#modal_addmagang, #modal_editmagang').on('change', 'select[name="province"]', function(e){
-				e.preventDefault();
-				const modal = $(this).closest('.modal'),
-					  id 	= $(this).val(),
-					  elm = $(this),
-					  checkattr = $(this).hasAttr('data-city');
+			$('#modal_uploadpembayaran').on('show.bs.modal', function (e) {
+				const modal = $(this),
+					  id = $(e.relatedTarget).data('id'),
+					  htmlBank = `<div class="items">
+										<div class="customers review-slider">
+											<div class="d-flex justify-content-between align-items-center mt-2">
+												<div class="customer-profile d-flex ">
+													<img src="{{ asset('image/assets/no-img.png') }}" alt="" style="width: auto;height: 30px;">
+													<div class="ms-3">
+														<h5 class="mb-0"><a href="javascript:void(0);" class="id-bank text-primary clipboard-text">123-21211-221</a></h5>
+														<span class="font-w700 name-bank">Bank BRI</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>`;
 
-				if(checkattr) {
-					var data_id = $(this).attr('data-city');
-				}
+				$('#modal_detailresearch').modal('hide');
+				modal.find('#id_bukti').val(id)
 
-				$.ajax({
-					url: `https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi=${id}`,
-					type: 'GET',
-					dataType: 'json',
-					headers: '',
-					cache: false,
-					beforeSend: function(){
-						modal.find("select[name='city']").html('').select2({data: []});
-					}
-				}).done(function (data) {
-					let city = data.kota_kabupaten, html_ = [];
-					$.each(city, function(i, val) {
-						html_.push({id: val.id, text: val.nama});
+				let detail, rekening;
+				$.when(
+					$.ajax({
+						url: "{{ route('research.get') }}",
+						data: {id: id},
+						type: 'POST',
+						async:false,
+						dataType: 'json',
+						beforeSend: function(){
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function(data){
+						if(data.success){
+							detail = data.get
+						} else {
+							alertError("Berhasil", data.msg)
+						}
+
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+					}).fail(function(data){
+						console.log(data.responseText)
+					}),
+					$.ajax({
+						url: '{{ route("setting.get_account") }}',
+						type: 'POST',
+						dataType: 'json',
+						cache: false
+					}).done(function (data) {
+						if(data.success){
+							rekening = data.get
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
 					})
+				).then(function(){
+					const btnShowEviden = `
+						<button class="btn btn-secondary btn-xs" data-fancybox></button>`;
 
-					modal.find("select[name='city']").html('').select2({data: html_});
+					carousel.trigger("destroy.owl.carousel");
+					modal.find('.rekening-slider').html('')
+					$.each(rekening, function(i, val){
+						let item = $(htmlBank);
+						
+						if(val.image) item.find('img').attr('src', val.image);
+						item.find('.id-bank').html(val.number);
+						item.find('.name-bank').html(val.name);
 
-					if(checkattr){
-						modal.find("select[name='city']").val(data_id).change()
-						elm.removeAttr('data-city')
+						modal.find('.rekening-slider').append(item)
+					})
+					myCarouselStart();
+
+					modal.find('#statuspay_view').html(setBadgePay(detail.paid));
+					modal.find('#pay_view').html("Rp " + currency.format(detail.total_paid));
+
+					if(detail.eviden_paid){
+						const htmlBtn = $(btnShowEviden).html('Lihat Bukti Pembayaran').attr('href', detail.eviden_paid)
+						const check = detail.eviden_paid.split('.')[1];
+						if(check == 'pdf') htmlBtn.attr('data-type', 'pdf');
+
+						modal.find('#btn_evidenview').html(htmlBtn)
+					} else {
+						modal.find('#btn_evidenview').html('')
 					}
-				}).fail(function(data){
-					console.log(data)
-					console.log("error");
 				})
-			});
 
-			$('#modal_addmagang, #modal_editmagang').on('change', 'input[name="mou"], select[name="type"], select[name="jenjang"]', function(e){
-				const modal = $(this).closest('.modal'),
-					  input_mou = modal.find('input[name="mou"]'),
-					  select_type = modal.find('select[name="type"]').select2('data')[0],
-					  select_jenjang = modal.find('select[name="jenjang"]').select2('data')[0];
-
-				let from_mou = input_mou.data('from') == 'add'? "#docmou_daftar": "#docmou_edit",
-					from_pay = input_mou.data('from') == 'add'? "#pay_daftar": "#pay_edit",
-					have_mou = input_mou.data('have'),
-					no_mou   = input_mou.data('no'), word_mou, fee_mou;
 				
-				if(input_mou.val()){
-					word_mou = "Punya", fee_mou = parseInt(have_mou);
-				} else {
-					word_mou = "Tidak Punya", fee_mou = parseInt(no_mou);
-				}
-
-				const fee_type = parseInt(select_type.fee), fee_jenjang = parseInt(select_jenjang.fee), 
-					  total = fee_mou + fee_type + fee_jenjang;
-
-				modal.find('.have_mou').html(word_mou)
-				modal.find('.price_havemou').html(`Rp ${currency.format(fee_mou)}`)
-				modal.find('.tipe_pkl').html(select_type.text)
-				modal.find('.price_tipepkl').html(`Rp ${currency.format(fee_type)}`)
-				modal.find('.jenjang').html(select_jenjang.text)
-				modal.find('.price_jenjang').html(`Rp ${currency.format(fee_jenjang)}`)
-
-				modal.find('.price_total').html(`Rp ${currency.format(total)}`)
-
-				modal.find(from_mou).html(word_mou)
-				modal.find(from_pay).html(`Rp ${currency.format(total)}`)
 			})
 
-			$('#modal_addmagang').on('click', '#btn_addinstitusi', function(e){
-                e.preventDefault();
-				const modal = $(this).closest('.modal');
-
-                modal.modal('hide');
-                $('#modal_addinstitusi').modal('show');
-            })
-
-			$('#modal_addmagang, #modal_editmagang').on('hide.bs.modal', function (e) {
-                const modal = $(this);
+			$('#modal_addresearch, #modal_editresearch').on('hide.bs.modal', function (e) {
+                const modal = $(this), listMember = modal.find('.list_member');
 
 				modal.find('form')[0].reset();
 				modal.find("select[name='institusi']").html('').select2({data: []});
@@ -1506,17 +1265,12 @@
 				modal.find('input[name="end_date"]').val('')
 				modal.find('input[name="end_date"]').pickadate('picker').set("disable", true)
 
-				modal.find('.docmou').html('Tidak Punya')
-				modal.find('.pay').html(`Rp ${currency.format(300000)}`)
+				modal.find('.pay').html(`Rp 0`)
 
-				modal.find('.price_havemou').html(`Rp 0`)
-				modal.find('.price_tipepkl').html(`Rp 0`)
-				modal.find('.price_jenjang').html(`Rp 0`)
-				modal.find('.price_total').html(`Rp 0`)
+				listMember.html(`<p class="empty_member text-center">Tidak ada anggota</p>`);
 
-				if(modal.prop('id') == 'modal_editmagang'){
-					const nameId = ['ktm', 'proposal', 'antigen', 'izinortu', 'transkrip',
-						'panduanpraktek', 'izinmagang', 'akreditasi', 'mou', 'buktipkl', 'evidenpaid'];
+				if(modal.prop('id') == 'modal_editresearch'){
+					const nameId = ['permohonan', 'proposal', 'evidenpaid'];
 
 					$.each(nameId, function(i, val){
 						modal.find(`#btnedit_${val}`).html('')
@@ -1524,13 +1278,7 @@
 				}
 			})
 
-			$('#modal_addinstitusi').on('hide.bs.modal', function (e) {
-                const modal = $(this);
-
-				modal.find('form')[0].reset();
-			})
-
-			$('#data_reviews, #data_payments').on('click', ".delete_magang", function(e){
+			$('#data_reviews, #data_payments').on('click', ".delete_research", function(e){
 				e.preventDefault();
 				const id = $(this).data('id'),
 					  name = $(this).data('name'),
@@ -1545,7 +1293,7 @@
 				}).then((result) => {
 					if (result.isDenied) {
 						$.ajax({
-							url: "{{ route('internship.delete') }}",
+							url: "{{ route('research.delete') }}",
 							data: {id: id, _method: "DELETE"},
 							method: 'POST',
 							async:false,
@@ -1571,37 +1319,92 @@
 				})
 			})
 
-			$('#edit_magang').validate({
+            $('#tambah_research').validate({
 				ignore: [],
 				rules:{
-					name: { required: true, alphanumeric: true },
-					nim: { required: true, digits: true },
-					date: { required: true, date: true },
-					jurusan: { required: true, alphanumeric: true },
-					institusi: { required: true },
-					semester: { required: true, digits: true, min: 1 },
-					type: { required: true }, jenjang: { required: true },
-					start_date: { required: true, date: true }, end_date: { required: true, date: true },
-					phone: { required: true, digits: true, minlength: 11, maxlength: 14 },
-					city: { required: true }, province: { required: true },
-					address: { required: true },
-					ktm_ktp: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 1 },
-					proposal: { required: false, extension: "pdf", filesize : 2 },
-					antigen: { required: false, extension: "pdf", filesize : 1 },
-					izin_ortu: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 1 },
-					jadwal: { required: false, extension: "pdf", filesize : 1 },
-					panduan_praktek: { required: false, extension: "pdf", filesize : 1 },
-					izin_pkl: { required: false, extension: "pdf", filesize : 1 },
-					mou: { required: false, extension: "pdf", filesize : 1 },
-					bukti_pkl: { required: false, extension: "pdf", filesize : 1 },
+					judul: { required: true, alphanumeric: true },
+                    title: { required: true, alphanumeric: true },
+                    tipe_penelitian: { required: true }, institusi: { required: true },
+                    ketua: { required: true, alphanumeric: true },
+					nik: { required: true, digits: true, minlength:16, maxlength:16 },
+                    jenjang: { required: true },
+                    phone: { required: true, digits: true, minlength: 11, maxlength: 14 },
+                    city: { required: true }, province: { required: true },
+                    address: { required: true },
+                    members: { required: true, alphanumeric: true },
+                    tempat: { required: true, alphanumeric: true },
+                    start_date: { required: true, date: true }, end_date: { required: true, date: true },
+					proposal: { required: true, extension: "pdf", filesize : 2 },
+					permohonan: { required: true, extension: "pdf", filesize : 1 },
 					eviden_paid: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 1 },
 				},
 				submitHandler: function (form) {
-					let data_daftar = new FormData(form);
+					let data_daftar = new FormData(form),
+                        modal = $(form).closest('.modal');
+
+					$.ajax({
+						url: "{{ route('research.store') }}",
+						type: 'POST',
+						data: data_daftar,
+						async: false,
+						processData: false,
+						contentType: false,
+						cache: false,
+						dataType: 'json',
+						enctype: 'multipart/form-data',
+						beforeSend: function(){
+							$(modal).modal('hide')
+                            $(form)[0].reset()
+							$('#preloader').removeClass('d-none');
+							$('#main-wrapper').removeClass('show');
+						}
+					}).done(function (data) {						
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+						
+						if(data.success){
+							alertSuccess("Berhasil", data.msg)
+							reloadData('#data_reviews');
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					});   
+				}
+			})
+
+			$('#edit_research').validate({
+				ignore: [],
+				rules:{
+					judul: { required: true, alphanumeric: true },
+                    title: { required: true, alphanumeric: true },
+                    tipe_penelitian: { required: true }, institusi: { required: true },
+                    ketua: { required: true, alphanumeric: true },
+					nik: { required: true, digits: true, minlength:16, maxlength:16 },
+                    jenjang: { required: true },
+                    phone: { required: true, digits: true, minlength: 11, maxlength: 14 },
+                    city: { required: true }, province: { required: true },
+                    address: { required: true },
+                    members: { required: true, alphanumeric: true },
+                    tempat: { required: true, alphanumeric: true },
+                    start_date: { required: true, date: true }, end_date: { required: true, date: true },
+					proposal: { required: false, extension: "pdf", filesize : 2 },
+					permohonan: { required: false, extension: "pdf", filesize : 1 },
+					eviden_paid: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 1 },
+				},
+				submitHandler: function (form) {
+					let data_daftar = new FormData(form),
+                        modal = $(form).closest('.modal');
 					data_daftar.append('_method', 'PATCH');
 
 					$.ajax({
-						url: "{{ route('internship.update') }}",
+						url: "{{ route('research.update') }}",
 						type: 'POST',
 						data: data_daftar,
 						async: false,
@@ -1611,7 +1414,8 @@
 						dataType: 'json',
 						enctype: 'multipart/form-data',
 						beforeSend: function(){
-							$('#modal_editmagang').modal('hide')
+							$(modal).modal('hide')
+                            $(form)[0].reset()
 							$('#preloader').removeClass('d-none');
 							$('#main-wrapper').removeClass('show');
 						}
@@ -1622,115 +1426,6 @@
 						if(data.success){
 							alertSuccess("Berhasil", data.msg)
 							reloadData('#data_reviews');
-						} else {
-							alertError("Terjadi Kesalahan", data.msg)
-						}
-					}).fail(function(data){
-						$('#preloader').addClass('d-none');
-						$('#main-wrapper').addClass('show');
-
-						resp = JSON.parse(data.responseText)
-						alertError("Terjadi Kesalahan", resp.message)
-						console.log("error");
-					});   
-				}
-			})
-
-			$('#tambah_magang').validate({
-				ignore: [],
-				rules:{
-					name: { required: true, alphanumeric: true },
-					nim: { required: true, digits: true },
-					date: { required: true, date: true },
-					jurusan: { required: true, alphanumeric: true },
-					institusi: { required: true },
-					semester: { required: true, digits: true, min: 1 },
-					type: { required: true }, jenjang: { required: true },
-					start_date: { required: true, date: true }, end_date: { required: true, date: true },
-					phone: { required: true, digits: true, minlength: 11, maxlength: 14 },
-					city: { required: true }, province: { required: true },
-					address: { required: true },
-					ktm: { required: true, extension: "pdf|jpeg|jpg|png", filesize : 1 },
-					proposal: { required: true, extension: "pdf", filesize : 2 },
-					antigen: { required: true, extension: "pdf", filesize : 1 },
-					izin_ortu: { required: true, extension: "pdf|jpeg|jpg|png", filesize : 1 },
-					transkrip: { required: true, extension: "pdf", filesize : 1 },
-					panduan_praktek: { required: true, extension: "pdf", filesize : 1 },
-					izin_pkl: { required: true, extension: "pdf", filesize : 1 },
-					akreditasi: { required: true, extension: "pdf", filesize : 1 },
-					mou: { required: false, extension: "pdf", filesize : 1 },
-					bukti_pkl: { required: false, extension: "pdf", filesize : 1 },
-					eviden_paid: { required: false, extension: "pdf|jpeg|jpg|png", filesize : 1 },
-				},
-				submitHandler: function (form) {
-					let data_daftar = new FormData(form);
-
-					$.ajax({
-						url: "{{ route('internship.store') }}",
-						type: 'POST',
-						data: data_daftar,
-						async: false,
-						processData: false,
-						contentType: false,
-						cache: false,
-						dataType: 'json',
-						enctype: 'multipart/form-data',
-						beforeSend: function(){
-							$('#modal_addmagang').modal('hide')
-							$('#preloader').removeClass('d-none');
-							$('#main-wrapper').removeClass('show');
-						}
-					}).done(function (data) {						
-						$('#preloader').addClass('d-none');
-						$('#main-wrapper').addClass('show');
-						
-						if(data.success){
-							alertSuccess("Berhasil", data.msg)
-							reloadData('#data_reviews');
-						} else {
-							alertError("Terjadi Kesalahan", data.msg)
-						}
-					}).fail(function(data){
-						$('#preloader').addClass('d-none');
-						$('#main-wrapper').addClass('show');
-
-						resp = JSON.parse(data.responseText)
-						alertError("Terjadi Kesalahan", resp.message)
-						console.log("error");
-					});   
-				}
-			})
-
-			$('#tambah_institusi').validate({
-				rules:{
-					name: { required: true, alphanumeric: true,
-                        remote: {
-							url: '{{ route("verify_institution") }}',
-							type: 'POST',
-							data: {
-								name: function(){
-									return $('#namainstitusi_daftar').val();
-								}
-							}
-						} }
-				},
-				submitHandler: function (form) {
-					$.ajax({
-						url: "{{ route('store_institution') }}",
-						method: 'POST',
-						data: {"name" : $('#namainstitusi_daftar').val()},
-						beforeSend: function(){
-							$('#modal_addinstitusi').modal('hide')
-							$('#tambah_institusi')[0].reset();
-							$('#preloader').removeClass('d-none');
-							$('#main-wrapper').removeClass('show');
-						}
-					}).done(function (data) {						
-						$('#preloader').addClass('d-none');
-						$('#main-wrapper').addClass('show');
-						
-						if(data.success){
-							alertSuccess("Berhasil", data.msg)
 						} else {
 							alertError("Terjadi Kesalahan", data.msg)
 						}
@@ -1750,12 +1445,13 @@
 					eviden_paid: { required: true, extension: "pdf|jpeg|jpg|png", filesize : 2 }
 				},
 				submitHandler: function (form) {
-					const formData = new FormData(form);
+					const formData = new FormData(form),
+						  modal = $(form).closest('.modal');
 
 					formData.append('_method', 'PUT');
 
 					$.ajax({
-						url: "{{ route('internship.update_eviden') }}",
+						url: "{{ route('research.update_eviden') }}",
 						type: 'POST',
 						data: formData,
 						async: false,
@@ -1765,8 +1461,8 @@
 						dataType: 'json',
 						enctype: 'multipart/form-data',
 						beforeSend: function(){
-							$('#modal_uploadpembayaran').modal('hide')
-							$('#upload_bukti')[0].reset();
+							$(modal).modal('hide')
+							$(form)[0].reset();
 							$('#preloader').removeClass('d-none');
 							$('#main-wrapper').removeClass('show');
 						}
@@ -1789,7 +1485,6 @@
 					});   
 				}
 			})
-
         });
     </script>
 @endsection

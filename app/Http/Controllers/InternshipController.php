@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Internship, FileInternship, Institution, Setting};
+use App\{EducationLevel, Internship, FileInternship, Institution, Setting, TypeInternship};
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -115,11 +115,12 @@ class InternshipController extends Controller
             $req['institusi']
         );
 
-        $data = ['name' => 'jenjang_pendidikan', 'list' => $req['jenjang']];
-        $jenjang = Setting::getValueSpecific($data)? Setting::getValueSpecific($data):false;
-        $data = ['name' => 'tipe_internship', 'list' => $req['type']];
-        $tipe = Setting::getValueSpecific($data)? Setting::getValueSpecific($data):false;
+        $jenjang = EducationLevel::find($req['jenjang'])->first();
+        $tipe = TypeInternship::find($req['type'])->first();
         $mou_data = Setting::byName(['fee']);
+
+        $req['jenjang'] = $jenjang->name;
+        $req['type'] = $tipe->name;
 
         $checkData = [
             [$jenjang, "Data Jenjang Pendidikan"],
@@ -313,11 +314,12 @@ class InternshipController extends Controller
             $req['institusi']
         );
 
-        $data = ['name' => 'jenjang_pendidikan', 'list' => $req['jenjang']];
-        $jenjang = Setting::getValueSpecific($data)? Setting::getValueSpecific($data):false;
-        $data = ['name' => 'tipe_internship', 'list' => $req['type']];
-        $tipe = Setting::getValueSpecific($data)? Setting::getValueSpecific($data):false;
+        $jenjang = EducationLevel::find($req['jenjang'])->first();
+        $tipe = TypeInternship::find($req['type'])->first();
         $mou_data = Setting::byName(['fee']);
+
+        $req['jenjang'] = $jenjang->name;
+        $req['type'] = $tipe->name;
 
         $checkData = [
             [$jenjang, "Data Jenjang Pendidikan"],

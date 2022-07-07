@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Internship, FileInternship, Comparative, Message, Room, Setting};
+use App\{Internship, FileInternship, Comparative, Message, Research, Room, Setting};
 use App\Mail\SendMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Mail, Storage};
@@ -30,8 +30,8 @@ class ApprovementController extends Controller
                 'accept'        => $accept,
                 'waiting'        => $waiting,
                 'done'        => $done,
-                'presentase_accept'    => (count($accept)/count($intern)) * 100,
-                'presentase_waiting'    => (count($waiting)/count($intern)) * 100
+                'presentase_accept'    => count($intern) > 0 ? (count($accept)/count($intern)) * 100: 0,
+                'presentase_waiting'    => count($intern) > 0 ? (count($waiting)/count($intern)) * 100 : 0
             ],
             'kuota_pkl'     => $max_intern,
             'fee'           => $fee
@@ -41,7 +41,7 @@ class ApprovementController extends Controller
     }
 
     public function comparative_approve(){
-        $intern = Comparative::all();
+        $comparative = Comparative::all();
         $accept = Comparative::where('status', 'accept')->get();
         $waiting = Comparative::whereIn('status', ['review', 'pay'])->get();
 
@@ -49,11 +49,11 @@ class ApprovementController extends Controller
         
         $data = [
             'comparative'    => [
-                'all'           => $intern,
+                'all'           => $comparative,
                 'accept'        => $accept,
                 'waiting'        => $waiting,
-                'presentase_accept'    => (count($accept)/count($intern)) * 100,
-                'presentase_waiting'    => (count($waiting)/count($intern)) * 100
+                'presentase_accept'    => count($comparative) > 0 ? (count($accept)/count($comparative)) * 100 : 0,
+                'presentase_waiting'    => count($comparative) > 0 ? (count($waiting)/count($comparative)) * 100 : 0
             ],
             'fee'           => $fee
         ];
@@ -61,15 +61,22 @@ class ApprovementController extends Controller
         return view('dashboard.studibanding.persetujuan', compact('data'));
     }
 
+    public function research_approve(){
+        return view('dashboard.research.persetujuan');
+    }
+
     public function changestatus(Request $request){
         $data = $request->all();
-        
+
         switch($request->from){
             case 'comparative':
                 $sendMsg = $this->change_comparative($data);
             break;
             case 'internship':
                 $sendMsg = $this->change_internship($data);
+            break;
+            case 'research':
+                $sendMsg = $this->change_research($data);
             break;
         }
 
@@ -86,6 +93,9 @@ class ApprovementController extends Controller
             break;
             case 'internship':
                 $update = Internship::find($request->id)->update($request->all());
+            break;
+            case 'research':
+                $update = Research::find($request->id)->update($request->all());
             break;
         }
 
@@ -338,6 +348,82 @@ class ApprovementController extends Controller
         return $log_mail;
     }
 
+    public function change_research($data){
+        $research = Research::with('user')->find($data['id']);
+        $details = [
+            'user_id'   => $research->user_id,
+            'table_id'  => $research->id,
+            'email'     => $research->user->email,
+            'from'      => $data['from']
+        ];
+
+        $check_status = $data['status'] != $research->status;
+        $check_paid = $data['paid'] != $research->paid;
+        $check_etik = $data['is_layaketik'] != $research->is_layaketik;
+
+        $details['title'] = 'Perubahan Status Pengajuan Penelitian';
+        $details['body'] = '';
+        $check_send = false;
+
+        if($check_status){
+            $check_send = true;
+            switch($data['status']){
+                case 'reject':
+                    $details['body'] .= 'Mohon maaf, permintaan pengajuan Penelitian anda kami tolak.<br><br>';
+                break;
+                case 'review':
+                    $details['body'] .= 'Dokumen anda akan kami review terlebih dahulu. Untuk informasi 
+                                    kelengkapan dokumen akan kami informasikan segera. Terima Kasih.<br><br>';
+                break;
+                case 'pay':
+                    $details['body'] .= 'Selamat data dan berkas sudah kami terima. Selanjutnya silahkan
+                                        selesaikan pembayaran yang sudah tertera. Terima Kasih.<br><br>';
+                break;
+                case 'accept':
+                    $details['body'] .= 'Selamat anda telah diterima untuk melakukan Penelitian ditempat
+                                        kami. Informasi lebih lanjut segera kami beritahukan. Terima Kasih.<br><br>';
+                break;
+            }
+        }
+
+        if($check_paid){
+            $check_send = true;
+            switch($data['paid']){
+                case "1":
+                    $details['body'] .= "Selamat Bukti Pembayaran anda kami terima.<br><br><hr>";
+                break;
+                case "0":
+                    $details['body'] .= "Bukti Pembayaran anda tidak valid silahkan upload kembali.<br><br><hr>";
+                break;
+            }
+        }
+
+        if($check_etik){
+            $check_send = true;
+            switch($data['is_layaketik']){
+                case "1":
+                    $details['body'] .= "Penelitian anda perlu untuk di uji layak etik.";
+                break;
+                case "0":
+                    $details['body'] .= "Penelitian anda tidak perlu untuk di uji layak etik";
+                break;
+            }
+        }
+
+        if($check_send){
+            $log_mail = Message::create($details);
+
+            if($log_mail){
+                $details['data'] = $research;
+                Mail::to($details['email'])->send(new SendMail($details));
+            }
+        } else {
+            $log_mail = true;
+        }
+
+        return $log_mail;
+    }
+
     public function add_certificate(Request $request){
         $user = auth()->user();
         $intern = Internship::find($request->id);
@@ -390,11 +476,70 @@ class ApprovementController extends Controller
         return response()->json(['success' => true, 'msg' => "Berhasil upload Sertifikat Kelulusan"], 200);
     }
 
-    public function send_message(Request $request){
-        if($request->from == 'internship'){
-            $data = Internship::with('user')->find($request->id);
+    public function add_izinpenelitian(Request $request){
+        $user = auth()->user();
+        $research = Research::find($request->id);
+
+        if($request->hasFile('izin_penelitian')){
+            $image = $this->uploadImage([
+                'path'      => 'public/research/izinpenelitian',
+                'file'      => $request->file('izin_penelitian'),
+                'user'      => $user,
+                'id'        => $research->id,
+                'prefix'    => 'researchizinpenelitian_'
+            ]);
+
+            $update = $research->update(['izin_penelitian' => $image]);
+
+            if(!$update){
+                return response()->json([
+                    'success' => false,
+                    'msg'     => 'Gagal menyimpan surat izin penelitian'
+                ], 200);
+            }
         } else {
-            $data = Comparative::with('user')->find($request->id);
+            return response()->json([
+                'success' => false,
+                'msg'     => 'File tidak terdeteksi'
+            ], 200);
+        }
+
+        $research = Research::find($request->id);
+
+        $details = [
+            'user_id'   => $research->user_id,
+            'table_id'  => $research->id,
+            'email'     => $research->user->email,
+            'from'      => $request->from
+        ];
+
+        $details['title'] = 'Sertifikat Izin Penelitian di Rumah Sakit Gunung Jati Cirebon';
+        $details['body'] = "Selamat anda telah diterima untuk melakukan penelitian di Rumah Sakit Gunung Jati Cirebon. Berikut file kami lampirkan.";
+        $details['filepath'] = public_path().'/'.Storage::url('research/izinpenelitian/'.$research->izin_penelitian);
+        $details['filename'] = 'surat_izinpenelitian_rsgjcirebon.pdf';
+        
+        $log_mail = Message::create($details);
+
+        if($log_mail){
+            $details['data'] = $research;
+            Mail::to($details['email'])->send(new SendMail($details));
+        }        
+
+        return response()->json(['success' => true, 'msg' => "Berhasil upload Surat Izin Penelitian"], 200);
+    }
+
+    public function send_message(Request $request){
+        
+        switch($request->from){
+            case 'internship':
+                $data = Internship::with('user')->find($request->id);
+                break;
+            case 'comparative':
+                $data = Comparative::with('user')->find($request->id);
+                break;
+            case 'research': 
+                $data = Research::with('user')->find($request->id);
+                break;
         }
 
         $details = [

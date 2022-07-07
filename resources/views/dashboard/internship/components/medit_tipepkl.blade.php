@@ -8,7 +8,6 @@
             </div>
             <div class="modal-body py-3">
                 <input type="hidden" name="id" id="id_bukti" required>
-                <input type="hidden" name="tipe" id="tipe_bukti" required>
                 <div class="row">
                     <div class="col-12 col-sm-6 mb-3">
                         <div class="form-group">

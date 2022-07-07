@@ -958,7 +958,7 @@ $.validator.setDefaults({
 });
 
 $.validator.addMethod("alphanumeric", function(value, element) {
-	return this.optional(element) || /^[a-z\d\-\s\?]+$/i.test(value);
+	return this.optional(element) || /^[a-z\d\-\s\?\.\,]+$/i.test(value);
 }, "Letters and numbers only please");
 
 $.validator.addMethod('filesize', function (value, element, param) {

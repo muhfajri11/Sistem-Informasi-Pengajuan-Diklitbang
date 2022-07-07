@@ -54,10 +54,13 @@
 							<span class="nav-text">Penelitian</span>
 						</a>
 						<ul aria-expanded="false">
-							<li><a href="#!">Data Pengajuan</a></li>
-							<li><a href="#!">Pengambilan Data</a></li>
-							<li><a href="#!">Pengajuan Penelitian</a></li>
-							<li><a href="#!">Pengajuan Validasi Data</a></li>
+							<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Admin</a>
+								<ul aria-expanded="false" class="left mm-collapse" style="height: 14px;">
+									<li><a href="{{ route('research.approve') }}">Approval Pengajuan</a></li>
+								</ul>
+							</li>
+							<li><a href="{{ route('research') }}">Pengajuan</a></li>
+							<li><a href="#!">Uji Layak Etik</a></li>
 						</ul>
 					</li>
 					@endcan

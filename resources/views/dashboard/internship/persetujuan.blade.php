@@ -564,13 +564,13 @@
                             
                             let btn = `
 								<div class="btn-group">
-									<button data-list="${ data.name }" data-name="tipe_internship"
+									<button data-id="${ data.id }"
 										class="btn btn-warning shadow btn-xs px-2"
 										data-bs-toggle="modal" data-bs-target="#modal_edittipepkl" data-from="#data_tipepkl">
 										<i class="fas fa-cog me-1"></i>
 									</button>
 									<button class="btn btn-danger shadow btn-xs px-2 delete_setting"
-										data-list="${ data.name }" data-name="tipe_internship" data-from="#data_tipepkl">
+										data-id="${ data.id }" data-name="${ data.name }" data-from="#data_tipepkl">
 										<i class="fas fa-trash me-1"></i>
 									</button>
 								</div>`;
@@ -909,13 +909,13 @@
                                             
                                             let btn = `
                                                 <div class="btn-group">
-                                                    <button data-list="${ data.name }" data-name="jenjang_pendidikan"
+                                                    <button data-id="${ data.id }"
                                                         class="btn btn-warning shadow btn-xs px-2"
                                                         data-bs-toggle="modal" data-bs-target="#modal_editjenjang" data-from="#data_jenjangpend">
 														<i class="fas fa-cog me-1"></i>
                                                     </button>
 													<button class="btn btn-danger shadow btn-xs px-2 delete_setting"
-														data-list="${ data.name }" data-name="jenjang_pendidikan" data-from="#data_jenjangpend">
+														data-id="${ data.id }" data-name="${ data.name }" data-from="#data_jenjangpend">
 														<i class="fas fa-trash me-1"></i>
 													</button>
                                                 </div>`;
@@ -1311,13 +1311,20 @@
 
 			$('#modal_edittipepkl, #modal_editjenjang').on('show.bs.modal', function (e) {
                 const modal = $(this),
-                      name    = $(e.relatedTarget).data('name'),
-					  list    = $(e.relatedTarget).data('list'),
+					  id = $(e.relatedTarget).data('id'),
 					  from = $(e.relatedTarget).data('from');
 
+				let get_from = '';
+
+				if(from == '#data_tipepkl'){
+					get_from = "{{ route('setting.get_tipepkl') }}"
+				} else {
+					get_from = "{{ route('setting.get_jenjang') }}"
+				}
+
                 $.ajax({
-					url: "{{ route('setting.get_data') }}",
-					data: {name: name, list: list},
+					url: get_from,
+					data: {id: id},
 					type: 'POST',
 					async:false,
 					dataType: 'json',
@@ -1327,8 +1334,7 @@
 					}
 				}).done(function(data){
 					if(data.success){
-						modal.find('#id_bukti').val(data.get.name)
-						modal.find('#tipe_bukti').val(name)
+						modal.find('#id_bukti').val(data.get.id)
 
 						modal.find('input[name="name"]').val(data.get.name)
 						modal.find('input[name="fee"]').val(data.get.fee)
@@ -1350,21 +1356,29 @@
 			$('#data_tipepkl, #data_jenjangpend')
 			.on('click', ".delete_setting", function(e){
 				e.preventDefault();
-				const list = $(this).data('list'),
+				const id = $(this).data('id'),
 					  name = $(this).data('name'),
 					  id_elm = $(this).data('from');
 
 				Swal.fire({
-					title: `Apakah kamu yakin ingin menghapus ${list}?`,
+					title: `Apakah kamu yakin ingin menghapus ${name}?`,
 					showDenyButton: true,
 					showConfirmButton: false,
 					showCancelButton: true,
 					denyButtonText: `Hapus`
 				}).then((result) => {
 					if (result.isDenied) {
+						let get_from = '';
+
+						if(id_elm == '#data_tipepkl'){
+							get_from = "{{ route('setting.delete_tipepkl') }}"
+						} else {
+							get_from = "{{ route('setting.delete_jenjang') }}"
+						}
+
 						$.ajax({
-							url: "{{ route('setting.delete_spesific') }}",
-							data: {list: list, name: name},
+							url: get_from,
+							data: {id: id, _method: "DELETE"},
 							type: 'POST',
 							async:false,
 							dataType: 'json',
@@ -1710,7 +1724,7 @@
 						dataForm._method = "_PATCH";
 						
 					$.ajax({
-						url: "{{ route('setting.update_data') }}",
+						url: "{{ route('setting.edit_tipepkl') }}",
 						type: 'PATCH',
 						data: dataForm,
 						beforeSend: function(){
@@ -1739,7 +1753,7 @@
 						resp = JSON.parse(data.responseText)
 						alertError("Terjadi Kesalahan", resp.message)
 						console.log("error");
-					});   
+					});
 				}
 			})
 
@@ -1754,7 +1768,7 @@
 						dataForm._method = "_PATCH";
 						
 					$.ajax({
-						url: "{{ route('setting.update_data') }}",
+						url: "{{ route('setting.edit_jenjang') }}",
 						type: 'PATCH',
 						data: dataForm,
 						beforeSend: function(){

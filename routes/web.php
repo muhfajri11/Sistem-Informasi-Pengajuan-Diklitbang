@@ -73,9 +73,14 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::get('/internship/approvement', 'ApprovementController@internship_approve')->name('internship.approve');
     });
 
+    Route::group(['middleware' => ['permission:penelitian']], function () {
+        Route::get('/research/approvement', 'ApprovementController@research_approve')->name('research.approve');
+    });
+
     Route::group(['middleware' => ['permission:user']], function () {
         Route::get('/studibanding', 'ComparativeController@index')->name('studi_banding');
         Route::get('/internship', 'InternshipController@index')->name('internship');
+        Route::get('/research', 'ResearchController@index')->name('research');
     });
 
     Route::name('studi_banding.')->prefix('studibanding')->group(function() {
@@ -103,18 +108,39 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::delete('/delete', 'InternshipController@delete')->name('delete');
     });
 
+    Route::name('research.')->prefix('research')->group(function() {
+        Route::post('/all/{type}/{admin?}', 'ResearchController@all')->name('all');
+        Route::post('/get_once', 'ResearchController@get_once')->name('get');
+        Route::post('/store', 'ResearchController@store')->name('store');
+        Route::patch('/update', 'ResearchController@update')->name('update');
+
+        Route::put('/add_izinpenelitian', 'ApprovementController@add_izinpenelitian')->name('add_izinpenelitian');
+
+        Route::put('/update_eviden', 'ResearchController@update_eviden')->name('update_eviden');
+        Route::delete('/delete', 'ResearchController@delete')->name('delete');
+    });
+
     Route::post('/settings', 'SettingController@get_settings')->name('get_settings');
     Route::name('setting.')->prefix('setting')->group(function() {
         Route::post('/tipepkl_all', 'SettingController@tipepkl_all')->name('tipepkl_all');
         Route::post('/jenjang_all', 'SettingController@jenjang_all')->name('jenjang_all');
 
-        Route::post('/getdata', 'SettingController@get_data')->name('get_data');
-        Route::patch('/updatedata', 'SettingController@update_data')->name('update_data');
+        Route::post('/get_tipepkl', 'SettingController@get_tipepkl')->name('get_tipepkl');
+        Route::post('/get_jenjang', 'SettingController@get_jenjang')->name('get_jenjang');
+        Route::post('/get_account', 'SettingController@get_account')->name('get_account');
 
-        Route::post('/delete_spesific', 'SettingController@delete_spesific')->name('delete_spesific');
+        Route::patch('/edit_tipepkl', 'SettingController@edit_tipepkl')->name('edit_tipepkl');
+        Route::patch('/edit_jenjang', 'SettingController@edit_jenjang')->name('edit_jenjang');
+
+        Route::delete('/delete_tipepkl', 'SettingController@delete_tipepkl')->name('delete_tipepkl');
+        Route::delete('/delete_jenjang', 'SettingController@delete_jenjang')->name('delete_jenjang');
 
         Route::patch('/setting_pkl', 'ApprovementController@setting_pkl')->name('set_pkl');
         Route::patch('/setting_comparative', 'ApprovementController@setting_comparative')->name('set_comparative');
+
+        // Route::post('/getdata', 'SettingController@get_data')->name('get_data');
+        // Route::patch('/updatedata', 'SettingController@update_data')->name('update_data');
+        // Route::post('/delete_spesific', 'SettingController@delete_spesific')->name('delete_spesific');
     });
 
     Route::post('/get_institusi', 'InstitutionController@get')->name('get_institution');

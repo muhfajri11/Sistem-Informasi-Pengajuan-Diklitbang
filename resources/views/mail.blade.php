@@ -23,6 +23,16 @@
 @endcomponent
 @endif
 
+@if ($details['from'] == 'research')
+<h1 style="text-align: center">Pengajuan Penelitian</h1>
+@component('mail::panel')
+<p>Judul Penelitian</p>
+<h4>{{ $details['data']->judul }}</h4>
+<p>Peneliti Utama</p>
+<h4>{{ $details['data']->ketua }}</h4>
+@endcomponent
+@endif
+
 @endisset
 
 {!! $details['body'] !!}

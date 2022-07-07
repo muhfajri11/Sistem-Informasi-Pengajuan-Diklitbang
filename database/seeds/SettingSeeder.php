@@ -16,7 +16,7 @@ class SettingSeeder extends Seeder
             [
                 'user_id'   => 1,
                 'name'      => 'kuota',
-                'value'     => ['internship'    => 10]
+                'value'     => ['internship' => 10]
             ],
             [
                 'user_id'   => 1,
@@ -31,7 +31,8 @@ class SettingSeeder extends Seeder
                 'name'      => 'fee',
                 'value'     => [
                     'comparative' => ['kurang_dari' => 300000, 'lebih_dari' => 240000],
-                    'internship'  => ['mou' => 150000, 'no_mou' => 300000]
+                    'internship'  => ['mou' => 150000, 'no_mou' => 300000],
+                    'research'  => 300000
                 ]
             ],
             [
@@ -60,7 +61,7 @@ class SettingSeeder extends Seeder
         $settings->each(function($data){
             $data['value'] = json_encode($data['value']);
 
-            $setting = Setting::create($data);
+            Setting::create($data);
         });
     }
 }

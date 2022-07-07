@@ -31,8 +31,8 @@ class DashboardController extends Controller
         $institutions = Institution::all();
         $rooms = Room::all();
 
-        $intern['presentase'] = ($intern['accept']/$intern['all']) * 100;
-        $comparative['presentase'] = ($comparative['accept']/$comparative['all']) * 100;
+        $intern['presentase'] = $intern['all'] > 0?($intern['accept']/$intern['all']) * 100 : 0;
+        $comparative['presentase'] = $comparative['all'] > 0?($comparative['accept']/$comparative['all']) * 100 : 0;
 
         $max_intern = Setting::byName(['kuota']);
         $max_intern = $max_intern->value->internship;
