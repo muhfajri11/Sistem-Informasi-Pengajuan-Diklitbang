@@ -6,6 +6,9 @@
 <link rel="stylesheet" href="{{ asset('assets/vendor/datatables/css/jquery.dataTables.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/vendor/toastr/css/toastr.min.css') }}">
 
+<style>
+figure.image img { height: auto;max-width: 100%; }
+</style>
 @yield('style')
 
 <!-- Style css -->

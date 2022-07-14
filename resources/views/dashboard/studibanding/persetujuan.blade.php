@@ -256,13 +256,15 @@
     <script src="{{ asset('assets/vendor/pickadate/picker.date.js') }}"></script>
 
 	<script src="{{ asset('assets/vendor/fancyapps/fancybox.umd.js') }}"></script>
-    <script src="{{ asset('assets/vendor/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('assets/vendor/ckeditor/build/ckeditor.js') }}"></script>
 
     <script>
         let theEditor;
 
         ClassicEditor
-            .create( document.querySelector( '#editor' ) )
+            .create( document.querySelector( '#editor' ), {
+				extraPlugins: [ MyCustomUploadAdapterPlugin ],  
+			} )
             .then( editor => {
                 theEditor = editor; // Save for later use.
             } )

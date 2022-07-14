@@ -1,3 +1,88 @@
+class UploadAdapter {
+	/**
+	 * Creates a new adapter instance.
+	 *
+	 * @param {module:upload/filerepository~FileLoader} loader
+	 * @param {module:utils/locale~Locale#t} t
+	 */
+	constructor( loader, t ) {
+		/**
+		 * FileLoader instance to use during the upload.
+		 *
+		 * @member {module:upload/filerepository~FileLoader} #loader
+		 */
+		this.loader = loader;
+
+		/**
+		 * Locale translation method.
+		 *
+		 * @member {module:utils/locale~Locale#t} #t
+		 */
+		this.t = t;
+	}
+
+	/**
+	 * Starts the upload process.
+	 *
+	 * @see module:upload/filerepository~UploadAdapter#upload
+	 * @returns {Promise}
+	 */
+	upload() {
+		return this.loader.file
+            .then( file => new Promise( ( resolve, reject ) => {
+                // console.log(file)
+          			const reader = this.reader = new window.FileReader();
+          
+          			reader.onload = function(e) {
+                  const imgData = e.target.result
+                  const canvas = document.createElement('canvas')
+                  const ctx = canvas.getContext('2d')
+                  const newImg = document.createElement('img')
+                  newImg.setAttribute('src', imgData)
+                  newImg.onload = () => {
+                    const imgSize = (file.size / (1000 * 1024)).toFixed(1)
+                    const actualWidth = newImg.width
+                    const actualHeight = newImg.height
+            
+                    const imgWidth = Math.floor(
+                      actualWidth / (imgSize < 1 ? 1 : imgSize > 5 ? 4 : imgSize)
+                    )
+                    const imgHeight = Math.floor(
+                      actualHeight / (imgSize < 1 ? 1 : imgSize > 5 ? 4 : imgSize)
+                    )
+                    canvas.width = imgWidth
+                    canvas.height = imgHeight
+                    ctx.drawImage(newImg, 0, 0, imgWidth, imgHeight)
+                    const imgUrl = canvas.toDataURL('image/webp')
+                    resolve( { default: imgUrl } );
+                  }
+                }
+          
+          			reader.onerror = function( error ) {
+          				reject( error );
+          			};
+          
+          			reader.onabort = function() {
+          				reject();
+          			};
+
+          			reader.readAsDataURL( file );
+            } ) );
+	}
+
+	/**
+	 * Aborts the upload process.
+	 *
+	 * @see module:upload/filerepository~UploadAdapter#abort
+	 * @returns {Promise}
+	 */
+	abort() {
+		if ( this.reader ) {
+			this.reader.abort();
+		}
+	}
+}
+ 
  var Travl  = function(){
 	 "use strict"
 	/* Search Bar ============ */
@@ -121,17 +206,17 @@
 		});
 	}
 	
-	// var handleDzScroll = function() {
-	// 	jQuery('.dlab-scroll').each(function(){
-	// 		var scroolWidgetId = jQuery(this).attr('id');
-	// 		const ps = new PerfectScrollbar('#'+scroolWidgetId, {
-	// 		  wheelSpeed: 2,
-	// 		  wheelPropagation: true,
-	// 		  minScrollbarLength: 20
-	// 		});
-    //         ps.isRtl = false;
-	// 	})
-	// }
+	var handleDzScroll = function() {
+		jQuery('.dlab-scroll').each(function(){
+			var scroolWidgetId = jQuery(this).attr('id');
+			const ps = new PerfectScrollbar('#'+scroolWidgetId, {
+			  wheelSpeed: 2,
+			  wheelPropagation: true,
+			  minScrollbarLength: 20
+			});
+            ps.isRtl = false;
+		})
+	}
 	
 	var handleMenuTabs = function() {
 		if(screenWidth <= 991 ){
@@ -330,15 +415,15 @@
 		});
 	}
 	
-	// var handlePerfectScrollbar = function() {
-	// 	if(jQuery('.dlabnav-scroll').length > 0)
-	// 	{
-	// 		//const qs = new PerfectScrollbar('.dlabnav-scroll');
-	// 		const qs = new PerfectScrollbar('.dlabnav-scroll');
+	var handlePerfectScrollbar = function() {
+		if(jQuery('.dlabnav-scroll').length > 0)
+		{
+			//const qs = new PerfectScrollbar('.dlabnav-scroll');
+			const qs = new PerfectScrollbar('.dlabnav-scroll');
 			
-	// 		qs.isRtl = false;
-	// 	}
-	// }
+			qs.isRtl = false;
+		}
+	}
 
 	var handleBtnNumber = function() {
 		$('.btn-number').on('click', function(e) {
@@ -694,11 +779,11 @@
 			handleMinHeight();
 			handleDataAction();
 			handleHeaderHight();
-			// handleDzScroll();
+			handleDzScroll();
 			handleMenuTabs();
 			handleChatbox();
 			handleDeleteChat();
-			// handlePerfectScrollbar();
+			handlePerfectScrollbar();
 			handleBtnNumber();
 			handleDzChatUser();
 			handleDzFullScreen();
@@ -989,3 +1074,10 @@ const setDatatables = {
 }
 
 var currency = new Intl.NumberFormat('id-ID');
+
+function MyCustomUploadAdapterPlugin( editor ) {
+	editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
+		// Configure the URL to the upload script in your back-end here!
+		return new UploadAdapter( loader );
+	};
+}
