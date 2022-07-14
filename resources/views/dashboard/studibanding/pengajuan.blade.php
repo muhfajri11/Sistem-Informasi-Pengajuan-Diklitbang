@@ -857,7 +857,7 @@
 
             $('#modal_addstudibanding').on('show.bs.modal', function (e) {
                 const modal = $(this);
-				let institution, room, settings = {};
+				let institution, room, fee, account;
 
                 $.when(
 					$.ajax({
@@ -877,17 +877,29 @@
 						console.log("error");
 					}),
 					$.ajax({
+						url: '{{ route("setting.get_account") }}',
+						type: 'POST',
+						dataType: 'json'
+					}).done(function (data) {
+						if(data.success){
+							account = data.get,
+						} else {
+							alertError("Terjadi Kesalahan", data.msg)
+						}
+					}).fail(function(data){
+						resp = JSON.parse(data.responseText)
+						alertError("Terjadi Kesalahan", resp.message)
+						console.log("error");
+					}),
+					$.ajax({
 						url: '{{ route("get_settings") }}',
 						type: 'POST',
-						data: {name: ['fee', 'rekening']},
+						data: {name: ['fee']},
 						dataType: 'json',
 						cache: false
 					}).done(function (data) {
 						if(data.success){
-							data.get.forEach(val => {
-								settings[val.name] = val.value;
-							})
-							console.log(settings)
+							fee = data.get.value;
 						} else {
 							alertError("Terjadi Kesalahan", data.msg)
 						}
@@ -922,12 +934,12 @@
 					})
 					$("#rooms_daftar").html('').select2({data: html_});
 
-					modal.find('.fee_less').attr('data-fee', settings.fee.comparative.kurang_dari).html(`Rp ${currency.format(settings.fee.comparative.kurang_dari)}`)
-					modal.find('.fee_over').attr('data-fee', settings.fee.comparative.lebih_dari).html(`Rp ${currency.format(settings.fee.comparative.lebih_dari)}`)
+					modal.find('.fee_less').attr('data-fee', fee.comparative.kurang_dari).html(`Rp ${currency.format(fee.comparative.kurang_dari)}`)
+					modal.find('.fee_over').attr('data-fee', fee.comparative.lebih_dari).html(`Rp ${currency.format(fee.comparative.lebih_dari)}`)
 
 					carousel.trigger("destroy.owl.carousel");
 					modal.find('.rekening-slider').html('')
-					$.each(settings.rekening, function(i, val){
+					$.each(account, function(i, val){
 						let item = $(htmlBank);
 						
 						if(val.image) item.find('img').attr('src', val.image);
@@ -958,7 +970,7 @@
 										</div>
 									</div>`;
 				
-				let institution, room, detail, settings = {};
+				let institution, room, detail, fee, account;
 
 				$.when(
 					$.ajax({
@@ -982,11 +994,7 @@
 						data: {id: data_id},
 						type: 'POST',
 						async:false,
-						dataType: 'json',
-						beforeSend: function(){
-							$('#preloader').removeClass('d-none');
-							$('#main-wrapper').removeClass('show');
-						}
+						dataType: 'json'
 					}).done(function(data){
 						if(data.success){
 							detail = data.get
@@ -1000,17 +1008,31 @@
 						console.log(data.responseText)
 					}),
 					$.ajax({
+						url: "{{ route('setting.get_account') }}",
+						type: 'POST',
+						async:false,
+						dataType: 'json'
+					}).done(function(data){
+						if(data.success){
+							account = data.get
+						} else {
+							alertError("Berhasil", data.msg)
+						}
+
+						$('#preloader').addClass('d-none');
+						$('#main-wrapper').addClass('show');
+					}).fail(function(data){
+						console.log(data.responseText)
+					}),
+					$.ajax({
 						url: '{{ route("get_settings") }}',
 						type: 'POST',
-						data: {name: ['fee', 'rekening']},
+						data: {name: ['fee']},
 						dataType: 'json',
 						cache: false
 					}).done(function (data) {
 						if(data.success){
-							data.get.forEach(val => {
-								settings[val.name] = val.value;
-							})
-							console.log(settings)
+							fee = data.get.value;
 						} else {
 							alertError("Terjadi Kesalahan", data.msg)
 						}
@@ -1033,12 +1055,12 @@
 					})
 					$("#rooms_edit").html('').select2({data: html_});
 
-					modal.find('.fee_less').attr('data-fee', settings.fee.comparative.kurang_dari).html(`Rp ${currency.format(settings.fee.comparative.kurang_dari)}`)
-					modal.find('.fee_over').attr('data-fee', settings.fee.comparative.lebih_dari).html(`Rp ${currency.format(settings.fee.comparative.lebih_dari)}`)
+					modal.find('.fee_less').attr('data-fee', fee.comparative.kurang_dari).html(`Rp ${currency.format(fee.comparative.kurang_dari)}`)
+					modal.find('.fee_over').attr('data-fee', fee.comparative.lebih_dari).html(`Rp ${currency.format(fee.comparative.lebih_dari)}`)
 
 					carousel.trigger("destroy.owl.carousel");
 					modal.find('.rekening-slider').html('')
-					$.each(settings.rekening, function(i, val){
+					$.each(account, function(i, val){
 						let item = $(htmlBank);
 						
 						if(val.image) item.find('img').attr('src', val.image);
@@ -1261,14 +1283,14 @@
 						console.log(data.responseText)
 					}),
 					$.ajax({
-						url: '{{ route("get_settings") }}',
+						url: '{{ route("setting.get_account") }}',
 						type: 'POST',
 						data: {name: ['rekening']},
 						dataType: 'json',
 						cache: false
 					}).done(function (data) {
 						if(data.success){
-							rekening = data.get.value
+							rekening = data.get
 						} else {
 							alertError("Terjadi Kesalahan", data.msg)
 						}

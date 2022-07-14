@@ -1149,14 +1149,13 @@
 						console.log(data.responseText)
 					}),
 					$.ajax({
-						url: '{{ route("get_settings") }}',
+						url: '{{ route("setting.get_account") }}',
 						type: 'POST',
-						data: {name: ['rekening']},
 						dataType: 'json',
 						cache: false
 					}).done(function (data) {
 						if(data.success){
-							rekening = data.get.value
+							rekening = data.get
 						} else {
 							alertError("Terjadi Kesalahan", data.msg)
 						}
