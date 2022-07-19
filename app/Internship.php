@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\DB;
 class Internship extends Model
 {
     protected $fillable = [
-        'user_id', 'file_internship_id', 'institution_id', 'name', 'nim', 'jurusan', 'semester', 'jenjang', 'address',
+        'user_id', 'institution_id', 'name', 'nim', 'jurusan', 'semester', 'jenjang', 'address',
         'province', 'city', 'phone', 'start_date', 'end_date', 'type', 'jenjang_price', 'type_price', 'mou_price',
         'status', 'paid', 'total_paid'
     ];
 
     public function file_internship(){
-        return $this->belongsTo(FileInternship::class);
+        return $this->hasOne(FileInternship::class);
     }
 
     public function user(){

@@ -280,7 +280,7 @@ class InternshipController extends Controller
         if(isset($image_buktipkl)) $data_image['bukti_pkl'] = $image_buktipkl;
         if(isset($image_evidenpaid)) $data_image['eviden_paid'] = $image_evidenpaid;
 
-        $createFile = FileInternship::create($data_image);
+        $createFile = $intern->file_internship()->create($data_image);
 
         if(!$createFile){
             return response()->json([
@@ -288,7 +288,7 @@ class InternshipController extends Controller
                 'msg'     => 'Gagal menyimpan data berkas'
             ], 200);
         }
-        Internship::find($intern->id)->update(['file_internship_id' => $createFile->id]);
+
         /**      End Upload Image           */
 
         return response()->json([
@@ -492,7 +492,7 @@ class InternshipController extends Controller
         }
 
         if(count($data_image) > 0){
-            $updateFile = FileInternship::find($intern->file_internship_id)->update($data_image);
+            $updateFile = $intern->file_internship()->update($data_image);
 
             if(!$updateFile){
                 return response()->json([

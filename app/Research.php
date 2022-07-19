@@ -26,6 +26,10 @@ class Research extends Model
         return $this->belongsTo(EducationLevel::class);
     }
 
+    public function research_ethics(){
+        return $this->hasMany(ResearchEthic::class);
+    }
+
     public static function can_research($judul){
 
         $check = self::where('judul', $judul)->get();

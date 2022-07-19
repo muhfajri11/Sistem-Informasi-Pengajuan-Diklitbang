@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAccountsTable extends Migration
+class CreateFullboardsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateAccountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('fullboards', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('atas_nama');
-            $table->string('number');
-            $table->string('image')->nullable();
+            $table->foreignId('research_ethic_id')->constrained('research_ethics');
+            $table->string('tanggal');
+            $table->string('jam');
+            $table->string('tempat');
+            $table->string('surat_pemberitahuan');
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreateAccountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('fullboards');
     }
 }

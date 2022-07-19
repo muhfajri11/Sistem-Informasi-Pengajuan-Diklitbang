@@ -9,6 +9,10 @@ class ResearchFee extends Model
     protected $fillable = ['user_id', 'research_type_id', 'origin_proposer_id',
         'institution_proposer_id', 'status_proposer_id', 'education_level_id', 'fee'];
     
+    public function research_ethics(){
+        return $this->hasMany(ResearchEthic::class);
+    }
+
     public function research_type(){
         return $this->belongsTo(ResearchType::class);
     }

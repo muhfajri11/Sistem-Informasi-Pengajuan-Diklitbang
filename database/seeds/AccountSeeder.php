@@ -13,8 +13,8 @@ class AccountSeeder extends Seeder
     public function run()
     {
         $accounts = collect([
-            ['name' => 'BRI', 'number' => "12321211221", 'image' => null],
-            ['name' => 'BNI', 'number' => "892212212", 'image' => null]
+            ['name' => 'BRI', 'atas_nama' => "aziz",'number' => "12321211221", 'image' => null],
+            ['name' => 'BNI', 'atas_nama' => "roni",'number' => "892212212", 'image' => null]
         ]);
         
         $accounts->each(function($data){

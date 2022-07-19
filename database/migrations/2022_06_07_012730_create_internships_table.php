@@ -16,7 +16,6 @@ class CreateInternshipsTable extends Migration
         Schema::create('internships', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('file_internship_id')->nullable();
             $table->foreignId('institution_id');
 
             $table->string('name');

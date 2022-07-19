@@ -54,22 +54,22 @@
 							<span class="nav-text">Penelitian</span>
 						</a>
 						<ul aria-expanded="false">
-							<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Admin</a>
-								<ul aria-expanded="false" class="left mm-collapse" style="height: 14px;">
-									<li><a href="{{ route('research.approve') }}">Approval Pengajuan</a></li>
-								</ul>
-							</li>
+							<li><a href="{{ route('research.approve') }}">Persetujuan</a></li>
 							<li><a href="{{ route('research') }}">Pengajuan</a></li>
-							<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Uji Layak Etik</a>
-								<ul aria-expanded="false" class="left mm-collapse" style="height: 14px;">
-									<li><a href="#!">Pengisian Data</a></li>
-									<li><a href="#!">Protokol Penelitian</a></li>
-									<li><a href="#!">Self Assesment</a></li>
-									<li><a href="#!">Hasil Telaah</a></li>
-									<li><a href="#!">Perbaikan Protokol</a></li>
-									<li><a href="#!">Pemberitahuan Fullboard</a></li>
-								</ul>
-							</li>
+						</ul>
+					</li>
+					<li>
+						<a class="has-arrow " href="javascript:void()" aria-expanded="false">
+							<i class="fas fa-books-medical"></i>
+							<span class="nav-text">Uji Layak Etik</span>
+						</a>
+						<ul aria-expanded="false">
+							<li><a href="{{ route('layaketik') }}">Pengisian Data</a></li>
+							<li><a href="#!">Protokol Penelitian</a></li>
+							<li><a href="#!">Self Assesment</a></li>
+							<li><a href="#!">Hasil Telaah</a></li>
+							<li><a href="#!">Perbaikan Protokol</a></li>
+							<li><a href="#!">Pemberitahuan Fullboard</a></li>
 						</ul>
 					</li>
 					@endcan

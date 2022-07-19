@@ -11,4 +11,8 @@ class InstitutionProposer extends Model
     public function research_fees(){
         return $this->hasMany(ResearchFee::class);
     }
+
+    public function research_ethics(){
+        return $this->hasMany(ResearchEthic::class);
+    }
 }

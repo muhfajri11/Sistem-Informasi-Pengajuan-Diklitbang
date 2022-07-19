@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Account, EducationLevel, Setting, TypeInternship};
+use App\{Account, EducationLevel, InstitutionProposer, OriginProposer, ResearchType, Setting, StatusProposer, TypeInternship};
 use Illuminate\Http\Request;
 
 class SettingController extends Controller
@@ -97,6 +97,86 @@ class SettingController extends Controller
             $result = EducationLevel::find($request->id);
         } else {
             $result = EducationLevel::all();
+        }
+
+        if(!$result){
+            return response()->json([
+                'success' => false,
+                'msg'     => "Data tidak ada"
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'get'     => $result
+        ], 200);
+    }
+
+    public function get_jenis(Request $request){
+        if($request->id){
+            $result = ResearchType::find($request->id);
+        } else {
+            $result = ResearchType::all();
+        }
+
+        if(!$result){
+            return response()->json([
+                'success' => false,
+                'msg'     => "Data tidak ada"
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'get'     => $result
+        ], 200);
+    }
+
+    public function get_asal(Request $request){
+        if($request->id){
+            $result = OriginProposer::find($request->id);
+        } else {
+            $result = OriginProposer::all();
+        }
+
+        if(!$result){
+            return response()->json([
+                'success' => false,
+                'msg'     => "Data tidak ada"
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'get'     => $result
+        ], 200);
+    }
+
+    public function get_lembaga(Request $request){
+        if($request->id){
+            $result = InstitutionProposer::find($request->id);
+        } else {
+            $result = InstitutionProposer::all();
+        }
+
+        if(!$result){
+            return response()->json([
+                'success' => false,
+                'msg'     => "Data tidak ada"
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'get'     => $result
+        ], 200);
+    }
+
+    public function get_status(Request $request){
+        if($request->id){
+            $result = StatusProposer::find($request->id);
+        } else {
+            $result = StatusProposer::all();
         }
 
         if(!$result){

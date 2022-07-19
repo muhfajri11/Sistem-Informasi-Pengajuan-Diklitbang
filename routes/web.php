@@ -81,6 +81,7 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::get('/studibanding', 'ComparativeController@index')->name('studi_banding');
         Route::get('/internship', 'InternshipController@index')->name('internship');
         Route::get('/research', 'ResearchController@index')->name('research');
+        Route::get('/layaketik', 'ResearchEthicController@index')->name('layaketik');
     });
 
     Route::name('studi_banding.')->prefix('studibanding')->group(function() {
@@ -120,13 +121,32 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::delete('/delete', 'ResearchController@delete')->name('delete');
     });
 
+    Route::name('layaketik.')->prefix('layaketik')->group(function() {
+        Route::post('/all/{type}/{admin?}', 'ResearchEthicController@all')->name('all');
+        Route::post('/get_once', 'ResearchEthicController@get_once')->name('get');
+        Route::post('/store', 'ResearchEthicController@store')->name('store');
+        Route::patch('/update', 'ResearchEthicController@update')->name('update');
+
+        Route::post('/get_ethic', 'ResearchEthicController@get_ethic')->name('get_ethic');
+        Route::post('/check_fee', 'ResearchEthicController@check_fee')->name('check_fee');
+
+        Route::put('/update_eviden', 'ResearchEthicController@update_eviden')->name('update_eviden');
+        Route::delete('/delete', 'ResearchEthicController@delete')->name('delete');
+    });
+
     Route::post('/settings', 'SettingController@get_settings')->name('get_settings');
     Route::name('setting.')->prefix('setting')->group(function() {
         Route::post('/tipepkl_all', 'SettingController@tipepkl_all')->name('tipepkl_all');
         Route::post('/jenjang_all', 'SettingController@jenjang_all')->name('jenjang_all');
 
         Route::post('/get_tipepkl', 'SettingController@get_tipepkl')->name('get_tipepkl');
+
         Route::post('/get_jenjang', 'SettingController@get_jenjang')->name('get_jenjang');
+        Route::post('/get_jenis', 'SettingController@get_jenis')->name('get_jenis');
+        Route::post('/get_asal', 'SettingController@get_asal')->name('get_asal');
+        Route::post('/get_lembaga', 'SettingController@get_lembaga')->name('get_lembaga');
+        Route::post('/get_status', 'SettingController@get_status')->name('get_status');
+
         Route::post('/get_account', 'SettingController@get_account')->name('get_account');
 
         Route::patch('/edit_tipepkl', 'SettingController@edit_tipepkl')->name('edit_tipepkl');

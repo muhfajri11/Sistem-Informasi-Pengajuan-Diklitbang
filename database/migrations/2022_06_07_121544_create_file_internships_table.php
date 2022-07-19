@@ -15,6 +15,7 @@ class CreateFileInternshipsTable extends Migration
     {
         Schema::create('file_internships', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('internship_id')->constrained('internships');
             $table->string('proposal');
             $table->string('panduan_praktek');
             $table->string('ktm_ktp');

@@ -20,7 +20,7 @@ class CreateMessagesTable extends Migration
             $table->string('from');
             $table->string('email');
             $table->string('title');
-            $table->text('body');
+            $table->longText('body');
             $table->tinyInteger('is_read')->default(0);
             $table->timestamps();
         });

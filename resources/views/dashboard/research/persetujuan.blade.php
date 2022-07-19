@@ -742,6 +742,9 @@
 								check = data.get.paid? true : false;
 								modal.find('#switch').prop('checked', check);
 
+								check = data.get.is_layaketik? true : false;
+								modal.find('#switch_etik').prop('checked', check);
+
 								modal.find('select[name="status"]').html('').select2({data: status})
 								modal.find('select[name="status"]').val(data_status).change();
 							} else {

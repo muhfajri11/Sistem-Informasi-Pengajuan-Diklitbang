@@ -30,7 +30,7 @@
                     <input type="hidden" name="id" id="id_bukti" required>
                     <div class="col-12 mt-2">
                         <div class="form-group">
-                            <label for="eviden_daftar">Bukti Pembayaran Biaya Penelitian <span id="btn_evidenview"></span></label>
+                            <label for="eviden_daftar">Bukti Pembayaran Biaya Layak Etik <span id="btn_evidenview"></span></label>
                             <div class="input-group">
                                 <div class="form-file">
                                     <input type="file" class="form-file-input form-daftar form-control" name="eviden_paid" required>
