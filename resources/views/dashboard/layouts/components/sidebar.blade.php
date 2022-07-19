@@ -47,14 +47,16 @@
 							@endcan
 						</ul>
 					</li>
-					@can('penelitian')
+					@canany(['penelitian', 'user'])
 					<li>
 						<a class="has-arrow " href="javascript:void()" aria-expanded="false">
 							<i class="fas fa-atom"></i>
 							<span class="nav-text">Penelitian</span>
 						</a>
 						<ul aria-expanded="false">
+							@can('penelitian')
 							<li><a href="{{ route('research.approve') }}">Persetujuan</a></li>
+							@endcan
 							<li><a href="{{ route('research') }}">Pengajuan</a></li>
 						</ul>
 					</li>
@@ -64,6 +66,13 @@
 							<span class="nav-text">Uji Layak Etik</span>
 						</a>
 						<ul aria-expanded="false">
+							@can('penelitian')
+							<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Admin</a>
+								<ul aria-expanded="false" class="left mm-collapse" style="height: 14px;">
+									<li><a href="{{ route('layaketik.approve') }}">Approval Pengajuan</a></li>
+								</ul>
+							</li>
+							@endcan
 							<li><a href="{{ route('layaketik') }}">Pengisian Data</a></li>
 							<li><a href="#!">Protokol Penelitian</a></li>
 							<li><a href="#!">Self Assesment</a></li>

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ResearchEthic extends Model
 {
@@ -13,6 +14,19 @@ class ResearchEthic extends Model
         'is_multisenter', 'tempat_multisenter', 'acc_multisenter', 'status', 'paid',
         'surat_pengantar', 'eviden_paid'
     ];
+
+    public static function deleteMessage($user_id, $id){
+        $messages = DB::table('messages')->where('user_id', $user_id)->where('table_id', $id)->where('from', 'layaketik')->get();
+        
+        if(count($messages) > 0){
+            $delete = DB::table('messages')->where('user_id', $user_id)->where('table_id', $id)->where('from', 'layaketik')->delete();
+            if(!$delete) return false;
+        } else {
+            return true;
+        }
+
+        return true;
+    }
 
     public function user(){
         return $this->belongsTo(User::class);

@@ -90,7 +90,7 @@ class ResearchEthicController extends Controller
             $layaketik->peneliti_asing = json_decode($layaketik->peneliti_asing);
         }
 
-        $layaketik->surat_pernyataan = Storage::url('layaketik/surat_pernyataan/'.$layaketik->surat_pernyataan);
+        $layaketik->surat_pengantar = Storage::url('layaketik/surat_pengantar/'.$layaketik->surat_pengantar);
 
         $layaketik->eviden_paid = is_null($layaketik->eviden_paid)? 
             $layaketik->eviden_paid : Storage::url('layaketik/evidenpaid/'.$layaketik->eviden_paid);
@@ -441,7 +441,7 @@ class ResearchEthicController extends Controller
             }
         }
 
-        // $msg = Research::deleteMessage($intern->user_id, $intern->id);
+        $msg = ResearchEthic::deleteMessage($intern->user_id, $intern->id);
 
         // if(!$msg){
         //     return response()->json([

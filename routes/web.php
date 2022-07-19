@@ -75,6 +75,7 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
 
     Route::group(['middleware' => ['permission:penelitian']], function () {
         Route::get('/research/approvement', 'ApprovementController@research_approve')->name('research.approve');
+        Route::get('/layaketik/approvement', 'ApprovementController@layaketik_approve')->name('layaketik.approve');
     });
 
     Route::group(['middleware' => ['permission:user']], function () {

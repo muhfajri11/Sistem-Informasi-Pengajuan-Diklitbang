@@ -319,7 +319,7 @@ class DashboardController extends Controller
     }
 
     public function get_messages($admin = null){
-        $data = $admin ? Message::with('user')->get() : auth()->user()->messages;
+        $data = $admin ? Message::with('user')->latest()->get() : auth()->user()->messages()->latest()->get();
 
         if(!$data){
             return response()->json([

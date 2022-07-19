@@ -463,7 +463,7 @@ class UploadAdapter {
 				}
 			}).done(function (data) {
 				if(data.success){
-					console.log(data.get)
+					// console.log(data.get)
 					const container = jQuery('#content_msg .col-12'),
 						  dateCreate = new Date(data.get.created_at);
 

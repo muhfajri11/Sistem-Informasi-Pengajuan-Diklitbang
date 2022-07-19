@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Internship, FileInternship, Comparative, Message, Research, Room, Setting};
+use App\{Internship, FileInternship, Comparative, Message, Research, ResearchEthic, Room, Setting};
 use App\Mail\SendMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Mail, Storage};
@@ -65,6 +65,10 @@ class ApprovementController extends Controller
         return view('dashboard.research.persetujuan');
     }
 
+    public function layaketik_approve(){
+        return view('dashboard.layaketik.persetujuan');
+    }
+
     public function changestatus(Request $request){
         $data = $request->all();
 
@@ -77,6 +81,9 @@ class ApprovementController extends Controller
             break;
             case 'research':
                 $sendMsg = $this->change_research($data);
+            break;
+            case 'layaketik':
+                $sendMsg = $this->change_layaketik($data);
             break;
         }
 
@@ -96,6 +103,9 @@ class ApprovementController extends Controller
             break;
             case 'research':
                 $update = Research::find($request->id)->update($request->all());
+            break;
+            case 'layaketik':
+                $update = ResearchEthic::find($request->id)->update($request->all());
             break;
         }
 
@@ -424,6 +434,66 @@ class ApprovementController extends Controller
         return $log_mail;
     }
 
+    public function change_layaketik($data){
+        $research = ResearchEthic::with('user')->find($data['id']);
+        $details = [
+            'user_id'   => $research->user_id,
+            'table_id'  => $research->id,
+            'email'     => $research->user->email,
+            'from'      => $data['from']
+        ];
+
+        $check_status = $data['status'] != $research->status;
+        $check_paid = $data['paid'] != $research->paid;
+
+        $details['title'] = 'Perubahan Status Pengajuan Uji Layak Etik';
+        $details['body'] = '';
+        $check_send = false;
+
+        if($check_status){
+            $check_send = true;
+            switch($data['status']){
+                case 'review':
+                    $details['body'] .= 'Dokumen anda akan kami review terlebih dahulu. Untuk informasi 
+                                    kelengkapan dokumen akan kami informasikan segera. Terima Kasih.<br><br>';
+                break;
+                case 'pay':
+                    $details['body'] .= 'Selamat data dan berkas sudah kami terima. Selanjutnya silahkan
+                                        selesaikan pembayaran yang sudah tertera. Terima Kasih.<br><br>';
+                break;
+                case 'accept':
+                    $details['body'] .= 'Selamat anda telah diterima untuk melakukan Uji Layak Etik tindak lanjut dari penelitian anda ditempat 
+                                            kami. Informasi lebih lanjut segera kami beritahukan. Terima Kasih.<br><br>';
+                break;
+            }
+        }
+
+        if($check_paid){
+            $check_send = true;
+            switch($data['paid']){
+                case "1":
+                    $details['body'] .= "Selamat Bukti Pembayaran anda kami terima.<br><br><hr>";
+                break;
+                case "0":
+                    $details['body'] .= "Bukti Pembayaran anda tidak valid silahkan upload kembali.<br><br><hr>";
+                break;
+            }
+        }
+
+        if($check_send){
+            $log_mail = Message::create($details);
+
+            if($log_mail){
+                $details['data'] = $research;
+                Mail::to($details['email'])->send(new SendMail($details));
+            }
+        } else {
+            $log_mail = true;
+        }
+
+        return $log_mail;
+    }
+
     public function add_certificate(Request $request){
         $user = auth()->user();
         $intern = Internship::find($request->id);
@@ -539,6 +609,9 @@ class ApprovementController extends Controller
                 break;
             case 'research': 
                 $data = Research::with('user')->find($request->id);
+                break;
+            case 'layaketik': 
+                $data = ResearchEthic::with('user')->find($request->id);
                 break;
         }
 
