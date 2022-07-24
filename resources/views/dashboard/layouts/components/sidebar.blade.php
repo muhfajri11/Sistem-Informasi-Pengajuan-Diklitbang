@@ -74,8 +74,7 @@
 							</li>
 							@endcan
 							<li><a href="{{ route('layaketik') }}">Pengisian Data</a></li>
-							<li><a href="#!">Protokol Penelitian</a></li>
-							<li><a href="#!">Self Assesment</a></li>
+							<li><a href="{{ route('layaketik.protocol') }}">Protokol Penelitian</a></li>
 							<li><a href="#!">Hasil Telaah</a></li>
 							<li><a href="#!">Perbaikan Protokol</a></li>
 							<li><a href="#!">Pemberitahuan Fullboard</a></li>

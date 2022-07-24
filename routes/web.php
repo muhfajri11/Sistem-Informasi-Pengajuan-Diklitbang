@@ -82,7 +82,17 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         Route::get('/studibanding', 'ComparativeController@index')->name('studi_banding');
         Route::get('/internship', 'InternshipController@index')->name('internship');
         Route::get('/research', 'ResearchController@index')->name('research');
+
         Route::get('/layaketik', 'ResearchEthicController@index')->name('layaketik');
+
+        Route::name('layaketik.')->prefix('layaketik')->group(function() {
+            Route::get('/protocol', 'ProtocolController@index')->name('protocol');
+            
+            Route::get('/protocol/form', 'ProtocolController@form')->name('protocol.form');
+            Route::post('/protocol/store', 'ProtocolController@store')->name('protocol.store');
+
+            Route::get('/protocol/self_assesment', 'SelfAssesmentController@form')->name('protocol.self_assesment');
+        });
     });
 
     Route::name('studi_banding.')->prefix('studibanding')->group(function() {
@@ -133,6 +143,16 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
 
         Route::put('/update_eviden', 'ResearchEthicController@update_eviden')->name('update_eviden');
         Route::delete('/delete', 'ResearchEthicController@delete')->name('delete');
+
+        Route::name('protocol.')->prefix('protocol')->group(function() {
+            Route::post('/all/{admin?}', 'ProtocolController@all')->name('all');
+            Route::post('/store', 'ProtocolController@store')->name('store');
+
+            Route::name('selfassesment.')->prefix('selfassesment')->group(function() {
+                Route::post('/all/{admin?}', 'SelfAssesmentController@all')->name('all');
+                Route::post('/store', 'SelfAssesmentController@store')->name('store');
+            });
+        });
     });
 
     Route::post('/settings', 'SettingController@get_settings')->name('get_settings');
