@@ -148,6 +148,8 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
             Route::post('/all/{admin?}', 'ProtocolController@all')->name('all');
             Route::post('/store', 'ProtocolController@store')->name('store');
 
+            Route::get('/print/{hash}', 'ProtocolController@print')->name('print');
+
             Route::name('selfassesment.')->prefix('selfassesment')->group(function() {
                 Route::post('/all/{admin?}', 'SelfAssesmentController@all')->name('all');
                 Route::post('/store', 'SelfAssesmentController@store')->name('store');

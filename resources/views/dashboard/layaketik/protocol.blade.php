@@ -160,10 +160,16 @@
                         "render": function (data, row, type, meta) {
                             
                             let btn = `
-                            <button data-id="${ data.id }"
-								class="btn btn-primary shadow btn-xs px-2">
-								<i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
-							</button>`;
+							<div class="btn-group">
+								<button data-id="${ data.id }"
+									class="btn btn-primary shadow btn-xs px-2">
+									<i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
+								</button>
+								<a href="{{ URL::to('/dashboard/layaketik/protocol/print/') }}/${data.id}"
+									class="btn btn-primary shadow btn-xs px-2">
+									<i class="fas fa-print me-1"></i><span class="d-none d-sm-block">Print</span>
+								</a>
+							</div>`;
 
                             return btn;
                         }

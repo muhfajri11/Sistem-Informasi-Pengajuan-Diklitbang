@@ -27,6 +27,10 @@
         </div>
     </div>
 
+    <?php
+        $hashids = new Hashids\Hashids();
+    ?>
+
     <form id="tambah_selfassesment" enctype="multipart/form-data" novalidate>
         <div class="col-12">
             <div class="card">
@@ -40,10 +44,11 @@
                             <select class="select2_ mb-2" name="judul" required>
                                 <option value="">-</option>
                                 @foreach ($result as $data)
-                                    <option value="{{ $data->id }}">{{ $data->research->ketua }} - {{ $data->research->judul }}</option>
+                                    <option data-hash="{{ $hashids->encode($data->protocol->id) }}" value="{{ $data->id }}">{{ $data->research->ketua }} - {{ $data->research->judul }}</option>
                                 @endforeach
                             </select>
                         </div>
+                        <button id="print" class="btn btn-primary mt-4"><i class="fas fa-print me-2"></i> Print Protokol</button>
                     </div>
                 </div>
             </div>
@@ -124,10 +129,13 @@
                 change_dot(tab, result.parent, result.child)
             })
 
-            // $('.tab-pane').on('change', '.child_1', function(e){
-            //     const tab = $(this).closest('.tab-pane');
-            //     change_dot(tab, 'parent_1', 'child_1')
-            // })
+            $('#print').click(function(e){
+                e.preventDefault();
+                const hash = $("select[name=judul]").select2().find(":selected").data("hash");
+                
+                if(hash) window.location.href = `{{ URL::to('/dashboard/layaketik/protocol/print/') }}/${hash}`;
+            });
+
             $('#tambah_selfassesment').validate({
                 ignore : [],
 				submitHandler: function (form) {

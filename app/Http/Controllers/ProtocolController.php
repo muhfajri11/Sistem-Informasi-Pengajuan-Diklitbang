@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\{Protocol, ResearchEthic, SelfAssesment};
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use LynX39\LaraPdfMerger\Facades\PdfMerger;
 
 class ProtocolController extends Controller
 {
@@ -24,12 +28,12 @@ class ProtocolController extends Controller
             $ethics = ResearchEthic::with('protocol')->where('user_id', auth()->user()->id)->get();
         }
 
-        $response = []; $i = 0;
+        $response = []; $i = 0; $hashids = new Hashids();
 
         foreach($ethics as $ethic){
             if($ethic->protocol){
                 $response[$i]['i'] = $i + 1;
-                $response[$i]['id'] = $ethic->protocol->id;
+                $response[$i]['id'] = $hashids->encode($ethic->protocol->id);
                 $response[$i]['judul'] = $ethic->research->judul;
                 $response[$i]['start_date'] = Carbon::createFromFormat('Y-m-d', $ethic->research->start_date)->format('d F Y');
                 $response[$i]['created_at'] = Carbon::parse($ethic->protocol->created_at)->format('d F Y');
@@ -284,5 +288,81 @@ class ProtocolController extends Controller
             'success' => true,
             'msg'     => "Berhasil menyimpan data"
         ], 200);
+    }
+
+    public function print($hash){
+        if(empty($hash)) return abort(404);
+
+        $hashids = new Hashids();
+        $id = $hashids->decode($hash);
+
+        $protocol = Protocol::find($id[0]);
+
+        if(empty($protocol)) return abort(404);
+
+        $protocol->ringkasan_protokol = json_decode($protocol->ringkasan_protokol);
+        $protocol->kondisi_lapangan = json_decode($protocol->kondisi_lapangan);
+        $protocol->disain_penelitian = json_decode($protocol->disain_penelitian);
+        $protocol->sampling = json_decode($protocol->sampling);
+        $protocol->intervensi = json_decode($protocol->intervensi);
+        $protocol->adverse_penelitian = json_decode($protocol->adverse_penelitian);
+        $protocol->manfaat = json_decode($protocol->manfaat);
+        $protocol->informed_consent = json_decode($protocol->informed_consent);
+        $protocol->wali = json_decode($protocol->wali);
+        $protocol->bujukan = json_decode($protocol->bujukan);
+        $protocol->penjagaan_kerahasiaan = json_decode($protocol->penjagaan_kerahasiaan);
+        $protocol->manfaat_sosial = json_decode($protocol->manfaat_sosial);
+        $protocol->publikasi = json_decode($protocol->publikasi);
+        $protocol->komitmen_etik = json_decode($protocol->komitmen_etik);
+
+        $pdf = Pdf::loadview('dashboard/print_protocol', compact('protocol'));
+        $pdfmerger = PdfMerger::init();
+
+	    $content =  $pdf->setPaper('a4', 'portrait')->download()->getOriginalContent();
+        Storage::put('/public/temp/temp_pdf.pdf',$content);
+
+        $content = public_path('storage\temp\temp_pdf.pdf');
+        $pdfmerger->addPDF($content, 'all');
+
+        if(!empty($protocol->halaman_pengesahan)){
+            $file_ = public_path('storage\protokol\halaman_pengesahan\/').$protocol->halaman_pengesahan;
+            $pdfmerger->addPDF($file_, 'all');
+        }
+
+        if(!empty($protocol->cv_ketua)){
+            $file_ = public_path('storage\protokol\cv_ketua\/').$protocol->cv_ketua;
+            $pdfmerger->addPDF($file_, 'all');
+        }
+
+        if(!empty($protocol->cv_anggota)){
+            $file_ = public_path('storage\protokol\cv_anggota\/').$protocol->cv_anggota;
+            $pdfmerger->addPDF($file_, 'all');
+        }
+
+        if(!empty($protocol->lembaga_sponsor)){
+            $file_ = public_path('storage\protokol\lembaga_sponsor\/').$protocol->lembaga_sponsor;
+            $pdfmerger->addPDF($file_, 'all');
+        }
+
+        if(!empty($protocol->surat_pernyataan)){
+            $file_ = public_path('storage\protokol\surat_pernyataan\/').$protocol->surat_pernyataan;
+            $pdfmerger->addPDF($file_, 'all');
+        }
+
+        if(!empty($protocol->kuesioner)){
+            $file_ = public_path('storage\protokol\kuesioner\/').$protocol->kuesioner;
+            $pdfmerger->addPDF($file_, 'all');
+        }
+
+        if(!empty($protocol->file_informedconsent)){
+            $file_ = public_path('storage\protokol\file_informedconsent\/').$protocol->file_informedconsent;
+            $pdfmerger->addPDF($file_, 'all');
+        }
+
+        $pdfmerger->merge();
+
+        Storage::delete('public/temp/temp_pdf.pdf');
+
+        return $pdfmerger->save('protokol_penelitian.pdf', "download");
     }
 }

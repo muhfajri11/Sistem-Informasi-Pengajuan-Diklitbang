@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\{Comparative, Institution, Internship, Message, Room, Setting, User};
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Storage;
+use LynX39\LaraPdfMerger\Facades\PdfMerger;
 use Spatie\Permission\Models\{Permission, Role};
 
 class DashboardController extends Controller
