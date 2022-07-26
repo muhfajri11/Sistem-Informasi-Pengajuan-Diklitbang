@@ -1,6 +1,18 @@
 @extends('dashboard.layouts.app')
 
-@section('title', "Form Protokol Etik Penelitian")
+@php
+    if(isset($ethics)){
+        $title = "Form Protokol Etik Penelitian";
+    } else if(isset($protocol)) {
+        if(isset($is_edit)){
+            $title = "Edit Protokol Etik Penelitian";
+        } else {
+            $title = "Protokol Etik Penelitian";
+        }
+    }
+@endphp
+
+@section('title', $title)
 
 @section('style')
 	<link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}">
@@ -19,6 +31,7 @@
         </div>
     </div>
 
+    @if(isset($ethics))
     <form id="tambah_protocol" enctype="multipart/form-data" novalidate>
         <div class="col-12">
             <div class="card">
@@ -40,10 +53,22 @@
                 </div>
             </div>
         </div>
-
+    @elseif(isset($protocol))
+    @if(isset($is_edit))
+    <form id="edit_protocol" enctype="multipart/form-data" novalidate>
+        <input type="hidden" name="judul" value="{{ $protocol->id }}" required>
+    @endif
+    @endif
         
         @include('dashboard.layaketik.components.card_formprotocol')
+        
+    @if(isset($ethics))
     </form>
+    @elseif(isset($protocol))
+        @if(isset($is_edit))
+    </form>
+        @endif
+    @endif
 @endsection
 
 @section('script')
@@ -244,6 +269,70 @@
                         if (result.isConfirmed) {
                             $.ajax({
                                 url: "{{ route('layaketik.protocol.store') }}",
+                                method: 'POST',
+                                data: dataForm,
+                                async: false,
+                                processData: false,
+                                contentType: false,
+                                cache: false,
+                                dataType: 'json',
+                                enctype: 'multipart/form-data',
+                                beforeSend: function(){
+                                    $('#preloader').removeClass('d-none');
+                                    $('#main-wrapper').removeClass('show');
+                                }
+                            }).done(function (data) {						
+                                if(data.success){
+                                    alertSuccess("Berhasil", data.msg)
+                                    window.location.href = "{{ route('layaketik.protocol') }}";
+                                } else {
+                                    alertError("Terjadi Kesalahan", data.msg)
+                                }
+
+                                $('#preloader').addClass('d-none');
+                                $('#main-wrapper').addClass('show');
+                            }).fail(function(data){
+                                $('#preloader').addClass('d-none');
+                                $('#main-wrapper').addClass('show');
+
+                                resp = JSON.parse(data.responseText)
+                                alertError("Terjadi Kesalahan", resp.message)
+                                console.log("error");
+                            });   
+                        }
+                    })
+				}
+			})
+
+            $('#edit_protocol').validate({
+                ignore : [],
+				rules:{
+                    judul:{ required: true },
+                    ringkasan_protocol_a: { ckrequired: false }, ringkasan_protocol_b: { ckrequired: false },
+                    cv_ketua: { required: false, extension: "pdf", filesize : 1 },
+                    cv_anggota: { required: false, extension: "pdf", filesize : 1 },
+                    lembaga_sponsor: { required: false, extension: "pdf", filesize : 1 },
+                    surat_pernyataan: { required: false, extension: "pdf", filesize : 1 },
+                    kuesioner: { required: false, extension: "pdf", filesize : 1 },
+                    file_informedconsent: { required: false, extension: "pdf", filesize : 1 },
+                    halaman_pengesahan: { required: false, extension: "pdf", filesize : 1 },
+				},
+				submitHandler: function (form) {
+                    const dataForm = new FormData(form);
+
+                    // for (var pair of dataForm.entries()) {
+                    //     console.log(pair[0]+ ', ' + pair[1]); 
+                    // }
+
+                    Swal.fire({
+                        title: `Apakah yakin ingin mengupdate?`,
+                        text: "Periksa kembali data anda apakah sudah sesuai.",
+                        showCancelButton: true,
+                        confirmButtonText: `Save`
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: "{{ route('layaketik.protocol.update') }}",
                                 method: 'POST',
                                 data: dataForm,
                                 async: false,

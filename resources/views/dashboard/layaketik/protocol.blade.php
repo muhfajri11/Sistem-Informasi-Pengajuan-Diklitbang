@@ -160,15 +160,43 @@
                         "render": function (data, row, type, meta) {
                             
                             let btn = `
-							<div class="btn-group">
-								<button data-id="${ data.id }"
+							<div class="btn-group">`;
+								
+								if(data.edit){
+									btn += `
+								<a href="{{ URL::to('/dashboard/layaketik/protocol/view/') }}/${ data.id }"
 									class="btn btn-primary shadow btn-xs px-2">
-									<i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
-								</button>
-								<a href="{{ URL::to('/dashboard/layaketik/protocol/print/') }}/${data.id}"
-									class="btn btn-primary shadow btn-xs px-2">
-									<i class="fas fa-print me-1"></i><span class="d-none d-sm-block">Print</span>
+									<i class="fas fa-eye me-1"></i> <span class="d-none d-sm-block">View</span>
 								</a>
+								<div class="btn-group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
+                                    <div class="dropdown-menu">`;
+								} else {
+									btn += `
+								<button data-hash="${data.id}"
+									class="btn btn-primary shadow btn-xs px-2 btn_acc">
+									<i class="fas fa-file-check me-1"></i><span class="d-none d-sm-block">Review</span>
+								</button>
+								<div class="btn-group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
+                                    <div class="dropdown-menu">
+										<a href="{{ URL::to('/dashboard/layaketik/protocol/view/') }}/${ data.id }"
+											class="dropdown-item">
+											<i class="fas fa-eye me-1"></i> View
+										</a>
+										<a href="{{ URL::to('/dashboard/layaketik/protocol/edit/') }}/${data.id}"
+											class="dropdown-item">
+											<i class="fas fa-cog me-1"></i> Edit
+										</a>`;
+								}
+
+								btn += `
+										<a href="{{ URL::to('/dashboard/layaketik/protocol/print/') }}/${data.id}"
+											class="dropdown-item">
+											<i class="fas fa-print me-1"></i> Print
+										</a>
+                                    </div>
+                                </div>
 							</div>`;
 
                             return btn;
@@ -254,12 +282,27 @@
 									"mData": null,
 									"sortable": false,
 									"render": function (data, row, type, meta) {
+										let btn;
 										
-										let btn = `
-										<button data-id="${ data.id }"
-											class="btn btn-primary shadow btn-xs px-2">
-											<i class="fas fa-eye me-1"></i><span class="d-none d-sm-block">View</span>
-										</button>`;
+										if(data.edit){
+											btn = `
+											<a href="{{ URL::to('/dashboard/layaketik/protocol/self_assesment/view/') }}/${data.id}"
+												class="btn btn-primary shadow btn-xs px-2">
+												<i class="fas fa-eye me-1"></i> <span class="d-none d-sm-block">View</span>
+											</a>`;
+										} else {
+											btn = `
+											<div class="btn-group">
+												<a href="{{ URL::to('/dashboard/layaketik/protocol/self_assesment/view/') }}/${data.id}"
+													class="btn btn-primary shadow btn-xs px-2">
+													<i class="fas fa-eye me-1"></i> <span class="d-none d-sm-block">View</span>
+												</a>
+												<a href="{{ URL::to('/dashboard/layaketik/protocol/self_assesment/edit/') }}/${data.id}"
+													class="btn btn-primary shadow btn-xs px-2">
+													<i class="fas fa-cog me-1"></i> <span class="d-none d-sm-block">Edit</span>
+												</a>
+											</div>`;
+										}
 
 										return btn;
 									}
@@ -295,6 +338,45 @@
 				const id_elm = $(this).data('table');
 
 				reloadData(id_elm);
+			})
+
+			$('#data_protocol').on('click', '.btn_acc', function(e){
+				Swal.fire({
+                        title: `Protokol anda siap ditelaah?`,
+                        text: "Periksa kembali data anda apakah sudah sesuai.",
+                        showCancelButton: true,
+                        confirmButtonText: `Save`
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: "{{ route('layaketik.protocol.ready') }}",
+                                method: 'POST',
+								data: {hash: $(this).data('hash')},
+                                async: false,
+                                beforeSend: function(){
+                                    $('#preloader').removeClass('d-none');
+                                    $('#main-wrapper').removeClass('show');
+                                }
+                            }).done(function (data) {						
+                                if(data.success){
+                                    alertSuccess("Berhasil", data.msg)
+                                    reloadData('#data_protocol')
+                                } else {
+                                    alertError("Terjadi Kesalahan", data.msg)
+                                }
+
+                                $('#preloader').addClass('d-none');
+                                $('#main-wrapper').addClass('show');
+                            }).fail(function(data){
+                                $('#preloader').addClass('d-none');
+                                $('#main-wrapper').addClass('show');
+
+                                resp = JSON.parse(data.responseText)
+                                alertError("Terjadi Kesalahan", resp.message)
+                                console.log("error");
+                            });   
+                        }
+                    })
 			})
         })
     </script>

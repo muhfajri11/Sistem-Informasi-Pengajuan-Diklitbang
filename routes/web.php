@@ -87,11 +87,18 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
 
         Route::name('layaketik.')->prefix('layaketik')->group(function() {
             Route::get('/protocol', 'ProtocolController@index')->name('protocol');
-            
-            Route::get('/protocol/form', 'ProtocolController@form')->name('protocol.form');
-            Route::post('/protocol/store', 'ProtocolController@store')->name('protocol.store');
 
-            Route::get('/protocol/self_assesment', 'SelfAssesmentController@form')->name('protocol.self_assesment');
+            Route::name('protocol.')->prefix('protocol')->group(function() {
+                Route::get('/form', 'ProtocolController@form')->name('form');
+                Route::get('/view/{hash}', 'ProtocolController@view')->name('view');
+                Route::get('/edit/{hash}', 'ProtocolController@edit')->name('edit');
+    
+                Route::get('/self_assesment', 'SelfAssesmentController@form')->name('self_assesment');
+                Route::name('self_assesment.')->prefix('self_assesment')->group(function() {
+                    Route::get('/view/{hash}', 'SelfAssesmentController@view')->name('view');
+                    Route::get('/edit/{hash}', 'SelfAssesmentController@edit')->name('edit');
+                });
+            });
         });
     });
 
@@ -146,13 +153,16 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
 
         Route::name('protocol.')->prefix('protocol')->group(function() {
             Route::post('/all/{admin?}', 'ProtocolController@all')->name('all');
-            Route::post('/store', 'ProtocolController@store')->name('store');
+            Route::post('/store', 'ProtocolController@store')->name('store');        
+            Route::post('/update', 'ProtocolController@update')->name('update');
 
             Route::get('/print/{hash}', 'ProtocolController@print')->name('print');
+            Route::post('/ready', 'ProtocolController@ready')->name('ready');
 
             Route::name('selfassesment.')->prefix('selfassesment')->group(function() {
                 Route::post('/all/{admin?}', 'SelfAssesmentController@all')->name('all');
                 Route::post('/store', 'SelfAssesmentController@store')->name('store');
+                Route::post('/update', 'SelfAssesmentController@update')->name('update');
             });
         });
     });
