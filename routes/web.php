@@ -92,7 +92,10 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
                 Route::get('/form', 'ProtocolController@form')->name('form');
                 Route::get('/view/{hash}', 'ProtocolController@view')->name('view');
                 Route::get('/edit/{hash}', 'ProtocolController@edit')->name('edit');
-    
+
+                Route::get('/resume', 'ProtocolController@resume_protocol')->name('resume');
+                Route::get('/resume/form/{hash}', 'ProtocolController@form_resumeprotocol')->name('resume.form');
+
                 Route::get('/self_assesment', 'SelfAssesmentController@form')->name('self_assesment');
                 Route::name('self_assesment.')->prefix('self_assesment')->group(function() {
                     Route::get('/view/{hash}', 'SelfAssesmentController@view')->name('view');
@@ -164,6 +167,9 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
                 Route::post('/store', 'SelfAssesmentController@store')->name('store');
                 Route::post('/update', 'SelfAssesmentController@update')->name('update');
             });
+
+            Route::post('/resume/all_review', 'ProtocolController@all_review')->name('resume.all_review');
+            Route::post('/resume/store', 'ProtocolController@store_resumeprotocol')->name('resume.store');
         });
     });
 

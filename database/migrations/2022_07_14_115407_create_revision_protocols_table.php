@@ -16,6 +16,7 @@ class CreateRevisionProtocolsTable extends Migration
         Schema::create('revision_protocols', function (Blueprint $table) {
             $table->id();
             $table->foreignId('protocol_id')->constrained('protocols');
+            $table->integer('revision');
             $table->tinyInteger('is_ready')->default(0);
             $table->longText('ringkasan_protokol');
             $table->longText('isu_etik');

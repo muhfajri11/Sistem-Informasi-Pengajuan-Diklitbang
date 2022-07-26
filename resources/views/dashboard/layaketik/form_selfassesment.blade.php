@@ -73,8 +73,13 @@
             </div>
         </div>
     @endif
-
-        @include('dashboard.layaketik.components.card_formselfassesment')
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    @include('dashboard.layaketik.components.card_formselfassesment')
+                </div>
+            </div>
+        </div>
 
     @if(!isset($self_assesment) || isset($is_edit))
     </form>

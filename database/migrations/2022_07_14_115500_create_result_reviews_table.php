@@ -17,6 +17,7 @@ class CreateResultReviewsTable extends Migration
             $table->id();
             $table->foreignId('research_ethic_id')->constrained('research_ethics');
             $table->enum('status', ['exempted', 'expedited', 'fullboard', 'ditolak']);
+            $table->integer('revision');
             $table->text('keterangan');
             $table->string('sertifikat_layaketik')->nullable();
             $table->timestamps();

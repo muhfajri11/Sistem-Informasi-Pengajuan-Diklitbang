@@ -18,7 +18,7 @@ class CreateProtocolsTable extends Migration
             $table->foreignId('research_ethic_id')->constrained('research_ethics');
             $table->tinyInteger('is_ready')->default(0);
             $table->longText('ringkasan_protokol');
-            $table->longText('isu_etik');
+            $table->longText('isu_etik')->nullable();
             $table->longText('ringkasan_kajianpustaka')->nullable();
             $table->longText('kondisi_lapangan')->nullable();
             $table->longText('disain_penelitian')->nullable();

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Protocol, ResearchEthic, SelfAssesment};
+use App\{Protocol, ResearchEthic, ResumeReview, SelfAssesment};
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Hashids\Hashids;
@@ -20,6 +20,119 @@ class ProtocolController extends Controller
 
     public function index(){
         return view('dashboard.layaketik.protocol');
+    }
+
+    public function form(){
+        $data = [
+            'user_id' => auth()->user()->id,
+            'status'  => 'accept'
+        ];
+
+        $research = ResearchEthic::with('protocol')->where($data)->latest()->get();
+        $ethics = [];
+
+        foreach($research as $ethic){
+            if(empty($ethic->protocol)){
+                $ethics[] = $ethic;
+            }
+        }
+
+        return view('dashboard.layaketik.form_protocol', compact('ethics'));
+    }
+
+    public function resume_protocol(){
+        return view('dashboard.layaketik.admin.resume_protocol');
+    }
+
+    public function form_resumeprotocol($hash){
+        if(empty($hash)) return abort(404);
+
+        $id = $this->hashids->decode($hash);
+        if(empty($id)) return abort(404);
+
+        $protocol = Protocol::find($id[0]);
+        if(empty($protocol)) return abort(404);
+
+        $self_assesment = $protocol->research_ethic->self_assesment;
+        if(empty($self_assesment)) return abort(404);
+
+        $resume_review = $protocol->research_ethic->resume_review;
+
+        $self_assesment->nilai_sosial = json_decode($self_assesment->nilai_sosial);
+        $self_assesment->nilai_ilmiah = json_decode($self_assesment->nilai_ilmiah);
+        $self_assesment->pemerataan = json_decode($self_assesment->pemerataan);
+        $self_assesment->potensi = json_decode($self_assesment->potensi);
+        $self_assesment->bujukan = json_decode($self_assesment->bujukan);
+        $self_assesment->privacy = json_decode($self_assesment->privacy);
+
+        $protocol->ringkasan_protokol = json_decode($protocol->ringkasan_protokol);
+        $protocol->kondisi_lapangan = json_decode($protocol->kondisi_lapangan);
+        $protocol->disain_penelitian = json_decode($protocol->disain_penelitian);
+        $protocol->sampling = json_decode($protocol->sampling);
+        $protocol->intervensi = json_decode($protocol->intervensi);
+        $protocol->adverse_penelitian = json_decode($protocol->adverse_penelitian);
+        $protocol->manfaat = json_decode($protocol->manfaat);
+        $protocol->informed_consent = json_decode($protocol->informed_consent);
+        $protocol->wali = json_decode($protocol->wali);
+        $protocol->bujukan = json_decode($protocol->bujukan);
+        $protocol->penjagaan_kerahasiaan = json_decode($protocol->penjagaan_kerahasiaan);
+        $protocol->manfaat_sosial = json_decode($protocol->manfaat_sosial);
+        $protocol->publikasi = json_decode($protocol->publikasi);
+        $protocol->komitmen_etik = json_decode($protocol->komitmen_etik);
+
+        $protocol->research_ethic->surat_pengantar = Storage::url('layaketik/surat_pengantar/'.$protocol->research_ethic->surat_pengantar);
+
+        $protocol->research_ethic->eviden_paid = is_null($protocol->research_ethic->eviden_paid)? 
+            $protocol->research_ethic->eviden_paid : Storage::url('layaketik/evidenpaid/'.$protocol->research_ethic->eviden_paid);
+
+        $protocol->cv_ketua = is_null($protocol->cv_ketua)? 
+            $protocol->cv_ketua : Storage::url('protokol/cv_ketua/'.$protocol->cv_ketua);
+
+        $protocol->cv_anggota = is_null($protocol->cv_anggota)? 
+            $protocol->cv_anggota : Storage::url('protokol/cv_anggota/'.$protocol->cv_anggota);
+
+        $protocol->lembaga_sponsor = is_null($protocol->lembaga_sponsor)? 
+            $protocol->lembaga_sponsor : Storage::url('protokol/lembaga_sponsor/'.$protocol->lembaga_sponsor);
+
+        $protocol->surat_pernyataan = is_null($protocol->surat_pernyataan)? 
+            $protocol->surat_pernyataan : Storage::url('protokol/surat_pernyataan/'.$protocol->surat_pernyataan);
+
+        $protocol->kuesioner = is_null($protocol->kuesioner)? 
+            $protocol->kuesioner : Storage::url('protokol/kuesioner/'.$protocol->kuesioner);
+
+        $protocol->file_informedconsent = is_null($protocol->file_informedconsent)? 
+            $protocol->file_informedconsent : Storage::url('protokol/file_informedconsent/'.$protocol->file_informedconsent);
+
+        $protocol->halaman_pengesahan = is_null($protocol->halaman_pengesahan)? 
+            $protocol->halaman_pengesahan : Storage::url('protokol/halaman_pengesahan/'.$protocol->halaman_pengesahan);
+
+        return view('dashboard.layaketik.admin.form_resumeprotocol', compact('protocol', 'self_assesment', 'resume_review'));
+    }
+
+    public function store_resumeprotocol(Request $request){
+        $ethic = ResumeReview::where('research_ethic_id', $request->id)->first();
+        $req = $request->all();
+        $req['user_id'] = auth()->user()->id;
+        $req['research_ethic_id'] = $request->id;
+
+        if(is_null($ethic)){
+            $resume = ResumeReview::create($req);
+        } else {
+            unset($req['user_id'], $req['research_ethic_id']);
+            $resume = ResumeReview::where('research_ethic_id', $request->id)->update($req);
+        }
+
+        if(!$resume){
+            return response()->json([
+                'success' => false,
+                'msg'     => "Gagal menyimpan data"
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg'     => "Berhasil menyimpan resume"
+        ], 200);
     }
 
     public function all($admin = null){
@@ -46,23 +159,25 @@ class ProtocolController extends Controller
         echo json_encode($response);
         exit;
     }
-    
-    public function form(){
-        $data = [
-            'user_id' => auth()->user()->id,
-            'status'  => 'accept'
-        ];
 
-        $research = ResearchEthic::with('protocol')->where($data)->latest()->get();
-        $ethics = [];
+    public function all_review(){
+        $ethics = ResearchEthic::with('protocol')->get();
+        $response = []; $i = 0;
 
-        foreach($research as $ethic){
-            if(empty($ethic->protocol)){
-                $ethics[] = $ethic;
+        foreach($ethics as $ethic){
+            if($ethic->protocol){
+                $response[$i]['i'] = $i + 1;
+                $response[$i]['id'] = $this->hashids->encode($ethic->protocol->id);
+                $response[$i]['judul'] = $ethic->research->judul;
+                $response[$i]['mulai'] = Carbon::createFromFormat('Y-m-d', $ethic->research->start_date)->format('d F Y');
+                $response[$i]['is_ready'] = $ethic->resume_review? 1 : 0;
+                $response[$i]['pengajuan'] = Carbon::parse($ethic->created_at)->format('d F Y');
+                $i++;
             }
         }
 
-        return view('dashboard.layaketik.form_protocol', compact('ethics'));
+        echo json_encode($response);
+        exit;
     }
 
     public function view($hash){
@@ -90,6 +205,27 @@ class ProtocolController extends Controller
         $protocol->manfaat_sosial = json_decode($protocol->manfaat_sosial);
         $protocol->publikasi = json_decode($protocol->publikasi);
         $protocol->komitmen_etik = json_decode($protocol->komitmen_etik);
+
+        $protocol->cv_ketua = is_null($protocol->cv_ketua)? 
+            $protocol->cv_ketua : Storage::url('protokol/cv_ketua/'.$protocol->cv_ketua);
+
+        $protocol->cv_anggota = is_null($protocol->cv_anggota)? 
+            $protocol->cv_anggota : Storage::url('protokol/cv_anggota/'.$protocol->cv_anggota);
+
+        $protocol->lembaga_sponsor = is_null($protocol->lembaga_sponsor)? 
+            $protocol->lembaga_sponsor : Storage::url('protokol/lembaga_sponsor/'.$protocol->lembaga_sponsor);
+
+        $protocol->surat_pernyataan = is_null($protocol->surat_pernyataan)? 
+            $protocol->surat_pernyataan : Storage::url('protokol/surat_pernyataan/'.$protocol->surat_pernyataan);
+
+        $protocol->kuesioner = is_null($protocol->kuesioner)? 
+            $protocol->kuesioner : Storage::url('protokol/kuesioner/'.$protocol->kuesioner);
+
+        $protocol->file_informedconsent = is_null($protocol->file_informedconsent)? 
+            $protocol->file_informedconsent : Storage::url('protokol/file_informedconsent/'.$protocol->file_informedconsent);
+
+        $protocol->halaman_pengesahan = is_null($protocol->halaman_pengesahan)? 
+            $protocol->halaman_pengesahan : Storage::url('protokol/halaman_pengesahan/'.$protocol->halaman_pengesahan);
 
         return view('dashboard.layaketik.form_protocol', compact('protocol'));
     }
@@ -121,6 +257,27 @@ class ProtocolController extends Controller
         $protocol->manfaat_sosial = json_decode($protocol->manfaat_sosial);
         $protocol->publikasi = json_decode($protocol->publikasi);
         $protocol->komitmen_etik = json_decode($protocol->komitmen_etik);
+
+        $protocol->cv_ketua = is_null($protocol->cv_ketua)? 
+            $protocol->cv_ketua : Storage::url('protokol/cv_ketua/'.$protocol->cv_ketua);
+
+        $protocol->cv_anggota = is_null($protocol->cv_anggota)? 
+            $protocol->cv_anggota : Storage::url('protokol/cv_anggota/'.$protocol->cv_anggota);
+
+        $protocol->lembaga_sponsor = is_null($protocol->lembaga_sponsor)? 
+            $protocol->lembaga_sponsor : Storage::url('protokol/lembaga_sponsor/'.$protocol->lembaga_sponsor);
+
+        $protocol->surat_pernyataan = is_null($protocol->surat_pernyataan)? 
+            $protocol->surat_pernyataan : Storage::url('protokol/surat_pernyataan/'.$protocol->surat_pernyataan);
+
+        $protocol->kuesioner = is_null($protocol->kuesioner)? 
+            $protocol->kuesioner : Storage::url('protokol/kuesioner/'.$protocol->kuesioner);
+
+        $protocol->file_informedconsent = is_null($protocol->file_informedconsent)? 
+            $protocol->file_informedconsent : Storage::url('protokol/file_informedconsent/'.$protocol->file_informedconsent);
+
+        $protocol->halaman_pengesahan = is_null($protocol->halaman_pengesahan)? 
+            $protocol->halaman_pengesahan : Storage::url('protokol/halaman_pengesahan/'.$protocol->halaman_pengesahan);
 
         $is_edit = 1;
 

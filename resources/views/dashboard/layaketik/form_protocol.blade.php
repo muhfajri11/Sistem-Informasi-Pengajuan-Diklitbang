@@ -16,12 +16,11 @@
 
 @section('style')
 	<link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/pickadate/themes/default.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/pickadate/themes/default.date.css') }}">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset('assets/vendor/fancyapps/fancy.css') }}">
-	<link rel="stylesheet" href="{{ asset('assets/vendor/owl-carousel/owl.carousel.css') }}"></link>
-    
+    <style>
+        .ck-balloon-panel{z-index:9999 !important}
+    </style>
 @endsection
 
 @section('content')
@@ -59,8 +58,13 @@
         <input type="hidden" name="judul" value="{{ $protocol->id }}" required>
     @endif
     @endif
-        
-        @include('dashboard.layaketik.components.card_formprotocol')
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    @include('dashboard.layaketik.components.card_formprotocol')
+                </div>
+            </div>
+        </div>
         
     @if(isset($ethics))
     </form>
@@ -74,7 +78,6 @@
 @section('script')
 	<script src="{{ asset('assets/vendor/fancyapps/fancybox.umd.js') }}"></script>
     <script src="{{ asset('assets/vendor/ckeditor5/build/ckeditor.js') }}"></script>
-
     <script>
         let editors = [];   
 
@@ -119,26 +122,6 @@
 				id_active = id_active.split('#')[1],
 				id_previousActive = id_previousActive.split('#')[1]
 
-                // const editor_form = [
-                //     {c: ['ringkasan_protocol_a', 'ringkasan_protocol_b']},
-                //     {d: ['isu_etik']}, {e: ['ringkasan_kajianpustaka']},
-                //     {f: ['kondisi_lapangan_a', 'kondisi_lapangan_b', 'kondisi_lapangan_c']},
-                //     {g: ['disain_penelitian_a','disain_penelitian_b', 'disain_penelitian_c']},
-                //     {h: ['sampling_a', 'sampling_b', 'sampling_c']},
-                //     {i: ['intervensi_a', 'intervensi_b', 'intervensi_c', 'intervensi_d']},
-                //     {j: ['monitoring_penelitian']}, {k: ['penghentian_penelitian']},
-                //     {l: ['adverse_penelitian_a', 'adverse_penelitian_b']},
-                //     {m: ['penanganan_komplikasi']}, {n: ['manfaat_a', 'manfaat_b']},
-                //     {o: ['keberlanjutan_manfaat']}, {p: ['informed_consent_a', 'informed_consent_b']},
-                //     {q: ['wali_a', 'wali_b']}, {r: ['bujukan_a', 'bujukan_b', 'bujukan_c']},
-                //     {s: ['penjagaan_kerahasiaan_a', 'penjagaan_kerahasiaan_b', 'penjagaan_kerahasiaan_c', 'penjagaan_kerahasiaan_d']},
-                //     {t: ['rencana_analisis']}, {u: ['monitor_keamanan']}, {v: ['konflik_kepentingan']},
-                //     {w: ['manfaat_sosial_a', 'manfaat_sosial_b']}, {x: ['hakatas_data']}, 
-                //     {y: ['publikasi_a', 'publikasi_b']}, {z: ['pendanaan']}, 
-                //     {aa: ['komitmen_etik_a', 'komitmen_etik_b', 'komitmen_etik_c']}, 
-                //     {bb: ['daftar_pustaka']}
-                // ];
-
                 if(textarea.length > 0){
                     let _class;
                     $.each(textarea, function(i, val){
@@ -150,8 +133,6 @@
                         }
                     })
                 }
-
-				// checkDatatable(id_active)
 			})
 
             // const editor_form = [
@@ -255,7 +236,17 @@
                     halaman_pengesahan: { required: false, extension: "pdf", filesize : 1 },
 				},
 				submitHandler: function (form) {
-                    const dataForm = new FormData(form);
+                    let dataForm = new FormData(form),
+                        textarea_ = $('textarea');
+
+                    $.each(textarea_, function(i, val){
+                        if(getDataFromTheEditor($(val).attr('name')))
+                            dataForm.set($(val).attr('name'), getDataFromTheEditor($(val).attr('name')))
+                    })
+
+                    // for (var key of Object.keys(serialized)){
+                    //     console.log(key, serialized[key])
+                    // }
 
                     // for (var pair of dataForm.entries()) {
                     //     console.log(pair[0]+ ', ' + pair[1]); 
@@ -318,7 +309,13 @@
                     halaman_pengesahan: { required: false, extension: "pdf", filesize : 1 },
 				},
 				submitHandler: function (form) {
-                    const dataForm = new FormData(form);
+                    const dataForm = new FormData(form),
+                          textarea_ = $('textarea');
+
+                    $.each(textarea_, function(i, val){
+                        if(getDataFromTheEditor($(val).attr('name')))
+                            dataForm.set($(val).attr('name'), getDataFromTheEditor($(val).attr('name')))
+                    })
 
                     // for (var pair of dataForm.entries()) {
                     //     console.log(pair[0]+ ', ' + pair[1]); 

@@ -6,10 +6,6 @@
 	<link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="{{ asset('assets/vendor/fancyapps/fancy.css') }}">
-
-    <style>
-        .ck-balloon-panel{z-index:9999 !important}
-    </style>
 @endsection
 
 @section('content')

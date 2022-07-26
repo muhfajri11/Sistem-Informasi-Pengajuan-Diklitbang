@@ -44,6 +44,10 @@ class ResearchEthic extends Model
         return $this->hasOne(SelfAssesment::class);
     }
 
+    public function resume_review(){
+        return $this->hasOne(ResumeReview::class);
+    }
+
     public function result_reviews(){
         return $this->hasMany(ResultReview::class);
     }

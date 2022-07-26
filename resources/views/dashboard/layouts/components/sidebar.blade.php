@@ -70,6 +70,12 @@
 							<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Admin</a>
 								<ul aria-expanded="false" class="left mm-collapse" style="height: 14px;">
 									<li><a href="{{ route('layaketik.approve') }}">Approval Pengajuan</a></li>
+									<li><a href="{{ route('layaketik.protocol.resume') }}">Resume Protokol</a></li>
+								</ul>
+							</li>
+							<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Telaah</a>
+								<ul aria-expanded="false" class="left mm-collapse" style="height: 14px;">
+									<li><a href="{{ route('layaketik.approve') }}">Telaah Cepat</a></li>
 								</ul>
 							</li>
 							@endcan
