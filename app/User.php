@@ -58,6 +58,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(ResearchEthic::class);
     }
 
+    public function quick_reviews(){
+        return $this->hasMany(QuickReview::class);
+    }
+
     public function settings(){
         return $this->hasMany(Setting::class);
     }

@@ -102,6 +102,11 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
                     Route::get('/edit/{hash}', 'SelfAssesmentController@edit')->name('edit');
                 });
             });
+
+            Route::name('telaah.')->prefix('telaah')->group(function() {
+                Route::get('/cepat', 'QuickReviewController@index')->name('cepat');
+                Route::get('/cepat/{hash}', 'QuickReviewController@form_telaahcepat')->name('cepat.form');
+            });
         });
     });
 
@@ -170,6 +175,13 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
 
             Route::post('/resume/all_review', 'ProtocolController@all_review')->name('resume.all_review');
             Route::post('/resume/store', 'ProtocolController@store_resumeprotocol')->name('resume.store');
+        });
+
+        Route::name('telaah.')->prefix('telaah')->group(function() {
+            Route::post('/ready', 'QuickReviewController@ready')->name('cepat.ready');
+            Route::post('/reviewed', 'QuickReviewController@reviewed')->name('cepat.reviewed');
+
+            Route::post('/cepat/store', 'QuickReviewController@store_telaahcepat')->name('cepat.store');
         });
     });
 

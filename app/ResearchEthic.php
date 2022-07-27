@@ -48,6 +48,10 @@ class ResearchEthic extends Model
         return $this->hasOne(ResumeReview::class);
     }
 
+    public function quick_review(){
+        return $this->hasMany(QuickReview::class);
+    }
+
     public function result_reviews(){
         return $this->hasMany(ResultReview::class);
     }

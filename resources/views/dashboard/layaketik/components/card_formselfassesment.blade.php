@@ -35,7 +35,7 @@
                 <h4 class="text-primary">Nilai Sosial/Klinis</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)))
+                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
@@ -47,7 +47,16 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>7-Standar Kelayakan Etik Penelitian</th>
-                                    <th style="width: 7em">Pilihan</th>
+                                    <th style="width: 7em">
+                                        @isset($is_telaah)
+                                        Peneliti
+                                        @else 
+                                        Pilihan
+                                        @endisset
+                                    </th>
+                                    @isset($is_telaah) 
+                                        <th style="width: 7em">Penelaah</th> 
+                                    @endisset
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,6 +80,22 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah) 
+                                    <td>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_1 telaah_assesment" type="radio" name="telaah_sosial_1" value="1" disabled>
+                                            <label class="form-check-label">
+                                                Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_1 telaah_assesment" type="radio" name="telaah_sosial_1" value="0" disabled>
+                                            <label class="form-check-label">
+                                                Tidak
+                                            </label>
+                                        </div>
+                                    </td> 
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">1.1</th>
@@ -92,6 +117,22 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah) 
+                                    <td>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_1_1 telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_1" value="1" disabled>
+                                            <label class="form-check-label">
+                                                Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_1_1 telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_1" value="0" disabled>
+                                            <label class="form-check-label">
+                                                Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -108,6 +149,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah) 
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1_1 telaah_assesment" data-child="telaah_child_1_1" type="radio" name="telaah_sosial_1_1a" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1_1 telaah_assesment" data-child="telaah_child_1_1" type="radio" name="telaah_sosial_1_1a" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -125,6 +180,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah) 
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1_1 telaah_assesment" data-child="telaah_child_1_1" type="radio" name="telaah_sosial_1_1b" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1_1 telaah_assesment" data-child="telaah_child_1_1" type="radio" name="telaah_sosial_1_1b" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -142,6 +211,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah) 
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1_1 telaah_assesment" data-child="telaah_child_1_1" type="radio" name="telaah_sosial_1_1c" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1_1 telaah_assesment" data-child="telaah_child_1_1" type="radio" name="telaah_sosial_1_1c" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">1.2</th>
@@ -158,6 +241,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_2" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_2" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">1.3</th>
@@ -174,6 +271,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_3" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_3" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">1.4</th>
@@ -190,6 +301,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_4" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_4" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">1.5</th>
@@ -206,6 +331,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_5" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_5" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">1.6</th>
@@ -222,6 +361,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_6" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_6" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">1.7</th>
@@ -238,6 +391,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_7" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_1 telaah_assesment" data-child="telaah_child_1" type="radio" name="telaah_sosial_1_7" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                             </tbody>
                         </table>
@@ -248,6 +415,13 @@
                 <div class="col-12">
                     <textarea name="catatan_nilaisosial" class="form-control"></textarea>
                 </div>
+                @isset($is_telaah)
+                <h4 class="text-dark">Catatan Penelaah Nilai Sosial/Klinis:</h4>
+                <hr>
+                <div class="col-12">
+                    <textarea name="telaah_catatan_nilaisosial" class="form-control telaah_assesment"></textarea>
+                </div>
+                @endisset
             </div>
         </div>
         <div id="nilai_ilmiah" class="tab-pane pt-4" role="tabpanel">
@@ -255,7 +429,7 @@
                 <h4 class="text-primary">Nilai Ilmiah</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)))
+                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
@@ -267,7 +441,16 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>7-Standar Kelayakan Etik Penelitian</th>
-                                    <th style="width: 7em">Pilihan</th>
+                                    <th style="width: 7em">
+                                        @isset($is_telaah)
+                                        Peneliti
+                                        @else 
+                                        Pilihan
+                                        @endisset
+                                    </th>
+                                    @isset($is_telaah) 
+                                        <th style="width: 7em">Penelaah</th> 
+                                    @endisset
                                 </tr>
                             </thead>
                             <tbody>
@@ -291,6 +474,22 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_2 telaah_assesment" type="radio" name="telaah_ilmiah_2" value="1" disabled>
+                                            <label class="form-check-label">
+                                                Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_2 telaah_assesment" type="radio" name="telaah_ilmiah_2" value="0" disabled>
+                                            <label class="form-check-label">
+                                                Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -314,6 +513,22 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_2_1 telaah_child_2 telaah_assesment" data-child="telaah_child_2" type="radio" name="telaah_ilmiah_2_1" value="1" disabled>
+                                            <label class="form-check-label">
+                                                Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_2_1 telaah_child_2 telaah_assesment" data-child="telaah_child_2" type="radio" name="telaah_ilmiah_2_1" value="0" disabled>
+                                            <label class="form-check-label">
+                                                Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -337,6 +552,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1a" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1a" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -353,6 +582,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1b" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1b" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -372,6 +615,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1c" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1c" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -388,6 +645,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1d" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1d" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -404,6 +675,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1e" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1e" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -420,6 +705,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1f" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1f" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -436,6 +735,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1g" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1g" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -452,6 +765,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1h" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1h" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -468,6 +795,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1i" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1i" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -484,6 +825,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1j" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1j" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -500,6 +855,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1k" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1 telaah_assesment" data-child="telaah_child_2_1" type="radio" name="telaah_ilmiah_2_1k" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -518,6 +887,22 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_2_1_ telaah_child_2" data-child="telaah_child_2" type="radio" name="telaah_ilmiah_2_1_" value="1" disabled>
+                                            <label class="form-check-label">
+                                                Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_2_1_ telaah_child_2" data-child="telaah_child_2" type="radio" name="telaah_ilmiah_2_1_" value="0" disabled>
+                                            <label class="form-check-label">
+                                                Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -534,6 +919,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1_ telaah_assesment" data-child="telaah_child_2_1_" type="radio" name="telaah_ilmiah_2_1_a" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1_ telaah_assesment" data-child="telaah_child_2_1_" type="radio" name="telaah_ilmiah_2_1_a" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -550,6 +949,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1_ telaah_assesment" data-child="telaah_child_2_1_" type="radio" name="telaah_ilmiah_2_1_b" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1_ telaah_assesment" data-child="telaah_child_2_1_" type="radio" name="telaah_ilmiah_2_1_b" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -566,6 +979,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1_ telaah_assesment" data-child="telaah_child_2_1_" type="radio" name="telaah_ilmiah_2_1_c" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1_ telaah_assesment" data-child="telaah_child_2_1_" type="radio" name="telaah_ilmiah_2_1_c" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -582,6 +1009,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1_ telaah_assesment" data-child="telaah_child_2_1_" type="radio" name="telaah_ilmiah_2_1_d" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1_ telaah_assesment" data-child="telaah_child_2_1_" type="radio" name="telaah_ilmiah_2_1_d" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -598,6 +1039,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1_ telaah_assesment" data-child="telaah_child_2_1_" type="radio" name="telaah_ilmiah_2_1_e" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_1_ telaah_assesment" data-child="telaah_child_2_1_" type="radio" name="telaah_ilmiah_2_1_e" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -621,6 +1076,22 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_2_2 telaah_child_2 telaah_assesment" data-child="telaah_child_2" type="radio" name="telaah_ilmiah_2_2" value="1" disabled>
+                                            <label class="form-check-label">
+                                                Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_2_2 telaah_child_2 telaah_assesment" data-child="telaah_child_2" type="radio" name="telaah_ilmiah_2_2" value="0" disabled>
+                                            <label class="form-check-label">
+                                                Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -637,6 +1108,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2 telaah_assesment" data-child="telaah_child_2_2" type="radio" name="telaah_ilmiah_2_2a" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2 telaah_assesment" data-child="telaah_child_2_2" type="radio" name="telaah_ilmiah_2_2a" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -653,6 +1138,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2 telaah_assesment" data-child="telaah_child_2_2" type="radio" name="telaah_ilmiah_2_2b" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2 telaah_assesment" data-child="telaah_child_2_2" type="radio" name="telaah_ilmiah_2_2b" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -671,6 +1170,22 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_2_2_ telaah_child_2 telaah_assesment" data-child="telaah_child_2" type="radio" name="telaah_ilmiah_2_2_" value="1" disabled>
+                                            <label class="form-check-label">
+                                                Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_2_2_ telaah_child_2 telaah_assesment" data-child="telaah_child_2" type="radio" name="telaah_ilmiah_2_2_" value="0" disabled>
+                                            <label class="form-check-label">
+                                                Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -687,6 +1202,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_a" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_a" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -703,6 +1232,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_b" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_b" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -719,6 +1262,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_c" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_c" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -735,6 +1292,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_d" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_d" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -751,6 +1322,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_e" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_e" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -767,6 +1352,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_f" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_f" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -788,6 +1387,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_g" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_g" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -804,6 +1417,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_h" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_h" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -820,6 +1447,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_i" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_i" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -836,6 +1477,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_j" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_j" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -852,6 +1507,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_k" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_k" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -868,6 +1537,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_l" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_l" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -885,6 +1568,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_m" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_m" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -902,6 +1599,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_n" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_2_2_ telaah_assesment" data-child="telaah_child_2_2_" type="radio" name="telaah_ilmiah_2_2_n" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                             </tbody>
                         </table>
@@ -912,6 +1623,13 @@
                 <div class="col-12">
                     <textarea name="catatan_nilaiilmiah" class="form-control"></textarea>
                 </div>
+                @isset($is_telaah)
+                <h4 class="text-dark">Catatan Penelaah Nilai Ilmiah:</h4>
+                <hr>
+                <div class="col-12">
+                    <textarea name="telaah_catatan_nilaiilmiah" class="form-control telaah_assesment"></textarea>
+                </div>
+                @endisset
             </div>
         </div>
         <div id="pemerataan" class="tab-pane pt-4" role="tabpanel">
@@ -919,7 +1637,7 @@
                 <h4 class="text-primary">Pemerataan Beban dan Manfaat</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)))
+                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
@@ -931,7 +1649,16 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>7-Standar Kelayakan Etik Penelitian</th>
-                                    <th style="width: 7em">Pilihan</th>
+                                    <th style="width: 7em">
+                                        @isset($is_telaah)
+                                        Peneliti
+                                        @else 
+                                        Pilihan
+                                        @endisset
+                                    </th>
+                                    @isset($is_telaah) 
+                                        <th style="width: 7em">Penelaah</th> 
+                                    @endisset
                                 </tr>
                             </thead>
                             <tbody>
@@ -955,6 +1682,22 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_3 telaah_assesment" type="radio" name="telaah_pemerataan_3" value="1" disabled>
+                                            <label class="form-check-label">
+                                                Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_3 telaah_assesment" type="radio" name="telaah_pemerataan_3" value="0" disabled>
+                                            <label class="form-check-label">
+                                                Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">3.1</th>
@@ -991,6 +1734,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_2" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_2" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">3.3</th>
@@ -1008,6 +1765,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_3" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_3" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">3.4</th>
@@ -1025,6 +1796,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_4" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_4" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">3.5</th>
@@ -1041,6 +1826,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_5" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_5" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">3.6</th>
@@ -1057,6 +1856,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_6" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_6" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">3.7</th>
@@ -1073,6 +1886,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_7" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_7" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">3.8</th>
@@ -1089,6 +1916,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_8" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_8" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">3.9</th>
@@ -1105,6 +1946,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_9" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_9" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">3.10</th>
@@ -1121,6 +1976,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_10" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_10" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">3.11</th>
@@ -1139,6 +2008,22 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_3_11 telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_11" value="1" disabled>
+                                            <label class="form-check-label">
+                                                Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_3_11 telaah_child_3 telaah_assesment" data-child="telaah_child_3" type="radio" name="telaah_pemerataan_3_11" value="0" disabled>
+                                            <label class="form-check-label">
+                                                Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1155,6 +2040,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11a" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11a" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1171,6 +2070,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11b" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11b" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1187,6 +2100,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11c" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11c" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1203,6 +2130,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11d" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11d" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1219,6 +2160,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11e" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11e" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1235,6 +2190,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11f" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11f" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1251,6 +2220,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11g" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11g" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1267,6 +2250,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11h" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11h" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1283,6 +2280,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11i" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11i" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1299,6 +2310,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11j" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11j" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1315,6 +2340,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11k" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_3_11 telaah_assesment" data-child="telaah_child_3_11" type="radio" name="telaah_pemerataan_3_11k" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                             </tbody>
                         </table>
@@ -1325,6 +2364,13 @@
                 <div class="col-12">
                     <textarea name="catatan_pemerataan" class="form-control"></textarea>
                 </div>
+                @isset($is_telaah)
+                <h4 class="text-dark">Catatan Penelaah Pemerataan Beban dan Manfaat:</h4>
+                <hr>
+                <div class="col-12">
+                    <textarea name="telaah_catatan_pemerataan" class="form-control telaah_assesment"></textarea>
+                </div>
+                @endisset
             </div>
         </div>
         <div id="potensi" class="tab-pane pt-4" role="tabpanel">
@@ -1332,7 +2378,7 @@
                 <h4 class="text-primary">Potensi Manfaat dan Resiko</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)))
+                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
@@ -1344,7 +2390,16 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>7-Standar Kelayakan Etik Penelitian</th>
-                                    <th style="width: 7em">Pilihan</th>
+                                    <th style="width: 7em">
+                                        @isset($is_telaah)
+                                        Peneliti
+                                        @else 
+                                        Pilihan
+                                        @endisset
+                                    </th>
+                                    @isset($is_telaah) 
+                                        <th style="width: 7em">Penelaah</th> 
+                                    @endisset
                                 </tr>
                             </thead>
                             <tbody>
@@ -1374,6 +2429,22 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_4 telaah_assesment" type="radio" name="telaah_potensi_4" value="1" disabled>
+                                            <label class="form-check-label">
+                                                Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_4 telaah_assesment" type="radio" name="telaah_potensi_4" value="0" disabled>
+                                            <label class="form-check-label">
+                                                Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.1</th>
@@ -1392,6 +2463,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_1" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_1" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.2</th>
@@ -1408,6 +2493,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_2" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_2" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.3</th>
@@ -1424,6 +2523,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_3" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_3" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.4</th>
@@ -1440,6 +2553,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_4" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_4" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.5</th>
@@ -1456,6 +2583,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_5" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_5" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.6</th>
@@ -1472,6 +2613,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_6" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_6" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.7</th>
@@ -1488,6 +2643,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_7" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_7" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.8</th>
@@ -1504,6 +2673,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_8" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_8" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.9</th>
@@ -1520,6 +2703,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_9" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_9" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.10</th>
@@ -1536,6 +2733,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_10" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_10" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.11</th>
@@ -1552,6 +2763,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_11" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_11" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.12</th>
@@ -1568,6 +2793,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_12" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_12" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.13</th>
@@ -1584,6 +2823,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_13" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_13" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.14</th>
@@ -1600,6 +2853,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_14" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_14" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">4.15</th>
@@ -1616,6 +2883,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_15" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_4 telaah_assesment" data-child="telaah_child_4" type="radio" name="telaah_potensi_4_15" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                             </tbody>
                         </table>
@@ -1626,6 +2907,13 @@
                 <div class="col-12">
                     <textarea name="catatan_potensi" class="form-control"></textarea>
                 </div>
+                @isset($is_telaah)
+                <h4 class="text-dark">Catatan Penelaah Potensi Manfaat dan Resiko:</h4>
+                <hr>
+                <div class="col-12">
+                    <textarea name="telaah_catatan_potensi" class="form-control telaah_assesment"></textarea>
+                </div>
+                @endisset
             </div>
         </div>
         <div id="bujukan" class="tab-pane pt-4" role="tabpanel">
@@ -1633,7 +2921,7 @@
                 <h4 class="text-primary">Bujukan/ Eksploitasi/ Inducement</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)))
+                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
@@ -1645,7 +2933,16 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>7-Standar Kelayakan Etik Penelitian</th>
-                                    <th style="width: 7em">Pilihan</th>
+                                    <th style="width: 7em">
+                                        @isset($is_telaah)
+                                        Peneliti
+                                        @else 
+                                        Pilihan
+                                        @endisset
+                                    </th>
+                                    @isset($is_telaah) 
+                                        <th style="width: 7em">Penelaah</th> 
+                                    @endisset
                                 </tr>
                             </thead>
                             <tbody>
@@ -1668,6 +2965,22 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_5 telaah_assesment" type="radio" name="telaah_bujukan_5" value="1" disabled>
+                                            <label class="form-check-label">
+                                                Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_5 telaah_assesment" type="radio" name="telaah_bujukan_5" value="0" disabled>
+                                            <label class="form-check-label">
+                                                Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">5.1</th>
@@ -1686,6 +2999,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_5 telaah_assesment" data-child="telaah_child_5" type="radio" name="telaah_bujukan_5_1" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_5 telaah_assesment" data-child="telaah_child_5" type="radio" name="telaah_bujukan_5_1" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">5.2</th>
@@ -1702,6 +3029,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_5 telaah_assesment" data-child="telaah_child_5" type="radio" name="telaah_bujukan_5_2" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_5 telaah_assesment" data-child="telaah_child_5" type="radio" name="telaah_bujukan_5_2" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">5.3</th>
@@ -1718,6 +3059,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_5 telaah_assesment" data-child="telaah_child_5" type="radio" name="telaah_bujukan_5_3" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_5 telaah_assesment" data-child="telaah_child_5" type="radio" name="telaah_bujukan_5_3" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                             </tbody>
                         </table>
@@ -1728,6 +3083,13 @@
                 <div class="col-12">
                     <textarea name="catatan_bujukan" class="form-control"></textarea>
                 </div>
+                @isset($is_telaah)
+                <h4 class="text-dark">Catatan Penelaah Bujukan/ Eksploitasi/ Inducement:</h4>
+                <hr>
+                <div class="col-12">
+                    <textarea name="telaah_catatan_bujukan" class="form-control telaah_assesment"></textarea>
+                </div>
+                @endisset
             </div>
         </div>
         <div id="privacy" class="tab-pane pt-4" role="tabpanel">
@@ -1735,7 +3097,7 @@
                 <h4 class="text-primary">Rahasia dan Privacy</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)))
+                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
@@ -1747,7 +3109,16 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>7-Standar Kelayakan Etik Penelitian</th>
-                                    <th style="width: 7em">Pilihan</th>
+                                    <th style="width: 7em">
+                                        @isset($is_telaah)
+                                        Peneliti
+                                        @else 
+                                        Pilihan
+                                        @endisset
+                                    </th>
+                                    @isset($is_telaah) 
+                                        <th style="width: 7em">Penelaah</th> 
+                                    @endisset
                                 </tr>
                             </thead>
                             <tbody>
@@ -1770,6 +3141,22 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_6 telaah_assesment" type="radio" name="telaah_privacy_6" value="1" disabled>
+                                            <label class="form-check-label">
+                                                Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_6 telaah_assesment" type="radio" name="telaah_privacy_6" value="0" disabled>
+                                            <label class="form-check-label">
+                                                Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">6.1</th>
@@ -1787,6 +3174,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6 telaah_assesment" data-child="telaah_child_6" type="radio" name="telaah_privacy_6_1" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6 telaah_assesment" data-child="telaah_child_6" type="radio" name="telaah_privacy_6_1" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">6.2</th>
@@ -1803,6 +3204,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6 telaah_assesment" data-child="telaah_child_6" type="radio" name="telaah_privacy_6_2" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6 telaah_assesment" data-child="telaah_child_6" type="radio" name="telaah_privacy_6_2" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">6.3</th>
@@ -1819,6 +3234,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6 telaah_assesment" data-child="telaah_child_6" type="radio" name="telaah_privacy_6_3" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6 telaah_assesment" data-child="telaah_child_6" type="radio" name="telaah_privacy_6_3" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right">6.4</th>
@@ -1837,6 +3266,22 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_6_4 telaah_child_6 telaah_assesment" data-child="telaah_child_6" type="radio" name="telaah_privacy_6_4" value="1" disabled>
+                                            <label class="form-check-label">
+                                                Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check disabled">
+                                            <input class="form-check-input telaah_parent_6_4 telaah_child_6 telaah_assesment" data-child="telaah_child_6" type="radio" name="telaah_privacy_6_4" value="0" disabled>
+                                            <label class="form-check-label">
+                                                Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1853,6 +3298,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4a" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4a" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1869,6 +3328,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4b" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4b" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1885,6 +3358,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4c" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4c" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1901,6 +3388,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4d" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4d" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1917,6 +3418,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4e" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4e" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1933,6 +3448,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4f" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4f" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                                 <tr>
                                     <th class="numb_right"></th>
@@ -1949,6 +3478,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4g" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_child_6_4 telaah_assesment" data-child="telaah_child_6_4" type="radio" name="telaah_privacy_6_4g" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                             </tbody>
                         </table>
@@ -1959,6 +3502,13 @@
                 <div class="col-12">
                     <textarea name="catatan_privacy" class="form-control"></textarea>
                 </div>
+                @isset($is_telaah)
+                <h4 class="text-dark">Catatan Penelaah Rahasia dan Privacy:</h4>
+                <hr>
+                <div class="col-12">
+                    <textarea name="telaah_catatan_privacy" class="form-control telaah_assesment"></textarea>
+                </div>
+                @endisset
             </div>
         </div>
         <div id="informedconsent" class="tab-pane pt-4" role="tabpanel">
@@ -1966,7 +3516,7 @@
                 <h4 class="text-primary">Informed Consent</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)))
+                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
@@ -1978,7 +3528,16 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>7-Standar Kelayakan Etik Penelitian</th>
-                                    <th style="width: 7em">Pilihan</th>
+                                    <th style="width: 7em">
+                                        @isset($is_telaah)
+                                        Peneliti
+                                        @else 
+                                        Pilihan
+                                        @endisset
+                                    </th>
+                                    @isset($is_telaah) 
+                                        <th style="width: 7em">Penelaah</th> 
+                                    @endisset
                                 </tr>
                             </thead>
                             <tbody>
@@ -2000,6 +3559,20 @@
                                             </label>
                                         </div>
                                     </td>
+                                    @isset($is_telaah)
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_assesment" type="radio" name="telaah_informed_consent" value="1"> Ya
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input telaah_assesment" type="radio" name="telaah_informed_consent" value="0"> Tidak
+                                            </label>
+                                        </div>
+                                    </td>
+                                    @endisset
                                 </tr>
                             </tbody>
                         </table>
@@ -2010,13 +3583,20 @@
                 <div class="col-12">
                     <textarea name="catatan_informedconsent" class="form-control"></textarea>
                 </div>
+                @isset($is_telaah)
+                <h4 class="text-dark">Catatan Penelaah Informed Consent:</h4>
+                <hr>
+                <div class="col-12">
+                    <textarea name="telaah_catatan_informedconsent" class="form-control telaah_assesment"></textarea>
+                </div>
+                @endisset
             </div>
         </div>
     </div>
 </div>
 
 @if(!isset($hide_it))
-@if(isset($is_edit) || !(isset($self_assesment)))
+@if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
     <button type="submit" class="btn btn-primary mt-4">Simpan</button>
 @endif
 <a href="{{ route('layaketik.protocol') }}" class="btn btn-dark mt-4">Kembali</a>

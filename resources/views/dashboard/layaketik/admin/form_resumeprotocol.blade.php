@@ -172,6 +172,8 @@
                 })
 
                 $.each(textarea_, (i, val) => $(val).val(data_selfassesment[$(val).attr('name')]))
+                
+                $('#selfassesment input:radio,#selfassesment textarea').prop('disabled', true)
             })
         </script>
     @endif
@@ -179,13 +181,14 @@
     <script>
         let editors = [];   
 
-        function createEditor( elementId ) {
+        function createEditor( elementId, from = null) {
             return ClassicEditor
                 .create( document.querySelector( '.' + elementId ), {
                     extraPlugins: [ MyCustomUploadAdapterPlugin ],  
                 } )
                 .then( editor => { 
                     editors[ elementId ] = editor 
+                    if(from) editor.enableReadOnlyMode(elementId)
                 } )
                 .catch( err => console.error( err ) );
         }
@@ -235,7 +238,7 @@
                         _class = $(val).attr('class');
 
                         if(!editors[_class]){
-                            createEditor(_class)
+                            createEditor(_class, 1)
                             console.log(`${_class}, created`)
                         }
                     })
