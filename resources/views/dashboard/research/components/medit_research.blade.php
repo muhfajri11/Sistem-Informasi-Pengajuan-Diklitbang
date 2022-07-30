@@ -194,7 +194,7 @@
             </div>
             <div class="modal-footer">
                 <div id="html_back"></div>
-                <button type="button" id="btnresearch_submit" data-next="invoice" class="btn btn-primary">Lanjut</button>
+                <button type="button" id="btnresearch_submit" data-next="invoice_edit" class="btn btn-primary">Lanjut</button>
             </div>
         </form>
     </div>

@@ -96,7 +96,6 @@ class ResearchController extends Controller
 
         $req['anggota'] = isset($req['members'])? json_encode($req['members']): "[]";
 
-
         $jenjang = EducationLevel::find($req['jenjang'])->first();
         $fee = Setting::byName(['fee']);
         
@@ -190,7 +189,7 @@ class ResearchController extends Controller
         $req['education_level_id'] = $req['jenjang'];
         $req['start_date'] = $req['start_date_submit'];
         $req['end_date'] = $req['end_date_submit'];
-        $req['anggota'] = json_encode($req['members']);
+        $req['anggota'] = isset($req['members'])?json_encode($req['members']):"";
 
         $jenjang = EducationLevel::find($req['jenjang'])->first();
         $fee = Setting::byName(['fee']);

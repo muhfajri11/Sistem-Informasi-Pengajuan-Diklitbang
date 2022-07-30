@@ -71,6 +71,8 @@
 								<ul aria-expanded="false" class="left mm-collapse" style="height: 14px;">
 									<li><a href="{{ route('layaketik.approve') }}">Approval Pengajuan</a></li>
 									<li><a href="{{ route('layaketik.protocol.resume') }}">Resume Protokol</a></li>
+									<li><a href="{{ route('layaketik.telaah.cepat.result') }}">Keputusan Telaah</a></li>
+									<li><a href="{{ route('layaketik.telaah.fullboard.set') }}">Jadwal Fullboard</a></li>
 								</ul>
 							</li>
 							<li><a class="has-arrow" href="javascript:void()" aria-expanded="false">Telaah</a>
@@ -81,9 +83,9 @@
 							@endcan
 							<li><a href="{{ route('layaketik') }}">Pengisian Data</a></li>
 							<li><a href="{{ route('layaketik.protocol') }}">Protokol Penelitian</a></li>
-							<li><a href="#!">Hasil Telaah</a></li>
+							<li><a href="{{ route('layaketik.telaah.result') }}">Hasil Telaah</a></li>
 							<li><a href="#!">Perbaikan Protokol</a></li>
-							<li><a href="#!">Pemberitahuan Fullboard</a></li>
+							<li><a href="{{ route('layaketik.telaah.fullboard.notif') }}">Pemberitahuan Fullboard</a></li>
 						</ul>
 					</li>
 					@endcan

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFullboardsTable extends Migration
+class CreateRevisionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,12 @@ class CreateFullboardsTable extends Migration
      */
     public function up()
     {
-        Schema::create('fullboards', function (Blueprint $table) {
+        Schema::create('revisions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('research_ethic_id')->constrained('research_ethics');
-            $table->foreignId('result_review_id')->constrained('result_reviews');
+            $table->foreignId('user_id')->constrained('users');
             $table->integer('revision');
-            $table->string('tanggal');
-            $table->string('jam');
-            $table->string('tempat');
-            $table->string('surat_pemberitahuan');
+            $table->longText('resume_catatan');
             $table->timestamps();
         });
     }
@@ -33,6 +30,6 @@ class CreateFullboardsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fullboards');
+        Schema::dropIfExists('revisions');
     }
 }

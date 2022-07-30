@@ -165,7 +165,7 @@ class ProtocolController extends Controller
         $response = []; $i = 0;
 
         foreach($ethics as $ethic){
-            if($ethic->protocol){
+            if($ethic->protocol && $ethic->self_assesment){
                 $response[$i]['i'] = $i + 1;
                 $response[$i]['id'] = $this->hashids->encode($ethic->protocol->id);
                 $response[$i]['judul'] = $ethic->research->judul;

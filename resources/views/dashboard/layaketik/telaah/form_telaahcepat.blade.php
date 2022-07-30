@@ -1,6 +1,9 @@
 @extends('dashboard.layouts.app')
 
-@section('title', "Form Telaah Cepat Protokol")
+@php
+$title = is_null($view)? "Form Telaah Cepat Protokol" : "Detail Telaah Cepat Protokol";
+@endphp
+@section('title', $title)
 
 @section('style')
 	<link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}">
@@ -40,12 +43,19 @@
                 <h5 class="card-title text-primary">Judul Penelitian</h5>
             </div>
             <div class="card-body">
-                <div class="col-12 mb-3">
+                <div class="col-12">
                     <h4>{{ $protocol->research_ethic->research->judul? $protocol->research_ethic->research->judul: "" }}</h4>
                     <p class="mb-0">Peneliti Utama: {{ $protocol->research_ethic->research->ketua? $protocol->research_ethic->research->ketua: "" }}</p>
                     <a href="{{ route('layaketik.protocol.print', ['hash'=>$hashids->encode($protocol->id)]) }}" class="btn btn-primary mt-4"><i class="fas fa-print me-2"></i> Print Protokol</a>
                     <button data-id="{{ $protocol->research_ethic->id }}" data-bs-toggle="modal" data-bs-target="#modal_detailresearch" class="btn btn-primary mt-4"><i class="fas fa-info me-2"></i> Lihat Detail</button>
                 </div>
+                @if(!is_null($view))
+                <div class="col-12 mb-3">
+                    <hr>
+                    <p class="mb-0"><strong>Penelaah: </strong>{{ $quick_review->user->name }}</p>
+                    <p class="mb-0"><strong>Ditelaah pada: </strong> {{ $quick_review->created_at }}</p>
+                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -56,7 +66,7 @@
 				<div class="custom-tab-1">
 					<ul class="nav nav-tabs">
                         <li class="nav-item">
-							<a href="#resume" data-bs-toggle="tab" class="nav-parent nav-link active show">Kesimpulan</a>
+							<a href="#resume" data-bs-toggle="tab" class="nav-parent nav-link active show">Resume</a>
 						</li>
 						<li class="nav-item">
 							<a href="#protocol" data-bs-toggle="tab" class="nav-parent nav-link">Protokol</a>
@@ -120,8 +130,12 @@
                                 </div>
 							</div>
 						</div>
+                        @if(is_null($view)) 
                         <form id="kesimpulan" class="tab-pane fade">
                             <input type="hidden" name="id" value="{{ $protocol->research_ethic->id }}" required>
+                        @else
+                        <div id="kesimpulan" class="tab-pane fade">
+                        @endif
 							<div class="row">
                                 <div class="col-12">
                                     <h4 class="text-secondary">Klasifikasi Usulan Penelaah Etik</h4>
@@ -129,34 +143,40 @@
                                     <div class="col-12">
                                         <div class="form-check form-check-inline">
                                             <label class="form-check-label font-w600">
-                                                <input class="form-check-input" type="radio" name="usulan" value="exempted"> Exempted
+                                                <input class="form-check-input" type="radio" name="status" value="exempted"> Exempted
                                             </label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <label class="form-check-label font-w600">
-                                                <input class="form-check-input" type="radio" name="usulan" value="expedited"> Expedited
+                                                <input class="form-check-input" type="radio" name="status" value="expedited"> Expedited
                                             </label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <label class="form-check-label font-w600">
-                                                <input class="form-check-input" type="radio" name="usulan" value="fullboard"> Fullboard
+                                                <input class="form-check-input" type="radio" name="status" value="fullboard"> Fullboard
                                             </label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <label class="form-check-label font-w600">
-                                                <input class="form-check-input" type="radio" name="usulan" value="ditolak"> Tidak bisa ditelaah
+                                                <input class="form-check-input" type="radio" name="status" value="ditolak"> Tidak bisa ditelaah
                                             </label>
                                         </div>
                                     </div>
                                     <h4 class="text-secondary mt-2">Kesimpulan:</h4>
                                     <hr>
                                     <div class="col-12">
-                                        <textarea name="kesimpulan" class="form-control" required>{{ $quick_review->kesimpulan }}</textarea>
+                                        <textarea name="kesimpulan" class="form-control" required>{{ !is_null($quick_review)?$quick_review->kesimpulan: "" }}</textarea>
                                     </div>
+                                    @if(is_null($view))
                                     <button type="submit" class="btn btn-primary mt-4">Simpan</button>
+                                    @endif
                                 </div>
 							</div>
-						</form>
+                        @if(is_null($view)) 
+                        </form>
+                        @else
+                        </div>
+                        @endif
 					</div>
 				</div>
             </div>
@@ -218,7 +238,7 @@
     @if(isset($quick_review))
         <script>
             $(document).ready(function(){
-                const radio_usulan = $('input:radio[name=usulan]');
+                const radio_usulan = $('input:radio[name=status]');
                 
                 radio_usulan.filter('[value={{ $quick_review->status }}]').prop('checked', true).change();
 
@@ -263,6 +283,15 @@
                 $.each(textarea_, (i, val) => {
                     $(val).val(data_quickreview[$(val).attr('name').slice(7)])
                 })
+            })
+        </script>
+    @endif
+
+    @if(!is_null($view))
+        <script>
+            $(document).ready(function(){
+                const form_peneliti = $('#smartwizard input:radio, #smartwizard textarea, #kesimpulan textarea, #kesimpulan input:radio');
+                $.each(form_peneliti, (i, val) => $(val).prop('disabled', true))
             })
         </script>
     @endif

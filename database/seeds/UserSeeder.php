@@ -21,6 +21,13 @@ class UserSeeder extends Seeder
                 'password'              => bcrypt('12341234')
             ],
             [
+                'name'                  => 'Master Admin 2',
+                'phone'                 => '12345612',
+                'email'                 => 'master2@test.com',
+                'email_verified_at'     => date('Y-m-d h:i:s'),
+                'password'              => bcrypt('12341234')
+            ],
+            [
                 'name'      => 'Admin Pendidikan',
                 'phone'     => '32141234',
                 'email'     => 'pendidikan@test.com',
@@ -35,9 +42,23 @@ class UserSeeder extends Seeder
                 'password'  => bcrypt('12341234')
             ],
             [
+                'name'                  => 'Admin Penelitian 2',
+                'phone'                 => '12345612',
+                'email'                 => 'penelitian2@test.com',
+                'email_verified_at'     => date('Y-m-d h:i:s'),
+                'password'              => bcrypt('12341234')
+            ],
+            [
                 'name'      => 'User Example',
                 'phone'     => '123456789',
                 'email'     => 'example@test.com',
+                'email_verified_at'     => date('Y-m-d h:i:s'),
+                'password'  => bcrypt('12341234')
+            ],
+            [
+                'name'      => 'Muhamad Fajri',
+                'phone'     => '123456789',
+                'email'     => 'fajri@test.com',
                 'email_verified_at'     => date('Y-m-d h:i:s'),
                 'password'  => bcrypt('12341234')
             ]
@@ -48,23 +69,18 @@ class UserSeeder extends Seeder
 
             switch($data['email']){
                 case "master@test.com":
+                case "master2@test.com":
                     $user->assignRole('masteradmin');
-                    // $permissions = $user->getAllPermissions();
-
-                    // $name_permissions = [];
-                    // $permissions->each(function($data) use(&$name_permissions){
-                    //     $name_permissions[] = $data->name;
-                    // });
-
-                    // $user->syncPermissions($name_permissions);
                     break;
                 case "pendidikan@test.com":
                     $user->assignRole('pendidikan');
                     break;
                 case "penelitian@test.com":
+                case "penelitian2@test.com":
                     $user->assignRole('penelitian');
                     break;
                 case "example@test.com":
+                case "fajri@test.com":
                     $user->assignRole('user');
                     break;
             }

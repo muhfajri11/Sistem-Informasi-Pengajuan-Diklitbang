@@ -104,8 +104,20 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
             });
 
             Route::name('telaah.')->prefix('telaah')->group(function() {
+                Route::get('/result', 'ResearchEthicController@result')->name('result');
+
                 Route::get('/cepat', 'QuickReviewController@index')->name('cepat');
-                Route::get('/cepat/{hash}', 'QuickReviewController@form_telaahcepat')->name('cepat.form');
+                Route::name('cepat.')->prefix('cepat')->group(function() {
+                    Route::get('/result', 'QuickReviewController@result_index')->name('result');
+                    Route::get('/result/list/{id}', 'QuickReviewController@list_index')->name('list');
+    
+                    Route::get('/{hash}/{view?}', 'QuickReviewController@form_telaahcepat')->name('form');
+                });
+
+                Route::name('fullboard.')->prefix('fullboard')->group(function() {
+                    Route::get('/set', 'FullboardController@index')->name('set');
+                    Route::get('/notif', 'FullboardController@notif')->name('notif');
+                });
             });
         });
     });
@@ -178,10 +190,26 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
         });
 
         Route::name('telaah.')->prefix('telaah')->group(function() {
-            Route::post('/ready', 'QuickReviewController@ready')->name('cepat.ready');
-            Route::post('/reviewed', 'QuickReviewController@reviewed')->name('cepat.reviewed');
+            Route::post('/result/all', 'ResearchEthicController@get_result')->name('result.all');
+            Route::post('/result/detail', 'ResearchEthicController@detail_result')->name('result.detail');
 
-            Route::post('/cepat/store', 'QuickReviewController@store_telaahcepat')->name('cepat.store');
+            Route::name('cepat.')->prefix('cepat')->group(function() {
+                Route::post('/ready/{admin?}', 'QuickReviewController@ready')->name('ready');
+                Route::post('/reviewed/{admin?}', 'QuickReviewController@reviewed')->name('reviewed');
+
+                Route::post('/result/all', 'QuickReviewController@all_result')->name('result.all');
+                Route::post('/result/store', 'QuickReviewController@result')->name('result.store');
+                Route::post('/result/surat', 'QuickReviewController@result_surat')->name('result.surat');
+
+                Route::post('/store', 'QuickReviewController@store_telaahcepat')->name('store');
+            });
+
+            Route::name('fullboard.')->prefix('fullboard')->group(function() {
+                Route::post('/ready/{admin?}', 'FullboardController@ready')->name('ready');
+                Route::post('/set', 'FullboardController@set_fullboard')->name('set');
+                Route::post('/detail', 'FullboardController@detail')->name('detail');
+                Route::post('/user', 'FullboardController@user')->name('user');
+            });
         });
     });
 

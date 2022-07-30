@@ -944,6 +944,9 @@
 										</div>
 									</div>`;
 				let account, judul, jenis, asal, lembaga, status_;
+				
+				$('#preloader').removeClass('d-none');
+				$('#main-wrapper').removeClass('show');
 
                 $.when(
 					$.ajax({
@@ -1100,11 +1103,7 @@
 						data: {id: data_id},
 						type: 'POST',
 						async:false,
-						dataType: 'json',
-						beforeSend: function(){
-							$('#preloader').removeClass('d-none');
-							$('#main-wrapper').removeClass('show');
-						}
+						dataType: 'json'
 					}).done(function(data){
 						if(data.success){
 							const htmlBtnShow = `<button class="btn btn-secondary btn-xs ms-2" data-fancybox>Buka</button>`;
@@ -1160,15 +1159,13 @@
 						} else {
 							alertError("Terjasi Kesalahan", data.msg)
 						}
-
-						$('#preloader').addClass('d-none');
-						$('#main-wrapper').addClass('show');
 					}).fail(function(data){
 						console.log(data.responseText)
-						$('#preloader').addClass('d-none');
-						$('#main-wrapper').addClass('show');
 					});
 				}
+
+				$('#preloader').addClass('d-none');
+				$('#main-wrapper').addClass('show');
             })
 			
 			$('#modal_addresearch, #modal_editresearch').on('hide.bs.modal', function (e) {

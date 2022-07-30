@@ -811,6 +811,9 @@
 									</div>`;
 				let institutions, province, account, jenjang, fee;
 
+				$('#preloader').removeClass('d-none');
+				$('#main-wrapper').removeClass('show');
+				
                 $.when(
 					$.ajax({
 						url: '{{ route('get_institutions') }}',
@@ -960,7 +963,7 @@
 							modal.find("select[name='province']").val(data.get.province).change();
 							modal.find('textarea[name="address"]').val(data.get.address)
 
-							if(data.get.anggota.length > 0) {
+							if(data.get.anggota) {
 								const listMember = modal.find('.list_member'),
 									formMember = `
 										<div class="form-group form_member mb-2">
@@ -1014,6 +1017,8 @@
 						console.log("error");
 					})
 				}
+				$('#preloader').addClass('d-none');
+				$('#main-wrapper').addClass('show');
             })
 
 			$('#modal_detailresearch').on('show.bs.modal', function (e) {
@@ -1049,7 +1054,7 @@
 						modal.find('#jenjang_view').html(data.get.education_level ? data.get.education_level.name : "Tidak ada");
 						modal.find('#phone_view').html(data.get.phone);
 						modal.find('#address_view').html(data.get.address);
-						if(data.get.anggota.length > 0){
+						if(data.get.anggota){
 							let anggota = ``;
 							$.each(data.get.anggota, (i, val) => {
 								anggota += val + ", ";

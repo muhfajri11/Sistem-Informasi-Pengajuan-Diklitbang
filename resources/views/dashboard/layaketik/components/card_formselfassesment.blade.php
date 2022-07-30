@@ -36,9 +36,11 @@
                 <hr>
 
                 @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
+                @endif
                 @endif
                 <div class="col-12 mt-2">
                     <div class="table-responsive">
@@ -430,9 +432,11 @@
                 <hr>
 
                 @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
+                @endif
                 @endif
                 <div class="col-12 mt-2">
                     <div class="table-responsive">
@@ -1638,9 +1642,11 @@
                 <hr>
 
                 @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
+                @endif
                 @endif
                 <div class="col-12 mt-2">
                     <div class="table-responsive">
@@ -2379,9 +2385,11 @@
                 <hr>
 
                 @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
+                @endif
                 @endif
                 <div class="col-12 mt-2">
                     <div class="table-responsive">
@@ -2922,9 +2930,11 @@
                 <hr>
 
                 @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
+                @endif
                 @endif
                 <div class="col-12 mt-2">
                     <div class="table-responsive">
@@ -3098,9 +3108,11 @@
                 <hr>
 
                 @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
+                @endif
                 @endif
                 <div class="col-12 mt-2">
                     <div class="table-responsive">
@@ -3517,9 +3529,11 @@
                 <hr>
 
                 @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view))
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
+                @endif
                 @endif
                 <div class="col-12 mt-2">
                     <div class="table-responsive">

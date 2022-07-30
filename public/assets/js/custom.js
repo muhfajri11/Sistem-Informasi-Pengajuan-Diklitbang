@@ -1081,3 +1081,9 @@ function MyCustomUploadAdapterPlugin( editor ) {
 		return new UploadAdapter( loader );
 	};
 }
+
+const consoleForm = function(form){
+	for (var pair of form.entries()) {
+		console.log(pair[0]+ ', ' + pair[1]); 
+	}
+}

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\{Research, ResearchEthic, ResearchFee};
+use App\{Research, ResearchEthic, ResearchFee, ResultReview};
 use Carbon\Carbon;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,10 +13,15 @@ class ResearchEthicController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->hashids = new Hashids();
     }
 
     public function index(){
         return view('dashboard.layaketik.pengajuan');
+    }
+
+    public function result(){
+        return view('dashboard.layaketik.result');
     }
 
     public function all($type, $admin = null){
@@ -53,6 +59,57 @@ class ResearchEthicController extends Controller
 
         echo json_encode($response);
         exit;
+    }
+
+    public function get_result(){
+        $ethics = ResearchEthic::where('user_id', auth()->user()->id)->latest()->get();
+
+        $response = []; $i = 0;
+        foreach($ethics as $ethic){
+            if($ethic->result_reviews){
+                foreach($ethic->result_reviews as $result){
+                    $response[$i]['i'] = $i + 1;
+                    $response[$i]['id'] = $this->hashids->encode($result->id);
+                    $response[$i]['judul'] = $result->research_ethic->research->judul;
+                    $response[$i]['status'] = $result->status;
+                    $response[$i]['revision'] = $result->revision;
+                    $i++;
+                }
+            }
+        }
+        
+        echo json_encode($response);
+        exit;
+    }
+
+    public function detail_result(Request $request){
+        $id = $this->hashids->decode($request->id);
+
+        if(empty($id)) return response()->json([
+            'success' => false,
+            'msg'     => 'Terjadi Kesalahan'
+        ], 200);
+
+        $id = $id[0];
+
+        $result = ResultReview::find($id);
+        if(empty($result)) return response()->json([
+            'success' => false,
+            'msg'     => 'Terjadi kesalahan mengambil data'
+        ], 200);
+
+        $result->sertifikat_layaketik = is_null($result->sertifikat_layaketik)? 
+            $result->sertifikat_layaketik : Storage::url('layaketik/surat_hasil/'.$result->sertifikat_layaketik);
+
+        $result->research_ethic = $result->research_ethic;
+        $result->research = $result->research_ethic->research;
+        $result->institution = $result->research->institution;
+        $result->user = $result->research_ethic->user;
+
+        return response()->json([
+            'success' => true,
+            'get'     => $result
+        ], 200);
     }
 
     public function get_once(Request $request){
