@@ -150,6 +150,7 @@ class QuickReviewController extends Controller
         foreach($ethics as $ethic){
             if($ethic->result_reviews){
                 foreach($ethic->result_reviews as $result){
+                    if($result->revision > 0) continue;
                     $response[$i]['i'] = $i + 1;
                     $response[$i]['id'] = $this->hashids->encode($result->id);
                     $response[$i]['judul'] = $result->research_ethic->research->judul;

@@ -57,7 +57,7 @@ class ResearchEthic extends Model
     }
 
     public function result_reviews(){
-        return $this->hasMany(ResultReview::class);
+        return $this->hasMany(ResultReview::class)->latest();
     }
 
     public function revisions(){
@@ -65,7 +65,7 @@ class ResearchEthic extends Model
     }
 
     public function fullboards(){
-        return $this->hasMany(Fullboard::class);
+        return $this->hasMany(Fullboard::class)->latest();
     }
 
     public function revision_protocols(){

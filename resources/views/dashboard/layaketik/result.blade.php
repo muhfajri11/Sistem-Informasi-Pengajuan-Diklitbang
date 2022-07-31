@@ -168,7 +168,7 @@
 				});
 			};
 
-            $('.tab-content').on('click', '.btn_refresh', function(e){
+            $(document).on('click', '.btn_refresh', function(e){
 				e.preventDefault();
 				const id_elm = $(this).data('table');
 

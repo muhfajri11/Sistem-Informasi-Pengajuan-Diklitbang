@@ -20,6 +20,7 @@ class CreateRevisionsTable extends Migration
             $table->foreignId('result_review_id')->constrained('result_reviews');
             $table->integer('revision');
             $table->longText('resume_catatan');
+            $table->string('surat_perbaikan')->nullable();
             $table->timestamps();
         });
     }

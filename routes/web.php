@@ -123,6 +123,10 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
                     Route::get('/{hash}/{view?}', 'DeepReviewController@form')->name('lanjut.form');
                 });
 
+                Route::name('revision.')->prefix('revision')->group(function() {
+                    Route::get('/set', 'RevisionController@index')->name('set');
+                });
+
                 Route::name('fullboard.')->prefix('fullboard')->group(function() {
                     Route::get('/set', 'FullboardController@index')->name('set');
                     Route::get('/notif', 'FullboardController@notif')->name('notif');
@@ -130,10 +134,8 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
             });
 
             Route::name('revision.')->prefix('revision')->group(function() {
-                Route::get('/set', 'RevisionController@index')->name('set');
-                
                 Route::get('/protocol', 'RevisionProtocolController@index')->name('protocol');
-                Route::get('/protocol/view/{hash}', 'RevisionProtocolController@view')->name('protocol.view');
+                Route::get('/protocol/view/{hash}/{admin?}', 'RevisionProtocolController@view')->name('protocol.view');
                 Route::get('/protocol/form/{hash}', 'RevisionProtocolController@form')->name('protocol.form');
                 // Route::get('/protocol/detail/{ethic}/{data}', 'RevisionProtocolController@get_detailprotocol')->name('detail');
             });
@@ -225,6 +227,10 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
             Route::name('lanjut.')->prefix('lanjut')->group(function() {
                 Route::post('/ready/{status}/{admin?}', 'DeepReviewController@ready')->name('ready');
                 Route::post('/reviewed/{status}/{admin?}', 'DeepReviewController@reviewed')->name('reviewed');
+
+                Route::post('/result/ready', 'ResultReviewController@ready')->name('result.ready');
+                Route::post('/result/all', 'ResultReviewController@all')->name('result.all');
+                Route::post('/result/store', 'ResultReviewController@store_keputusanlanjut')->name('result.store');
                 
                 Route::post('/store', 'DeepReviewController@store')->name('store');
             });

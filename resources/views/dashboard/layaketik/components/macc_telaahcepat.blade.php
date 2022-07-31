@@ -37,6 +37,20 @@
                             <div class="text-right font-w700" id="mail_msg">Test</div>
                         </div>
                     </div>
+                    <div class="col-12 col-sm-6 mb-3 d-flex align-items-center lanjut_status d-none">
+                        <i class="fas fa-check-circle fa-2x me-4 text-primary"></i>
+                        <div>
+                            <p class="small text-right mb-0">Klasifikasi Sementara</p>
+                            <div class="text-right font-w700" id="status_msg">Test</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 mb-3 d-flex align-items-center lanjut_revision d-none">
+                        <i class="fas fa-edit fa-2x me-4 text-primary"></i>
+                        <div>
+                            <p class="small text-right mb-0">Perbaikan Ke</p>
+                            <div class="text-right font-w700" id="revision_msg">Test</div>
+                        </div>
+                    </div>
                     <div class="col-12"><hr></div>
                     <div class="col-12 mb-3">
                         <div class="form-group">

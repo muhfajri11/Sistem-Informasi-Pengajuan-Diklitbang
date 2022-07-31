@@ -143,6 +143,7 @@ class FullboardController extends Controller
         if(!$result->fullboard){
             $req['result_review_id'] = $id;
             $req['research_ethic_id'] = $result->research_ethic->id;
+            $req['revision'] = $result->revision;
 
             $fullboard = Fullboard::create($req);
 

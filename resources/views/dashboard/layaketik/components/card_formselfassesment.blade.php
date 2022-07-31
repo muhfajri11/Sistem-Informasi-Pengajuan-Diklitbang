@@ -35,13 +35,13 @@
                 <h4 class="text-primary">Nilai Sosial/Klinis</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
-                @if(!isset($view))
+                {{-- @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view)) --}}
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
-                @endif
-                @endif
+                {{-- @endif
+                @endif --}}
                 <div class="col-12 mt-2">
                     <div class="table-responsive">
                         <table class="table table-bordered table-responsive-sm">
@@ -431,13 +431,13 @@
                 <h4 class="text-primary">Nilai Ilmiah</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
-                @if(!isset($view))
+                {{-- @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view)) --}}
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
-                @endif
-                @endif
+                {{-- @endif
+                @endif --}}
                 <div class="col-12 mt-2">
                     <div class="table-responsive">
                         <table class="table table-bordered table-responsive-sm">
@@ -1641,13 +1641,13 @@
                 <h4 class="text-primary">Pemerataan Beban dan Manfaat</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
-                @if(!isset($view))
+                {{-- @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view)) --}}
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
-                @endif
-                @endif
+                {{-- @endif
+                @endif --}}
                 <div class="col-12 mt-2">
                     <div class="table-responsive">
                         <table class="table table-bordered table-responsive-sm">
@@ -2384,13 +2384,13 @@
                 <h4 class="text-primary">Potensi Manfaat dan Resiko</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
-                @if(!isset($view))
+                {{-- @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view)) --}}
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
-                @endif
-                @endif
+                {{-- @endif
+                @endif --}}
                 <div class="col-12 mt-2">
                     <div class="table-responsive">
                         <table class="table table-bordered table-responsive-sm">
@@ -2929,13 +2929,13 @@
                 <h4 class="text-primary">Bujukan/ Eksploitasi/ Inducement</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
-                @if(!isset($view))
+                {{-- @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view)) --}}
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
-                @endif
-                @endif
+                {{-- @endif
+                @endif --}}
                 <div class="col-12 mt-2">
                     <div class="table-responsive">
                         <table class="table table-bordered table-responsive-sm">
@@ -3107,13 +3107,13 @@
                 <h4 class="text-primary">Rahasia dan Privacy</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
-                @if(!isset($view))
+                {{-- @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view)) --}}
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
-                @endif
-                @endif
+                {{-- @endif
+                @endif --}}
                 <div class="col-12 mt-2">
                     <div class="table-responsive">
                         <table class="table table-bordered table-responsive-sm">
@@ -3528,13 +3528,13 @@
                 <h4 class="text-primary">Informed Consent</h4>
                 <hr>
 
-                @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
-                @if(!isset($view))
+                {{-- @if(isset($is_edit) || !(isset($self_assesment)) || isset($is_telaah))
+                @if(!isset($view)) --}}
                 <div class="col-12 d-flex justify-content-end">
                     <button type="button" class="btn btn-dark mt-4 clear_dot"><i class="fas fa-dot-circle me-2"></i> Kosongkan</button>
                 </div>
-                @endif
-                @endif
+                {{-- @endif
+                @endif --}}
                 <div class="col-12 mt-2">
                     <div class="table-responsive">
                         <table class="table table-bordered table-responsive-sm">

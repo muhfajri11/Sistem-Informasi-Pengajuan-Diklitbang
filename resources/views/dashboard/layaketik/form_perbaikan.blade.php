@@ -607,7 +607,7 @@
 
 							modal.find('#evidenpaidetik_view').html(htmlBtn)
 						} else {
-							modal.find('#evidenpaidetik_view').html(btnEviden)
+							modal.find('#evidenpaidetik_view').html('<p class="font-w600">Tidak Ada Bukti</p>')
 						}
 
 						if(data.get.research.izin_penelitian){

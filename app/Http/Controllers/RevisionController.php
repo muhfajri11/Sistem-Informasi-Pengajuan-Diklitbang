@@ -56,7 +56,7 @@ class RevisionController extends Controller
     }
 
     public function all(){
-        $revisions = Revision::all();
+        $revisions = Revision::latest()->get();
 
         $response = []; $i = 0;
         foreach($revisions as $revision){

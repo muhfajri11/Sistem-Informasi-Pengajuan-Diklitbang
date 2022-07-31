@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use stdClass;
 
 class DeepReviewController extends Controller
 {
@@ -143,24 +144,16 @@ class DeepReviewController extends Controller
         $self_assesment = $result->research_ethic->self_assesment;
         if(empty($self_assesment)) return abort(404);
 
+        $resume_review = $result->research_ethic->resume_review;
+
         if($result->revision == '0'){
-            $resume_review = $result->research_ethic->resume_review;
             $protocol = $result->research_ethic->protocol;
         } else {
-            $data_resume = $result->research_ethic->resume_deep_reviews;
             $data_protocol = $result->research_ethic->revision_protocols;
 
-            foreach($data_resume as $resume){
-                if($result->revision == $resume->revision){
-                    $resume_review = $resume;
-                    break;
-                }
-            }
-
             foreach($data_protocol as $_protocol){
-                if($result->revision == $_protocol->revision){
+                if(($result->revision - 1) == $_protocol->revision){
                     $protocol = $_protocol;
-                    break;
                 }
             }
         }
@@ -225,26 +218,26 @@ class DeepReviewController extends Controller
             $protocol->halaman_pengesahan = is_null($protocol->halaman_pengesahan)? 
                 $protocol->halaman_pengesahan : Storage::url('protokol/halaman_pengesahan/'.$protocol->halaman_pengesahan);
         } else {
-            $protocol->cv_ketua = is_null($protocol->research_ethic->cv_ketua)? 
-                $protocol->research_ethic->cv_ketua : Storage::url('protokol/cv_ketua/'.$protocol->research_ethic->cv_ketua);
+            $protocol->cv_ketua = is_null($protocol->research_ethic->protocol->cv_ketua)? 
+                $protocol->research_ethic->protocol->cv_ketua : Storage::url('protokol/cv_ketua/'.$protocol->research_ethic->protocol->cv_ketua);
 
-            $protocol->cv_anggota = is_null($protocol->research_ethic->cv_anggota)? 
-                $protocol->research_ethic->cv_anggota : Storage::url('protokol/cv_anggota/'.$protocol->research_ethic->cv_anggota);
+            $protocol->cv_anggota = is_null($protocol->research_ethic->protocol->cv_anggota)? 
+                $protocol->research_ethic->protocol->cv_anggota : Storage::url('protokol/cv_anggota/'.$protocol->research_ethic->protocol->cv_anggota);
 
-            $protocol->lembaga_sponsor = is_null($protocol->research_ethic->lembaga_sponsor)? 
-                $protocol->research_ethic->lembaga_sponsor : Storage::url('protokol/lembaga_sponsor/'.$protocol->research_ethic->lembaga_sponsor);
+            $protocol->lembaga_sponsor = is_null($protocol->research_ethic->protocol->lembaga_sponsor)? 
+                $protocol->research_ethic->protocol->lembaga_sponsor : Storage::url('protokol/lembaga_sponsor/'.$protocol->research_ethic->protocol->lembaga_sponsor);
 
-            $protocol->surat_pernyataan = is_null($protocol->research_ethic->surat_pernyataan)? 
-                $protocol->research_ethic->surat_pernyataan : Storage::url('protokol/surat_pernyataan/'.$protocol->research_ethic->surat_pernyataan);
+            $protocol->surat_pernyataan = is_null($protocol->research_ethic->protocol->surat_pernyataan)? 
+                $protocol->research_ethic->protocol->surat_pernyataan : Storage::url('protokol/surat_pernyataan/'.$protocol->research_ethic->protocol->surat_pernyataan);
 
-            $protocol->kuesioner = is_null($protocol->research_ethic->kuesioner)? 
-                $protocol->research_ethic->kuesioner : Storage::url('protokol/kuesioner/'.$protocol->research_ethic->kuesioner);
+            $protocol->kuesioner = is_null($protocol->research_ethic->protocol->kuesioner)? 
+                $protocol->research_ethic->protocol->kuesioner : Storage::url('protokol/kuesioner/'.$protocol->research_ethic->protocol->kuesioner);
 
-            $protocol->file_informedconsent = is_null($protocol->research_ethic->file_informedconsent)? 
-                $protocol->research_ethic->file_informedconsent : Storage::url('protokol/file_informedconsent/'.$protocol->research_ethic->file_informedconsent);
+            $protocol->file_informedconsent = is_null($protocol->research_ethic->protocol->file_informedconsent)? 
+                $protocol->research_ethic->protocol->file_informedconsent : Storage::url('protokol/file_informedconsent/'.$protocol->research_ethic->protocol->file_informedconsent);
 
-            $protocol->halaman_pengesahan = is_null($protocol->research_ethic->halaman_pengesahan)? 
-                $protocol->research_ethic->halaman_pengesahan : Storage::url('protokol/halaman_pengesahan/'.$protocol->research_ethic->halaman_pengesahan);
+            $protocol->halaman_pengesahan = is_null($protocol->research_ethic->protocol->halaman_pengesahan)? 
+                $protocol->research_ethic->protocol->halaman_pengesahan : Storage::url('protokol/halaman_pengesahan/'.$protocol->research_ethic->protocol->halaman_pengesahan);
         }
 
         $is_telaah = 1;

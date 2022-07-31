@@ -67,6 +67,7 @@
                                         <th>Penelaah</th>
                                         <th>Tanggal Telaah</th>
                                         <th>Klasifikasi Usulan</th>
+                                        <th>Perbaikan Ke</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -264,6 +265,12 @@
                             "mData": null,
                             "render": function (data, row, type, meta) {
                                 return setUsulan(data.usulan);
+                            }
+                        },
+                        {
+                            "mData": null,
+                            "render": function (data, row, type, meta) {
+                                return data.revision;
                             }
                         },
                         {

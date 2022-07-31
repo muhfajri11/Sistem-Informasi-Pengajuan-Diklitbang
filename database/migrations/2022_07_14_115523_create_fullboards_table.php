@@ -21,7 +21,7 @@ class CreateFullboardsTable extends Migration
             $table->string('tanggal');
             $table->string('jam');
             $table->string('tempat');
-            $table->string('surat_pemberitahuan');
+            $table->string('surat_pemberitahuan')->nullable();
             $table->timestamps();
         });
     }

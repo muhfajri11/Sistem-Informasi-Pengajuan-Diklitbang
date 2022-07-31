@@ -53,7 +53,7 @@ class RevisionProtocolController extends Controller
     }
 
     public function has_revision(){
-        $revisions = RevisionProtocol::all();
+        $revisions = RevisionProtocol::latest()->get();
 
         $response = []; $i = 0; 
         foreach($revisions as $revision){
@@ -185,7 +185,7 @@ class RevisionProtocolController extends Controller
         return view('dashboard.layaketik.form_perbaikan', compact($name));
     }
 
-    public function view($hash){
+    public function view($hash, $admin = null){
         if(empty($hash)) return abort(404);
 
         $id = $this->hashids->decode($hash);
@@ -203,7 +203,9 @@ class RevisionProtocolController extends Controller
         $protocol = RevisionProtocol::where($data)->first();
         if(empty($protocol)) return abort(404);
 
-        if($protocol->research_ethic->user_id != auth()->user()->id) return abort(404);
+        if(!$admin){
+            if($protocol->research_ethic->user_id != auth()->user()->id) return abort(404);
+        }
 
         $protocol->ringkasan_protokol = json_decode($protocol->ringkasan_protokol);
         $protocol->kondisi_lapangan = json_decode($protocol->kondisi_lapangan);
