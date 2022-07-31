@@ -157,7 +157,7 @@ class FullboardController extends Controller
                     'file'      => $request->file('surat_pemberitahuan'),
                     'user'      => $result->research_ethic->user,
                     'id'        => $fullboard->id,
-                    'prefix'    => 'layaketiksuratfullboard_rev'.$result->revision."_"
+                    'prefix'    => 'layaketiksuratfullboard_rev'.$result->revision.$id."_"
                 ]);
     
                 $update = $fullboard->update($data);

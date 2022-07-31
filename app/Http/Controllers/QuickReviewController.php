@@ -171,20 +171,41 @@ class QuickReviewController extends Controller
         $id = $this->hashids->decode($hash);
         if(empty($id)) return abort(404);
 
-        $quick_review = QuickReview::find($id[0]);
-        if(empty($quick_review)) return abort(404);
+        if(!$view){
+            $ethic = ResearchEthic::find($id[0]);
+            if(empty($ethic)) return abort(404);
 
-        $self_assesment = $quick_review->research_ethic->self_assesment;
-        if(empty($self_assesment)) return abort(404);
+            $self_assesment = $ethic->self_assesment;
+            if(empty($self_assesment)) return abort(404);
 
-        $resume_review = $quick_review->research_ethic->resume_review;
+            $resume_review = $ethic->resume_review;
 
-        $quick_review->nilai_sosial = json_decode($quick_review->nilai_sosial);
-        $quick_review->nilai_ilmiah = json_decode($quick_review->nilai_ilmiah);
-        $quick_review->pemerataan = json_decode($quick_review->pemerataan);
-        $quick_review->potensi = json_decode($quick_review->potensi);
-        $quick_review->bujukan = json_decode($quick_review->bujukan);
-        $quick_review->privacy = json_decode($quick_review->privacy);
+            $data = [
+                'user_id' => auth()->user()->id,
+                'research_ethic_id' => $id
+            ];
+
+            $quick_review = QuickReview::where($data)->first();
+
+            if($quick_review){
+                $quick_review->nilai_sosial = json_decode($quick_review->nilai_sosial);
+                $quick_review->nilai_ilmiah = json_decode($quick_review->nilai_ilmiah);
+                $quick_review->pemerataan = json_decode($quick_review->pemerataan);
+                $quick_review->potensi = json_decode($quick_review->potensi);
+                $quick_review->bujukan = json_decode($quick_review->bujukan);
+                $quick_review->privacy = json_decode($quick_review->privacy);
+            }
+        } else {
+            $quick_review = QuickReview::find($id[0]);
+            if(empty($quick_review)) return abort(404);
+
+            $self_assesment = $quick_review->research_ethic->self_assesment;
+            if(empty($self_assesment)) return abort(404);
+
+            $resume_review = $quick_review->research_ethic->resume_review;
+
+            $ethic = $quick_review->research_ethic;
+        }
 
         $self_assesment->nilai_sosial = json_decode($self_assesment->nilai_sosial);
         $self_assesment->nilai_ilmiah = json_decode($self_assesment->nilai_ilmiah);
@@ -193,7 +214,7 @@ class QuickReviewController extends Controller
         $self_assesment->bujukan = json_decode($self_assesment->bujukan);
         $self_assesment->privacy = json_decode($self_assesment->privacy);
 
-        $protocol = $quick_review->research_ethic->protocol;
+        $protocol = $ethic->protocol;
 
         $protocol->ringkasan_protokol = json_decode($protocol->ringkasan_protokol);
         $protocol->kondisi_lapangan = json_decode($protocol->kondisi_lapangan);
@@ -292,7 +313,7 @@ class QuickReviewController extends Controller
         ], 200);
 
         $check = QuickReview::where('research_ethic_id', $request->id)->get();
-        if(count($check) <= 1) return response()->json([
+        if(count($check) < 1) return response()->json([
             'success' => false,
             'msg'     => 'Minimal 1 telaah cepat untuk menentukan hasil'
         ], 200);
@@ -311,7 +332,7 @@ class QuickReviewController extends Controller
                 'file'      => $request->file('sertifikat_layaketik'),
                 'user'      => $ethic->user,
                 'id'        => $result->id,
-                'prefix'    => 'layaketiksurathasil_rev'.$req['revision']."_"
+                'prefix'    => 'layaketiksurathasil_rev'.$req['revision'].$request->id."_"
             ]);
 
             $update = $result->update($data);
@@ -350,7 +371,7 @@ class QuickReviewController extends Controller
             'file'      => $request->file('sertifikat_layaketik'),
             'user'      => $result->research_ethic->user,
             'id'        => $result->id,
-            'prefix'    => 'layaketiksurathasil_rev'.$result->revision."_"
+            'prefix'    => 'layaketiksurathasil_rev'.$result->revision.$id."_"
         ]);
 
         $update = $result->update($data);

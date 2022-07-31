@@ -52,8 +52,16 @@ class ResearchEthic extends Model
         return $this->hasMany(QuickReview::class);
     }
 
+    public function deep_reviews(){
+        return $this->hasMany(DeepReview::class);
+    }
+
     public function result_reviews(){
         return $this->hasMany(ResultReview::class);
+    }
+
+    public function revisions(){
+        return $this->hasMany(Revision::class);
     }
 
     public function fullboards(){

@@ -17,6 +17,7 @@ class CreateRevisionsTable extends Migration
             $table->id();
             $table->foreignId('research_ethic_id')->constrained('research_ethics');
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('result_review_id')->constrained('result_reviews');
             $table->integer('revision');
             $table->longText('resume_catatan');
             $table->timestamps();

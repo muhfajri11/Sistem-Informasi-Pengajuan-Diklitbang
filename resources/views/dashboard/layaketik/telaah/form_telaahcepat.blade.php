@@ -2,6 +2,7 @@
 
 @php
 $title = is_null($view)? "Form Telaah Cepat Protokol" : "Detail Telaah Cepat Protokol";
+$title = isset($is_telaahlanjut)? $title : "Form Telaah Lanjut";
 @endphp
 @section('title', $title)
 
@@ -49,11 +50,28 @@ $title = is_null($view)? "Form Telaah Cepat Protokol" : "Detail Telaah Cepat Pro
                     <a href="{{ route('layaketik.protocol.print', ['hash'=>$hashids->encode($protocol->id)]) }}" class="btn btn-primary mt-4"><i class="fas fa-print me-2"></i> Print Protokol</a>
                     <button data-id="{{ $protocol->research_ethic->id }}" data-bs-toggle="modal" data-bs-target="#modal_detailresearch" class="btn btn-primary mt-4"><i class="fas fa-info me-2"></i> Lihat Detail</button>
                 </div>
+                @if(isset($is_telaahlanjut))
+                <div class="col-12 mb-3">
+                    <hr>
+                    <p class="mb-0">
+                        <strong>Perbaikan Ke: </strong>
+                        <span class="badge badge-warning">
+                            {{ $is_telaahlanjut->revision }}
+                        </span> || 
+                        <strong>Klasifikasi: </strong>
+                        <span class="badge badge-dark">
+                            {{ $is_telaahlanjut->status }}
+                        </span>
+                    </p>
+                </div>
+                @endif
                 @if(!is_null($view))
                 <div class="col-12 mb-3">
                     <hr>
-                    <p class="mb-0"><strong>Penelaah: </strong>{{ $quick_review->user->name }}</p>
-                    <p class="mb-0"><strong>Ditelaah pada: </strong> {{ $quick_review->created_at }}</p>
+                    <p class="mb-0">
+                        <strong>Penelaah: </strong>{{ $quick_review->user->name }} ||
+                        <strong>Ditelaah pada: </strong> {{ $quick_review->created_at }}
+                    </p>
                 </div>
                 @endif
             </div>
@@ -131,8 +149,16 @@ $title = is_null($view)? "Form Telaah Cepat Protokol" : "Detail Telaah Cepat Pro
 							</div>
 						</div>
                         @if(is_null($view)) 
-                        <form id="kesimpulan" class="tab-pane fade">
+                        <form id="kesimpulan" class="tab-pane fade"
+                            @if(isset($is_telaahlanjut))
+                            data-lanjut="1"
+                            data-status="{{ $is_telaahlanjut->status }}"
+                            @endif
+                            >
                             <input type="hidden" name="id" value="{{ $protocol->research_ethic->id }}" required>
+                            @if(isset($is_telaahlanjut))
+                            <input type="hidden" name="revision" value="{{ $is_telaahlanjut->revision }}" required>
+                            @endif
                         @else
                         <div id="kesimpulan" class="tab-pane fade">
                         @endif
@@ -759,8 +785,26 @@ $title = is_null($view)? "Form Telaah Cepat Protokol" : "Detail Telaah Cepat Pro
 				submitHandler: function (form) {
                     const dataForm = $(form).serializeObject(),
                           radio_telaah = $('#smartwizard input:radio:checked.telaah_assesment'),
-                          text_telaah = $('#smartwizard textarea.telaah_assesment');
+                          text_telaah = $('#smartwizard textarea.telaah_assesment'),
+                          is_lanjut = $(form).attr('data-lanjut'),
+                          _status = $(form).attr('data-status');
 
+                    const link_submit = is_lanjut? 
+                        "{{ route('layaketik.telaah.lanjut.store') }}" : 
+                        "{{ route('layaketik.telaah.cepat.store') }}";
+
+                    let link_reload;
+                    if(_status){
+                        const choose_status = _status == 'expedited'? 
+                            "{{ route('layaketik.telaah.expedited') }}":
+                            "{{ route('layaketik.telaah.fullboard') }}"
+
+                        link_reload = is_lanjut? 
+                            choose_status : "{{ route('layaketik.telaah.cepat') }}";
+                    } else {
+                        link_reload = "{{ route('layaketik.telaah.cepat') }}";
+                    }
+                        
                     dataForm['nilai_sosial'] = {};
                     dataForm['nilai_ilmiah'] = {};
                     dataForm['pemerataan'] = {};
@@ -804,7 +848,7 @@ $title = is_null($view)? "Form Telaah Cepat Protokol" : "Detail Telaah Cepat Pro
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: "{{ route('layaketik.telaah.cepat.store') }}",
+                                url: link_submit,
                                 method: 'POST',
                                 data: dataForm,
                                 async: false,
@@ -816,7 +860,7 @@ $title = is_null($view)? "Form Telaah Cepat Protokol" : "Detail Telaah Cepat Pro
                             }).done(function (data) {						
                                 if(data.success){
                                     alertSuccess("Berhasil", data.msg)
-                                    window.location.href = "{{ route('layaketik.telaah.cepat') }}";
+                                    window.location.href = link_reload;
                                 } else {
                                     alertError("Terjadi Kesalahan", data.msg)
                                 }

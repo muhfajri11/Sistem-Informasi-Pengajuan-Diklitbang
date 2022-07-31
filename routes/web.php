@@ -107,11 +107,24 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
                 Route::get('/result', 'ResearchEthicController@result')->name('result');
 
                 Route::get('/cepat', 'QuickReviewController@index')->name('cepat');
+
+                Route::get('/expedited', 'DeepReviewController@expedited')->name('expedited');
+                Route::get('/fullboard', 'DeepReviewController@fullboard')->name('fullboard');
+                
                 Route::name('cepat.')->prefix('cepat')->group(function() {
                     Route::get('/result', 'QuickReviewController@result_index')->name('result');
                     Route::get('/result/list/{id}', 'QuickReviewController@list_index')->name('list');
     
                     Route::get('/{hash}/{view?}', 'QuickReviewController@form_telaahcepat')->name('form');
+                });
+
+                Route::name('lanjut.')->prefix('lanjut')->group(function() {
+                    Route::get('/list/{id}', 'RevisionController@list')->name('list');
+                    Route::get('/{hash}/{view?}', 'DeepReviewController@form')->name('lanjut.form');
+                });
+
+                Route::name('revision.')->prefix('revision')->group(function() {
+                    Route::get('/set', 'RevisionController@index')->name('set');
                 });
 
                 Route::name('fullboard.')->prefix('fullboard')->group(function() {
@@ -202,6 +215,20 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
                 Route::post('/result/surat', 'QuickReviewController@result_surat')->name('result.surat');
 
                 Route::post('/store', 'QuickReviewController@store_telaahcepat')->name('store');
+            });
+
+            Route::name('lanjut.')->prefix('lanjut')->group(function() {
+                Route::post('/ready/{status}/{admin?}', 'DeepReviewController@ready')->name('ready');
+                Route::post('/reviewed/{status}/{admin?}', 'DeepReviewController@reviewed')->name('reviewed');
+                
+                Route::post('/store', 'DeepReviewController@store')->name('store');
+            });
+
+            Route::name('revision.')->prefix('revision')->group(function() {
+                Route::post('/ready', 'RevisionController@ready')->name('ready');
+                Route::post('/set', 'RevisionController@store')->name('set');
+                Route::post('/detail', 'RevisionController@detail')->name('detail');
+                Route::post('/all', 'RevisionController@all')->name('all');
             });
 
             Route::name('fullboard.')->prefix('fullboard')->group(function() {

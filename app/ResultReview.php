@@ -15,4 +15,8 @@ class ResultReview extends Model
     public function fullboard(){
         return $this->hasOne(Fullboard::class);
     }
+
+    public function perbaikan(){
+        return $this->hasOne(Revision::class);
+    }
 }
