@@ -68,6 +68,10 @@ class ResearchEthic extends Model
         return $this->hasMany(Fullboard::class);
     }
 
+    public function revision_protocols(){
+        return $this->hasMany(RevisionProtocol::class);
+    }
+
     public function research_type(){
         return $this->belongsTo(ResearchType::class);
     }

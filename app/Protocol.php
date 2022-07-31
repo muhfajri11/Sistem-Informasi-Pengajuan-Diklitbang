@@ -12,7 +12,7 @@ class Protocol extends Model
         'intervensi', 'monitoring_penelitian', 'penghentian_penelitian',
         'adverse_penelitian', 'penanganan_komplikasi', 'manfaat', 'keberlanjutan_manfaat',
         'informed_consent', 'wali', 'bujukan', 'penjagaan_kerahasiaan', 'rencana_analisis',
-        'monitor_keamanan', 'konflik_keamanan', 'manfaat_sosial', 'hakatas_data', 'publikasi',
+        'monitor_keamanan', 'konflik_kepentingan', 'manfaat_sosial', 'hakatas_data', 'publikasi',
         'pendanaan', 'komitmen_etik', 'daftar_pustaka', 'cv_ketua', 'cv_anggota', 
         'lembaga_sponsor', 'surat_pernyataan', 'kuesioner', 'file_informedconsent', 
         'halaman_pengesahan'
@@ -20,9 +20,5 @@ class Protocol extends Model
 
     public function research_ethic(){
         return $this->belongsTo(ResearchEthic::class);
-    }
-
-    public function revision_protocols(){
-        return $this->hasMany(RevisionProtocol::class);
     }
 }

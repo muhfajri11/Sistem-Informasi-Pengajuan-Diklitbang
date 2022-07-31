@@ -87,7 +87,7 @@
 							<li><a href="{{ route('layaketik') }}">Pengisian Data</a></li>
 							<li><a href="{{ route('layaketik.protocol') }}">Protokol Penelitian</a></li>
 							<li><a href="{{ route('layaketik.telaah.result') }}">Hasil Telaah</a></li>
-							<li><a href="#!">Perbaikan Protokol</a></li>
+							<li><a href="{{ route('layaketik.revision.protocol') }}">Perbaikan Protokol</a></li>
 							<li><a href="{{ route('layaketik.telaah.fullboard.notif') }}">Pemberitahuan Fullboard</a></li>
 						</ul>
 					</li>

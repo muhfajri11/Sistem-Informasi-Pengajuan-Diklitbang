@@ -123,14 +123,19 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
                     Route::get('/{hash}/{view?}', 'DeepReviewController@form')->name('lanjut.form');
                 });
 
-                Route::name('revision.')->prefix('revision')->group(function() {
-                    Route::get('/set', 'RevisionController@index')->name('set');
-                });
-
                 Route::name('fullboard.')->prefix('fullboard')->group(function() {
                     Route::get('/set', 'FullboardController@index')->name('set');
                     Route::get('/notif', 'FullboardController@notif')->name('notif');
                 });
+            });
+
+            Route::name('revision.')->prefix('revision')->group(function() {
+                Route::get('/set', 'RevisionController@index')->name('set');
+                
+                Route::get('/protocol', 'RevisionProtocolController@index')->name('protocol');
+                Route::get('/protocol/view/{hash}', 'RevisionProtocolController@view')->name('protocol.view');
+                Route::get('/protocol/form/{hash}', 'RevisionProtocolController@form')->name('protocol.form');
+                // Route::get('/protocol/detail/{ethic}/{data}', 'RevisionProtocolController@get_detailprotocol')->name('detail');
             });
         });
     });
@@ -236,6 +241,17 @@ Route::middleware('verified')->prefix('dashboard')->group(function(){
                 Route::post('/set', 'FullboardController@set_fullboard')->name('set');
                 Route::post('/detail', 'FullboardController@detail')->name('detail');
                 Route::post('/user', 'FullboardController@user')->name('user');
+            });
+        });
+
+        Route::name('revision.')->prefix('revision')->group(function() {
+            Route::name('protocol.')->prefix('protocol')->group(function() {
+                Route::post('/ready', 'RevisionProtocolController@ready')->name('ready');
+                Route::post('/revisioned', 'RevisionProtocolController@has_revision')->name('revisioned');
+
+                Route::post('/store', 'RevisionProtocolController@store')->name('store');
+                Route::post('/is_ready', 'RevisionProtocolController@is_ready')->name('is_ready');
+                // Route::post('/detail', 'RevisionProtocolController@get_detailprotocol')->name('detail');
             });
         });
     });

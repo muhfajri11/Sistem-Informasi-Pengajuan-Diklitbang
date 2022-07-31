@@ -1,10 +1,6 @@
 @extends('dashboard.layouts.app')
 
-@php
-$title = is_null($view)? "Form Telaah Cepat" : "Detail Telaah Cepat";
-$title = isset($is_telaahlanjut)? "Form Telaah Lanjut" : $title;
-@endphp
-@section('title', $title)
+@section('title', "Form Perbaikan Protokol")
 
 @section('style')
 	<link rel="stylesheet" href="{{ asset('assets/vendor/select2/css/select2.min.css') }}">
@@ -45,35 +41,40 @@ $title = isset($is_telaahlanjut)? "Form Telaah Lanjut" : $title;
             </div>
             <div class="card-body">
                 <div class="col-12">
-                    <h4>{{ $protocol->research_ethic->research->judul? $protocol->research_ethic->research->judul: "" }}</h4>
-                    <p class="mb-0">Peneliti Utama: {{ $protocol->research_ethic->research->ketua? $protocol->research_ethic->research->ketua: "" }}</p>
-                    <a href="{{ route('layaketik.protocol.print', ['hash'=>$hashids->encode($protocol->id)]) }}" class="btn btn-primary mt-4"><i class="fas fa-print me-2"></i> Print Protokol</a>
-                    <button data-id="{{ $protocol->research_ethic->id }}" data-bs-toggle="modal" data-bs-target="#modal_detailresearch" class="btn btn-primary mt-4"><i class="fas fa-info me-2"></i> Lihat Detail</button>
+                    <h4>{{ $revision->research_ethic->research->judul }}</h4>
+                    <p class="mb-0">Peneliti Utama: {{ $revision->research_ethic->research->ketua }}</p>
+                    <a href="" class="btn btn-primary mt-4"><i class="fas fa-print me-2"></i> Print Protokol</a>
+                    <button data-id="{{ $revision->research_ethic->id }}" data-bs-toggle="modal" data-bs-target="#modal_detailresearch" class="btn btn-primary mt-4"><i class="fas fa-info me-2"></i> Lihat Detail</button>
                 </div>
-                @if(isset($is_telaahlanjut))
                 <div class="col-12 mb-3">
                     <hr>
                     <p class="mb-0">
                         <strong>Perbaikan Ke: </strong>
                         <span class="badge badge-warning">
-                            {{ $is_telaahlanjut->revision }}
+                            {{ $revision->result_review->revision }}
                         </span> || 
                         <strong>Klasifikasi: </strong>
                         <span class="badge badge-dark">
-                            {{ $is_telaahlanjut->status }}
+                            {{ $revision->result_review->status }}
                         </span>
                     </p>
                 </div>
-                @endif
-                @if(!is_null($view))
-                <div class="col-12 mb-3">
-                    <hr>
-                    <p class="mb-0">
-                        <strong>Penelaah: </strong>{{ $quick_review->user->name }} ||
-                        <strong>Ditelaah pada: </strong> {{ $quick_review->created_at }}
-                    </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 mb-3">
+        <div class="accordion accordion-primary-solid" id="accordion-two">
+            <div class="accordion-item">
+                <div class="accordion-header  rounded-lg" id="accord-2One" data-bs-toggle="collapse" data-bs-target="#collapse2One" aria-controls="collapse2One" aria-expanded="true" role="button">
+                    <span class="accordion-header-text">Catatan Perbaikan</span>
+                    <span class="accordion-header-indicator"></span>
                 </div>
-                @endif
+                <div id="collapse2One" class="collapse accordion__body show" aria-labelledby="accord-2One" data-bs-parent="#accordion-two">
+                    <div class="accordion-body-text">
+                        {{ $revision->resume_catatan }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -81,130 +82,44 @@ $title = isset($is_telaahlanjut)? "Form Telaah Lanjut" : $title;
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-				<div class="custom-tab-1">
-					<ul class="nav nav-tabs">
-                        <li class="nav-item">
-							<a href="#resume" data-bs-toggle="tab" class="nav-parent nav-link active show">Resume</a>
-						</li>
-						<li class="nav-item">
-							<a href="#protocol" data-bs-toggle="tab" class="nav-parent nav-link">Protokol</a>
-						</li>
-						<li class="nav-item">
-							<a href="#selfassesment" data-bs-toggle="tab" class="nav-parent nav-link">Self Assesment</a>
-						</li>
-                        <li class="nav-item">
-							<a href="#kesimpulan" data-bs-toggle="tab" class="nav-parent nav-link">Kesimpulan</a>
-						</li>
-					</ul>
-					<div class="tab-content pt-4">
-                        <div id="resume" class="tab-pane fade active show">
-                            <div class="row">
-                                <div class="col-12">
-                                    <h4 class="text-secondary font-w600">Resume Sekretaris</h4>
-                                    <hr>
-                                    {!! $resume_review->resume !!}
+                @if(!isset($view))
+                <form id="tambah_revisionprotocol" enctype="multipart/form-data" @if(isset($protocol)) data-edit="1" @endif  novalidate>
+                    <input type="hidden" name="id" value="{{ $revision->research_ethic->id }}" required>
+                    <input type="hidden" name="revision" value="{{ $revision->revision }}" required>
+                @endif
+                    <div class="custom-tab-1">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a href="#protocol" data-bs-toggle="tab" class="nav-parent nav-link active show">Protokol</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#selfassesment" data-bs-toggle="tab" class="nav-parent nav-link">Self Assesment</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content pt-4">
+                            <div id="protocol" class="tab-pane fade active show">
+                                <div class="row">
+                                    <div class="col-12">
+                                        @include('dashboard.layaketik.components.card_formprotocol')
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="selfassesment" class="tab-pane fade">
+                                <div class="row">
+                                    <div class="col-12">
+                                        @include('dashboard.layaketik.components.card_formselfassesment')
+                                    </div>
                                 </div>
                             </div>
                         </div>
-						<div id="protocol" class="tab-pane fade">
-							<div class="row">
-								<div class="col-12">
-                                    <div class="row">
-                                        <div class="col-12 col-md-6">
-                                            <h4 class="text-secondary"><i class="fas fa-file me-2"></i> Surat Pengantar Protokol</h4>
-                                            <hr>
-                                            @isset($protocol)
-                                                @if(!is_null($protocol->research_ethic->surat_pengantar))
-                                                <button class="btn btn-secondary mb-2" type="button"                         
-                                                    href="{{ $protocol->research_ethic->surat_pengantar }}"
-                                                    data-fancybox>Lihat Dokumen</button>
-                                                @else
-                                                <p>Tidak ada dokumen</p>
-                                                @endif
-                                            @endisset
-                                        </div>
-                                        <div class="col-12 col-md-6">
-                                            <h4 class="text-secondary"><i class="fas fa-file me-2"></i> Bukti Pembayaran Uji Layak Etik</h4>
-                                            <hr>
-                                            @isset($protocol)
-                                                @if(!is_null($protocol->research_ethic->eviden_paid))
-                                                <button class="btn btn-secondary mb-2" type="button"                         
-                                                    href="{{ $protocol->research_ethic->eviden_paid }}"
-                                                    data-fancybox>Lihat Dokumen</button>
-                                                @else
-                                                <p>Tidak ada dokumen</p>
-                                                @endif
-                                            @endisset
-                                        </div>
-                                    </div>
-                                    @include('dashboard.layaketik.components.card_formprotocol')
-                                </div>
-							</div>
-						</div>
-						<div id="selfassesment" class="tab-pane fade">
-							<div class="row">
-								<div class="col-12">
-                                    @include('dashboard.layaketik.components.card_formselfassesment')
-                                </div>
-							</div>
-						</div>
-                        @if(is_null($view)) 
-                        <form id="kesimpulan" class="tab-pane fade"
-                            @if(isset($is_telaahlanjut))
-                            data-lanjut="1"
-                            data-status="{{ $is_telaahlanjut->status }}"
-                            @endif
-                            >
-                            <input type="hidden" name="id" value="{{ $protocol->research_ethic->id }}" required>
-                            @if(isset($is_telaahlanjut))
-                            <input type="hidden" name="revision" value="{{ $is_telaahlanjut->revision }}" required>
-                            @endif
-                        @else
-                        <div id="kesimpulan" class="tab-pane fade">
-                        @endif
-							<div class="row">
-                                <div class="col-12">
-                                    <h4 class="text-secondary">Klasifikasi Usulan Penelaah Etik</h4>
-                                    <hr>
-                                    <div class="col-12">
-                                        <div class="form-check form-check-inline">
-                                            <label class="form-check-label font-w600">
-                                                <input class="form-check-input" type="radio" name="status" value="exempted"> Exempted
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <label class="form-check-label font-w600">
-                                                <input class="form-check-input" type="radio" name="status" value="expedited"> Expedited
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <label class="form-check-label font-w600">
-                                                <input class="form-check-input" type="radio" name="status" value="fullboard"> Fullboard
-                                            </label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <label class="form-check-label font-w600">
-                                                <input class="form-check-input" type="radio" name="status" value="ditolak"> Tidak bisa ditelaah
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <h4 class="text-secondary mt-2">Kesimpulan:</h4>
-                                    <hr>
-                                    <div class="col-12">
-                                        <textarea name="kesimpulan" class="form-control" required>{{ !is_null($quick_review)?$quick_review->kesimpulan: "" }}</textarea>
-                                    </div>
-                                    @if(is_null($view))
-                                    <button type="submit" class="btn btn-primary mt-4">Simpan</button>
-                                    @endif
-                                </div>
-							</div>
-                        @if(is_null($view)) 
-                        </form>
-                        @else
-                        </div>
-                        @endif
-					</div>
-				</div>
+                    </div>
+                @if(!isset($view))
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mt-4">Simpan</button>
+                        <a href="{{ route('layaketik.revision.protocol') }}" class="btn btn-dark mt-4">Kembali</a>
+                    </div>
+                </form>
+                @endif
             </div>
         </div>
     </div>    
@@ -237,7 +152,7 @@ $title = isset($is_telaahlanjut)? "Form Telaah Lanjut" : $title;
                     'catatan_informedconsent': JSON.parse('{!! json_encode($self_assesment->catatan_informedconsent) !!}')
                 }
 
-                const radio_ = $('#smartwizard input:radio:not(.telaah_assesment)'), textarea_ = $('#smartwizard textarea:not(.telaah_assesment)');
+                const radio_ = $('#smartwizard input:radio'), textarea_ = $('#smartwizard textarea');
 
                 $.each(radio_, (i, val) => {
                     let name_parent = $(val).attr('name').split("_")[0],
@@ -261,78 +176,17 @@ $title = isset($is_telaahlanjut)? "Form Telaah Lanjut" : $title;
         </script>
     @endif
 
-    @if(isset($quick_review))
-        <script>
-            $(document).ready(function(){
-                const radio_usulan = $('input:radio[name=status]');
-                
-                radio_usulan.filter('[value={{ $quick_review->status }}]').prop('checked', true).change();
-
-                const data_quickreview = {
-                    'sosial': JSON.parse('{!! json_encode($quick_review->nilai_sosial) !!}'),
-                    'ilmiah': JSON.parse('{!! json_encode($quick_review->nilai_ilmiah) !!}'),
-                    'pemerataan': JSON.parse('{!! json_encode($quick_review->pemerataan) !!}'),
-                    'potensi': JSON.parse('{!! json_encode($quick_review->potensi) !!}'),
-                    'bujukan': JSON.parse('{!! json_encode($quick_review->bujukan) !!}'),
-                    'privacy': JSON.parse('{!! json_encode($quick_review->privacy) !!}'),
-                    'informed_consent': JSON.parse('{!! json_encode($quick_review->informed_consent) !!}'),
-                    'catatan_nilaisosial': JSON.parse('{!! json_encode($quick_review->catatan_nilaisosial) !!}'),
-                    'catatan_nilaiilmiah': JSON.parse('{!! json_encode($quick_review->catatan_nilaiilmiah) !!}'),
-                    'catatan_pemerataan': JSON.parse('{!! json_encode($quick_review->catatan_pemerataan) !!}'),
-                    'catatan_potensi': JSON.parse('{!! json_encode($quick_review->catatan_potensi) !!}'),
-                    'catatan_bujukan': JSON.parse('{!! json_encode($quick_review->catatan_bujukan) !!}'),
-                    'catatan_privacy': JSON.parse('{!! json_encode($quick_review->catatan_privacy) !!}'),
-                    'catatan_informedconsent': JSON.parse('{!! json_encode($quick_review->catatan_informedconsent) !!}')
-                }
-
-                const radio_ = $('#smartwizard input:radio.telaah_assesment'), textarea_ = $('#smartwizard textarea.telaah_assesment');
-
-                $.each(radio_, (i, val) => {
-                    let name_parent = $(val).attr('name').slice(7).split("_")[0],
-                        name_child = $(val).attr('name').slice(7)
-
-                    console.log(name_parent + ", " + name_child)
-
-                    if(data_quickreview[name_parent]){
-                        if(data_quickreview[name_parent][name_child]){
-                            $(val).filter('[value='+data_quickreview[name_parent][name_child]+']').prop('checked', true).change();
-                        }
-                    }
-
-                    if(name_child == 'informed_consent'){
-                        if(data_quickreview[name_child]){
-                            $(val).filter('[value='+data_quickreview[name_child]+']').prop('checked', true).change();
-                        }   
-                    }
-                })
-
-                $.each(textarea_, (i, val) => {
-                    $(val).val(data_quickreview[$(val).attr('name').slice(7)])
-                })
-            })
-        </script>
-    @endif
-
-    @if(!is_null($view))
-        <script>
-            $(document).ready(function(){
-                const form_peneliti = $('#smartwizard input:radio, #smartwizard textarea, #kesimpulan textarea, #kesimpulan input:radio');
-                $.each(form_peneliti, (i, val) => $(val).prop('disabled', true))
-            })
-        </script>
-    @endif
-
     <script>
+
         let editors = [];   
 
-        function createEditor( elementId, from = null) {
+        function createEditor( elementId ) {
             return ClassicEditor
                 .create( document.querySelector( '.' + elementId ), {
                     extraPlugins: [ MyCustomUploadAdapterPlugin ],  
                 } )
                 .then( editor => { 
-                    editors[ elementId ] = editor;
-                    if(from) editor.enableReadOnlyMode(elementId)
+                    editors[ elementId ] = editor 
                 } )
                 .catch( err => console.error( err ) );
         }
@@ -346,6 +200,12 @@ $title = isset($is_telaahlanjut)? "Form Telaah Lanjut" : $title;
         }
 
         $(document).ready(function(){
+
+            $.validator.addMethod('ckrequired', function (value, element, params) {
+                var idname = $(element).attr('class');
+                var messageLength =  getDataFromTheEditor(idname)? $.trim ( getDataFromTheEditor(idname) ) : $(element).val();
+                return !params  || messageLength.length !== 0;
+            }, "This field is required.");
 
             const setBadgeStatus = status => {
 				switch(status){
@@ -459,14 +319,43 @@ $title = isset($is_telaahlanjut)? "Form Telaah Lanjut" : $title;
 				}
 			}
 
-            const form_peneliti = $('#smartwizard input:radio:not(.telaah_assesment), #smartwizard textarea:not(.telaah_assesment)');
-            $.each(form_peneliti, (i, val) => $(val).prop('disabled', true))
-            
-            $.validator.addMethod('ckrequired', function (value, element, params) {
-                var idname = $(element).attr('class');
-                var messageLength =  getDataFromTheEditor(idname)? $.trim ( getDataFromTheEditor(idname) ) : $(element).val();
-                return !params  || messageLength.length !== 0;
-            }, "This field is required.");
+            const setUsulan = value => {
+				switch(value){
+					case 'exempted':
+						return `
+						<span class="badge mx-auto badge-pill badge-primary">
+							Exempted
+						</span>`;
+						break;
+					case 'expedited':
+						return `
+						<span class="badge mx-auto badge-pill badge-secondary">
+							Expedited
+						</span>`;
+						break;
+					case 'fullboard':
+						return `
+						<span class="badge mx-auto badge-pill badge-secondary">
+							Fullboard
+						</span>`;
+						break;
+					case 'ditolak':
+						return `
+						<span class="badge mx-auto badge-pill badge-dark">
+							Tidak bisa ditelaah
+						</span>`;
+						break;
+                    default: 
+						return ``;
+                        break;
+				}
+			}
+
+            // $.validator.addMethod('ckrequired', function (value, element, params) {
+            //     var idname = $(element).attr('class');
+            //     var messageLength =  getDataFromTheEditor(idname)? $.trim ( getDataFromTheEditor(idname) ) : $(element).val();
+            //     return !params  || messageLength.length !== 0;
+            // }, "This field is required.");
             
             $('#smartwizard').smartWizard({
                 anchor: {
@@ -475,61 +364,6 @@ $title = isset($is_telaahlanjut)? "Form Telaah Lanjut" : $title;
                     removeDoneStepOnNavigateBack: false,
                 }
             });
-
-            $('.tab-pane').on('click', '.clear_dot', function(e){
-                e.preventDefault();
-                const tab = $(this).closest('.tab-pane'),
-                      radio = tab.find('input:radio:checked.telaah_assesment');
-                
-                radio.prop('checked', false);
-            })
-
-            const change_dot = function(tab, parent, child){
-                const checked = tab.find(`.${child}`).filter('input:radio:checked');
-                let result = [];
-
-                $.each(checked, (i, val) => result.push($(val).val()))
-                result = result.filter(data => data == 1);
-
-                tab.find(`.${parent}`).prop('checked', false);
-                if(result.length > 0)
-                    tab.find(`.${parent}`).filter(`[value=1]`).prop('checked', true).change();
-
-                if(result.length == 0)
-                    tab.find(`.${parent}`).filter(`[value=0]`).prop('checked', true).change();
-            }
-
-            $('.tab-pane').on('change', 
-            '.telaah_child_1, .telaah_child_1_1, .telaah_child_2, .telaah_child_2_1, .telaah_child_2_1_, .telaah_child_2_2, .telaah_child_2_2_, .telaah_child_3, .telaah_child_3_11, .telaah_child_4, .telaah_child_5, .telaah_child_6, .telaah_child_6_4',
-            function(e){
-                const tab = $(this).closest('.tab-pane'),
-                    data_child = $(this).attr('data-child'),
-                    dots = [
-                        {parent: "telaah_parent_1", child: "telaah_child_1"},
-                        {parent: "telaah_parent_1_1", child: "telaah_child_1_1"},
-                        {parent: "telaah_parent_2", child: "telaah_child_2"},
-                        {parent: "telaah_parent_2_1", child: "telaah_child_2_1"},
-                        {parent: "telaah_parent_2_1_", child: "telaah_child_2_1_"},
-                        {parent: "telaah_parent_2_2", child: "telaah_child_2_2"},
-                        {parent: "telaah_parent_2_2_", child: "telaah_child_2_2_"},
-                        {parent: "telaah_parent_3", child: "telaah_child_3"},
-                        {parent: "telaah_parent_3_11", child: "telaah_child_3_11"},
-                        {parent: "telaah_parent_4", child: "telaah_child_4"},
-                        {parent: "telaah_parent_5", child: "telaah_child_5"},
-                        {parent: "telaah_parent_6", child: "telaah_child_6"},
-                        {parent: "telaah_parent_6_4", child: "telaah_child_6_4"},
-                    ];
-                let result;
-                
-                $.each(dots, function(i, val){
-                    if(val.child == data_child){
-                        result = val;
-                        return false;
-                    }
-                })
-
-                change_dot(tab, result.parent, result.child)
-            })
 
             $('.nav-table').on('shown.bs.tab', function (event) {
 				const active = event.target, // newly activated tab
@@ -550,13 +384,67 @@ $title = isset($is_telaahlanjut)? "Form Telaah Lanjut" : $title;
                         _class = $(val).attr('class');
 
                         if(!editors[_class]){
-                            createEditor(_class, 1)
+                            createEditor(_class)
                             console.log(`${_class}, created`)
                         }
                     })
                 }
-
 			})
+
+            $('.tab-pane').on('click', '.clear_dot', function(e){
+                e.preventDefault();
+                const tab = $(this).closest('.tab-pane'),
+                      radio = tab.find('input:radio:checked');
+                
+                radio.prop('checked', false);
+            })
+
+            const change_dot = function(tab, parent, child){
+                const checked = tab.find(`.${child}`).filter('input:radio:checked');
+                let result = [];
+
+                $.each(checked, (i, val) => result.push($(val).val()))
+                result = result.filter(data => data == 1);
+
+                tab.find(`.${parent}`).prop('checked', false);
+                if(result.length > 0)
+                    tab.find(`.${parent}`).filter(`[value=1]`).prop('checked', true).change();
+
+                if(result.length == 0)
+                    tab.find(`.${parent}`).filter(`[value=0]`).prop('checked', true).change();
+            }
+
+            $('.tab-pane').on('change', 
+            '.child_1, .child_1_1, .child_2, .child_2_1, .child_2_1_, .child_2_2, .child_2_2_, .child_3, .child_3_11, .child_4, .child_5, .child_6, .child_6_4',
+            function(e){
+                const tab = $(this).closest('.tab-pane'),
+                    data_child = $(this).attr('data-child'),
+                    dots = [
+                        {parent: "parent_1", child: "child_1"},
+                        {parent: "parent_1_1", child: "child_1_1"},
+                        {parent: "parent_2", child: "child_2"},
+                        {parent: "parent_2_1", child: "child_2_1"},
+                        {parent: "parent_2_1_", child: "child_2_1_"},
+                        {parent: "parent_2_2", child: "child_2_2"},
+                        {parent: "parent_2_2_", child: "child_2_2_"},
+                        {parent: "parent_3", child: "child_3"},
+                        {parent: "parent_3_11", child: "child_3_11"},
+                        {parent: "parent_4", child: "child_4"},
+                        {parent: "parent_5", child: "child_5"},
+                        {parent: "parent_6", child: "child_6"},
+                        {parent: "parent_6_4", child: "child_6_4"},
+                    ];
+                let result;
+                
+                $.each(dots, function(i, val){
+                    if(val.child == data_child){
+                        result = val;
+                        return false;
+                    }
+                })
+
+                change_dot(tab, result.parent, result.child)
+            })
 
             $('#modal_detailresearch').on('show.bs.modal', function (e) {
 				const modal = $(this),
@@ -776,83 +664,107 @@ $title = isset($is_telaahlanjut)? "Form Telaah Lanjut" : $title;
 				});
 			})
 
-            $('#kesimpulan').validate({
+            $('#tambah_revisionprotocol').validate({
                 ignore : [],
-                rules:{
-                    usulan:{ required: true },
-                    kesimpulan:{ required: true, alphanumeric: true },
+				rules:{
+                    judul:{ required: true },
+                    cv_ketua: { required: false, extension: "pdf", filesize : 1 },
+                    cv_anggota: { required: false, extension: "pdf", filesize : 1 },
+                    lembaga_sponsor: { required: false, extension: "pdf", filesize : 1 },
+                    surat_pernyataan: { required: false, extension: "pdf", filesize : 1 },
+                    kuesioner: { required: false, extension: "pdf", filesize : 1 },
+                    file_informedconsent: { required: false, extension: "pdf", filesize : 1 },
+                    halaman_pengesahan: { required: false, extension: "pdf", filesize : 1 },
 				},
 				submitHandler: function (form) {
-                    const dataForm = $(form).serializeObject(),
-                          radio_telaah = $('#smartwizard input:radio:checked.telaah_assesment'),
-                          text_telaah = $('#smartwizard textarea.telaah_assesment'),
-                          is_lanjut = $(form).attr('data-lanjut'),
-                          _status = $(form).attr('data-status');
+                    let dataForm = new FormData(form),
+                        textarea_ = $('textarea'),
+                        is_edit = $(form).data('edit');
 
-                    const link_submit = is_lanjut? 
-                        "{{ route('layaketik.telaah.lanjut.store') }}" : 
-                        "{{ route('layaketik.telaah.cepat.store') }}";
-
-                    let link_reload;
-                    if(_status){
-                        const choose_status = _status == 'expedited'? 
-                            "{{ route('layaketik.telaah.expedited') }}":
-                            "{{ route('layaketik.telaah.fullboard') }}"
-
-                        link_reload = is_lanjut? 
-                            choose_status : "{{ route('layaketik.telaah.cepat') }}";
-                    } else {
-                        link_reload = "{{ route('layaketik.telaah.cepat') }}";
-                    }
-                        
-                    dataForm['nilai_sosial'] = {};
-                    dataForm['nilai_ilmiah'] = {};
-                    dataForm['pemerataan'] = {};
-                    dataForm['potensi'] = {};
-                    dataForm['bujukan'] = {};
-                    dataForm['privacy'] = {};
-
-                    $.each(text_telaah, function(i, val){
-                        let text_ = $(val).attr('name').slice(7);
-                        dataForm[text_] = $(val).val()
-                    });
-
-                    $.each(radio_telaah, function(i, val){
-                        let text_ = $(val).attr('name').slice(7),
-                            splited = text_.split('_')[0];
-                        
-                        switch(splited){
-                            case "sosial": 
-                                dataForm['nilai_sosial'][text_] = $(val).filter(':checked').val();
-                                break;
-                            case "ilmiah":
-                                dataForm['nilai_ilmiah'][text_] = $(val).filter(':checked').val();
-                                break;
-                            case "pemerataan":
-                            case "potensi":
-                            case "bujukan":
-                            case "privacy":
-                                dataForm[splited][text_] = $(val).filter(':checked').val();
-                                break;
-                        }
-
-                        if(text_ == 'informed_consent') dataForm[text_] = $(val).filter(':checked').val();
+                    $.each(textarea_, function(i, val){
+                        if(getDataFromTheEditor($(val).attr('name')))
+                            dataForm.set($(val).attr('name'), getDataFromTheEditor($(val).attr('name')))
                     })
 
-                    console.log(dataForm)
+                    const radio_choose = $('input:radio').filter(':checked'),
+                          _radio = $('input:radio:disabled').filter(':checked')
+                          results = {
+                            nilai_sosial: {},
+                            nilai_ilmiah: {},
+                            pemerataan: {},
+                            potensi: {},
+                            bujukan: {},
+                            privacy: {},
+                          };
+                    let serialized = {};
+                    
+                    $.each(radio_choose, function(i, val){
+                        serialized[$(val).attr('name')] = $(val).val()
+                        if($(val).attr('name') != 'informed_consent'){
+                            dataForm.delete($(val).attr('name'))
+                        }
+                    });
+
+                    $.each(_radio, function(i, val){
+                        serialized[$(val).attr('name')] = $(val).val()
+                    });
+
+                    for(const data in serialized){
+                        let _data = data.split('_');
+                        switch(_data[0]){
+                            case 'sosial':
+                                results['nilai_sosial'][data] = serialized[data];
+                                break;
+                            case 'ilmiah':
+                                results['nilai_ilmiah'][data] = serialized[data];
+                                break;
+                            case 'pemerataan':
+                                results['pemerataan'][data] = serialized[data];
+                                break;
+                            case 'potensi':
+                                results['potensi'][data] = serialized[data];
+                                break;
+                            case 'bujukan':
+                                results['bujukan'][data] = serialized[data];
+                                break;
+                            case 'privacy':
+                                results['privacy'][data] = serialized[data];
+                                break;
+                            default:
+                                results[data] = serialized[data];
+                                break;
+                        }
+                    }
+
+                    dataForm.set('self_assesment', JSON.stringify(results));
+                    if(is_edit) dataForm.set('is_edit', 1);
+
+                    consoleForm(dataForm)
+
+                    // for (var key of Object.keys(serialized)){
+                    //     console.log(key, serialized[key])
+                    // }
+
+                    // for (var pair of dataForm.entries()) {
+                    //     console.log(pair[0]+ ', ' + pair[1]); 
+                    // }
+
                     Swal.fire({
-                        title: `Apakah yakin ingin menyimpan resume?`,
-                        text: `Periksa kembali self assesment penelaah, klasifikasi, dan kesimpulan anda.`,
+                        title: `Apakah yakin ingin menyimpan?`,
                         showCancelButton: true,
                         confirmButtonText: `Save`
                     }).then((result) => {
                         if (result.isConfirmed) {
                             $.ajax({
-                                url: link_submit,
+                                url: "{{ route('layaketik.revision.protocol.store') }}",
                                 method: 'POST',
                                 data: dataForm,
                                 async: false,
+                                processData: false,
+                                contentType: false,
+                                cache: false,
                                 dataType: 'json',
+                                enctype: 'multipart/form-data',
                                 beforeSend: function(){
                                     $('#preloader').removeClass('d-none');
                                     $('#main-wrapper').removeClass('show');
@@ -860,7 +772,7 @@ $title = isset($is_telaahlanjut)? "Form Telaah Lanjut" : $title;
                             }).done(function (data) {						
                                 if(data.success){
                                     alertSuccess("Berhasil", data.msg)
-                                    window.location.href = link_reload;
+                                    window.location.href = "{{ route('layaketik.revision.protocol') }}";
                                 } else {
                                     alertError("Terjadi Kesalahan", data.msg)
                                 }

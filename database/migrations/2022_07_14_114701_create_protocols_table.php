@@ -36,7 +36,7 @@ class CreateProtocolsTable extends Migration
             $table->longText('penjagaan_kerahasiaan')->nullable();
             $table->longText('rencana_analisis')->nullable();
             $table->longText('monitor_keamanan')->nullable();
-            $table->longText('konflik_keamanan')->nullable();
+            $table->longText('konflik_kepentingan')->nullable();
             $table->longText('manfaat_sosial')->nullable();
             $table->longText('hakatas_data')->nullable();
             $table->longText('publikasi')->nullable();

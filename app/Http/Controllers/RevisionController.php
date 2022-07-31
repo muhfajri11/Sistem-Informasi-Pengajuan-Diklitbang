@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\ResultReview;
-use App\Revision;
+use App\{ResultReview, Revision, RevisionProtocol};
 use Carbon\Carbon;
 use Hashids\Hashids;
 use Illuminate\Http\Request;

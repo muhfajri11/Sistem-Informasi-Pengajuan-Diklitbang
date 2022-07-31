@@ -651,6 +651,11 @@
                         </div>
                         @endisset
                     @else
+                    @if(isset($file_protocol))
+                    <button class="btn btn-secondary mb-0" type="button"                         
+                        href="{{ $protocol->cv_ketua }}"
+                        data-fancybox>Preview</button>
+                    @endif
                     <div class="form-group">
                         <div class="input-group">
                             <div class="form-file">
@@ -685,6 +690,11 @@
                         </div>
                         @endisset
                     @else
+                    @if(isset($file_protocol))
+                    <button class="btn btn-secondary mb-0" type="button"                         
+                        href="{{ $protocol->cv_anggota }}"
+                        data-fancybox>Preview</button>
+                    @endif
                     <div class="form-group">
                         <div class="input-group">
                             <div class="form-file">
@@ -719,6 +729,11 @@
                         </div>
                         @endisset
                     @else
+                    @if(isset($file_protocol))
+                    <button class="btn btn-secondary mb-0" type="button"                         
+                        href="{{ $protocol->lembaga_sponsor }}"
+                        data-fancybox>Preview</button>
+                    @endif
                     <div class="form-group">
                         <div class="input-group">
                             <div class="form-file">
@@ -753,6 +768,11 @@
                         </div>
                         @endisset
                     @else
+                    @if(isset($file_protocol))
+                    <button class="btn btn-secondary mb-0" type="button"                         
+                        href="{{ $protocol->surat_pernyataan }}"
+                        data-fancybox>Preview</button>
+                    @endif
                     <div class="form-group">
                         <div class="input-group">
                             <div class="form-file">
@@ -787,6 +807,11 @@
                         </div>
                         @endisset
                     @else
+                    @if(isset($file_protocol))
+                    <button class="btn btn-secondary mb-0" type="button"                         
+                        href="{{ $protocol->kuesioner }}"
+                        data-fancybox>Preview</button>
+                    @endif
                     <div class="form-group">
                         <div class="input-group">
                             <div class="form-file">
@@ -821,6 +846,11 @@
                         </div>
                         @endisset
                     @else
+                    @if(isset($file_protocol))
+                    <button class="btn btn-secondary mb-0" type="button"                         
+                        href="{{ $protocol->file_informedconsent }}"
+                        data-fancybox>Preview</button>
+                    @endif
                     <div class="form-group">
                         <div class="input-group">
                             <div class="form-file">
@@ -855,6 +885,11 @@
                         </div>
                         @endisset
                     @else
+                    @if(isset($file_protocol))
+                    <button class="btn btn-secondary mb-0" type="button"                         
+                        href="{{ $protocol->halaman_pengesahan }}"
+                        data-fancybox>Preview</button>
+                    @endif
                     <div class="form-group">
                         <div class="input-group">
                             <div class="form-file">
